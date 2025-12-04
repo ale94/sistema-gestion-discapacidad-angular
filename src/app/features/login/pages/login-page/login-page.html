@@ -32,8 +32,8 @@
             id="username"
             name="username"
             type="text"
-            [ngModel]="username()"
-            (ngModelChange)="username.set($event)"
+            [value]="username()"
+            (input)="username.set($event.target.value)"
             required
             class="mt-1 appearance-none relative block w-full px-3 py-3 border border-slate-300 bg-slate-50 text-slate-900 placeholder-slate-400 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 focus:z-10 sm:text-sm transition-shadow"
             placeholder="Usuario"
@@ -47,8 +47,8 @@
             id="password"
             name="password"
             type="password"
-            [ngModel]="password()"
-            (ngModelChange)="password.set($event)"
+            [value]="password()"
+            (input)="password.set($event.target.value)"
             required
             class="mt-1 appearance-none relative block w-full px-3 py-3 border border-slate-300 bg-slate-50 text-slate-900 placeholder-slate-400 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 focus:z-10 sm:text-sm transition-shadow"
             placeholder="Contraseña"
