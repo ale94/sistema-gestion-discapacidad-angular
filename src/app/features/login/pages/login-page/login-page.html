@@ -1,0 +1,75 @@
+<div class="flex items-center justify-center min-h-screen bg-slate-100 p-4 transition-colors">
+  <div
+    class="w-full max-w-sm p-8 space-y-8 bg-white rounded-2xl shadow-2xl border border-slate-200"
+  >
+    <div class="text-center">
+      <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-teal-100 mb-6">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-9 w-9 text-teal-600"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z"
+          />
+        </svg>
+      </div>
+      <h2 class="text-3xl font-extrabold text-slate-900">Bienvenido!</h2>
+      <p class="mt-2 text-sm text-slate-500">Inicie sesión para acceder al sistema</p>
+    </div>
+    <form class="mt-8 space-y-6" (ngSubmit)="onLogin()">
+      <div class="space-y-4">
+        <div>
+          <!-- <label for="username" class="text-sm font-medium text-slate-600"
+            >Usuario</label
+          > -->
+          <input
+            id="username"
+            name="username"
+            type="text"
+            [ngModel]="username()"
+            (ngModelChange)="username.set($event)"
+            required
+            class="mt-1 appearance-none relative block w-full px-3 py-3 border border-slate-300 bg-slate-50 text-slate-900 placeholder-slate-400 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 focus:z-10 sm:text-sm transition-shadow"
+            placeholder="Usuario"
+          />
+        </div>
+        <div>
+          <!-- <label for="password" class="text-sm font-medium text-slate-600"
+            >Contraseña</label
+          > -->
+          <input
+            id="password"
+            name="password"
+            type="password"
+            [ngModel]="password()"
+            (ngModelChange)="password.set($event)"
+            required
+            class="mt-1 appearance-none relative block w-full px-3 py-3 border border-slate-300 bg-slate-50 text-slate-900 placeholder-slate-400 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 focus:z-10 sm:text-sm transition-shadow"
+            placeholder="Contraseña"
+          />
+        </div>
+      </div>
+
+      @if (errorMessage()) {
+      <div class="bg-red-100 border border-red-300 text-red-700 px-4 py-2 rounded-md text-sm">
+        {{ errorMessage() }}
+      </div>
+      }
+
+      <div>
+        <button
+          type="submit"
+          class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 focus:ring-offset-white transition-all duration-300 transform hover:scale-105"
+        >
+          Iniciar Sesión
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
