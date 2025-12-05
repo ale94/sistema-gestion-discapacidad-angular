@@ -1,5 +1,7 @@
 import { Component, computed, inject } from '@angular/core';
-import { PersonService } from '../../../../shared/services/Person';
+import { PersonService } from '../../shared/services/person.service';
+
+
 
 @Component({
   selector: 'dashboard-page',

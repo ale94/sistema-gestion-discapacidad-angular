@@ -1,6 +1,7 @@
 import { Component, inject, output } from '@angular/core';
-import { Auth } from '../../services/auth';
+
 import { RouterLink, RouterLinkActive } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'sidebar',
@@ -10,7 +11,7 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 })
 export class Sidebar {
 
-  authService = inject(Auth);
+  authService = inject(AuthService);
   linkClicked = output<void>();
 
   onLinkClicked(): void {

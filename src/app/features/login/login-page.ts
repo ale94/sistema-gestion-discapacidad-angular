@@ -1,8 +1,8 @@
 import { Component, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { AuthService } from '../../shared/services/auth.service';
 
-import { Auth } from '../../../../shared/services/auth';
 
 @Component({
   selector: 'login-page',
@@ -12,7 +12,7 @@ import { Auth } from '../../../../shared/services/auth';
 })
 export default class LoginPage {
 
-  private authService = inject(Auth);
+  private authService = inject(AuthService);
   private router: Router = inject(Router);
 
   username = signal('');

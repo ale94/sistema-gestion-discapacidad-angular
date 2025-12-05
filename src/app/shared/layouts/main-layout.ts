@@ -1,7 +1,9 @@
 import { Component, signal } from '@angular/core';
-import { Sidebar } from '../../../../shared/components/sidebar/sidebar';
+
 import { RouterOutlet } from '@angular/router';
-import { Head } from '../../../../shared/components/head/head';
+import { Sidebar } from '../components/sidebar/sidebar';
+import { Head } from '../components/head/head';
+
 
 @Component({
   selector: 'main-layout',
