@@ -1,0 +1,142 @@
+<form [formGroup]="personForm" (ngSubmit)="onSubmit()" class="flex flex-col w-full max-w-5xl max-h-[90vh] rounded-lg overflow-hidden">
+  <div class="p-6 border-b border-slate-200">
+    <h2 class="text-xl font-semibold text-slate-900">
+      {{ isEditMode ? 'Editar Persona' : 'Agregar Nueva Persona' }}
+    </h2>
+  </div>
+
+  <div class="p-6 flex-grow overflow-y-auto bg-slate-50">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- Personal Info -->
+      <div class="lg:col-span-2">
+        <label class="form-label">Apellido y Nombre</label>
+        <input formControlName="nombreCompleto" type="text" class="form-input" />
+      </div>
+      <div class="lg:col-span-1">
+        <label class="form-label">D.N.I</label>
+        <input formControlName="dni" type="text" class="form-input" />
+      </div>
+      <div class="lg:col-span-1">
+        <label class="form-label">Fecha de Nacimiento</label>
+        <input formControlName="fechaNacimiento" type="date" class="form-input" />
+      </div>
+      <div class="lg:col-span-1">
+        <label class="form-label">Sexo</label>
+        <select formControlName="sexo" class="form-input">
+          @for (gender of genders; track gender) {
+          <option [value]="gender">{{ gender }}</option>
+          }
+        </select>
+      </div>
+      <div class="lg:col-span-1">
+        <label class="form-label">Tutor</label>
+        <input formControlName="tutor" type="text" class="form-input" />
+      </div>
+      <div class="lg:col-span-1">
+        <label class="form-label">Teléfono</label>
+        <input formControlName="telefono" type="text" class="form-input" />
+      </div>
+      <div class="lg:col-span-2">
+        <label class="form-label">Domicilio</label>
+        <input formControlName="domicilio" type="text" class="form-input" />
+      </div>
+
+      <!-- Disability Info -->
+      <div class="lg:col-span-3 border-t border-slate-200 pt-4 mt-2"></div>
+      <div class="lg:col-span-2">
+        <label class="form-label">Diagnóstico por Discapacidad</label>
+        <input formControlName="diagnostico" type="text" class="form-input" />
+      </div>
+      <div class="lg:col-span-1">
+        <label class="form-label">Tipo de Discapacidad</label>
+        <select formControlName="tipoDiscapacidad" class="form-input">
+          @for (type of disabilityTypes; track type) {
+          <option [value]="type">{{ type }}</option>
+          }
+        </select>
+      </div>
+      <div class="lg:col-span-1">
+        <label class="form-label">Número de Credencial (CUD)</label>
+        <input formControlName="numeroCUD" type="text" class="form-input" />
+      </div>
+      <div class="lg:col-span-1">
+        <label class="form-label">Fecha de Empadronamiento</label>
+        <input formControlName="fechaEmpadronamiento" type="date" class="form-input" />
+      </div>
+
+      <!-- Social Info -->
+      <div class="lg:col-span-3 border-t border-slate-200 pt-4 mt-2"></div>
+      <div class="lg:col-span-1">
+        <label class="form-label">Obra Social</label>
+        <input formControlName="obraSocial" type="text" class="form-input" />
+      </div>
+      <div class="lg:col-span-1">
+        <label class="form-label">Escolaridad</label>
+        <select formControlName="escolaridad" class="form-input">
+          @for (level of educationLevels; track level) {
+          <option [value]="level">{{ level }}</option>
+          }
+        </select>
+      </div>
+      <div class="lg:col-span-1">
+        <label class="form-label">Situación Laboral</label>
+        <select formControlName="situacionLaboral" class="form-input">
+          @for (status of jobStatuses; track status) {
+          <option [value]="status">{{ status }}</option>
+          }
+        </select>
+      </div>
+
+      <!-- Benefits -->
+      <div
+        class="lg:col-span-3 border-t border-slate-200 pt-4 mt-2 grid grid-cols-2 lg:grid-cols-4 gap-4"
+      >
+        <div class="flex items-center">
+          <input
+            formControlName="cudVigente"
+            id="cudVigente"
+            type="checkbox"
+            class="form-checkbox"
+          />
+          <label for="cudVigente" class="ml-2 text-sm text-slate-700">CUD Vigente</label>
+        </div>
+        <div class="flex items-center">
+          <input formControlName="pension" id="pension" type="checkbox" class="form-checkbox" />
+          <label for="pension" class="ml-2 text-sm text-slate-700">Pensión</label>
+        </div>
+        <div class="flex items-center">
+          <input
+            formControlName="bolsonMercaderia"
+            id="bolsonMercaderia"
+            type="checkbox"
+            class="form-checkbox"
+          />
+          <label for="bolsonMercaderia" class="ml-2 text-sm text-slate-700"
+            >Bolsón de Mercadería</label
+          >
+        </div>
+        <div class="flex items-center">
+          <input formControlName="paseLibre" id="paseLibre" type="checkbox" class="form-checkbox" />
+          <label for="paseLibre" class="ml-2 text-sm text-slate-700">Pase Libre</label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="p-4 bg-white border-t border-slate-200 flex justify-end space-x-4">
+    <button
+      type="button"
+      (click)="onCancel()"
+      class="px-6 py-2 rounded-lg text-slate-700 bg-white hover:bg-slate-100 transition-colors border border-slate-300"
+    >
+      Cancelar
+    </button>
+    <button
+      type="submit"
+      [disabled]="personForm.invalid"
+      class="px-6 py-2 rounded-lg text-white bg-teal-600 hover:bg-teal-700 disabled:bg-slate-400 disabled:cursor-not-allowed transition-colors"
+    >
+      Guardar
+    </button>
+  </div>
+</form>
