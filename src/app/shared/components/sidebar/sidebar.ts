@@ -14,7 +14,7 @@ export class Sidebar {
   authService = inject(AuthService);
   linkClicked = output<void>();
 
-  onLinkClicked(): void {
+  LinkClicked(): void {
     // Only emit on mobile to close the sidebar
     if (window.innerWidth < 1024) {
       this.linkClicked.emit();
@@ -23,6 +23,6 @@ export class Sidebar {
 
   logout(): void {
     this.authService.logout();
-    this.onLinkClicked(); // Also close sidebar on logout
+    this.LinkClicked(); // Also close sidebar on logout
   }
 }

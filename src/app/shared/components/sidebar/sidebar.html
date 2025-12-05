@@ -20,7 +20,7 @@
   </div>
   <nav class="flex-1 px-4 py-4 overflow-y-auto">
     <a
-      (click)="onLinkClicked()"
+      (click)="LinkClicked()"
       routerLink="/dashboard"
       routerLinkActive="active"
       [routerLinkActiveOptions]="{ exact: true }"
@@ -43,7 +43,7 @@
       <span class="ml-4 font-medium text-white">Dashboard</span>
     </a>
     <a
-      (click)="onLinkClicked()"
+      (click)="LinkClicked()"
       routerLink="/personas"
       routerLinkActive="active"
       class="nav-link flex items-center mt-4 px-4 py-3 text-slate-600 hover:bg-teal-700 rounded-lg transition-colors duration-200"
@@ -65,7 +65,7 @@
       <span class="ml-4 font-medium text-white">Personas</span>
     </a>
     <a
-      (click)="onLinkClicked()"
+      (click)="LinkClicked()"
       routerLink="/graficos"
       routerLinkActive="active"
       class="nav-link flex items-center mt-4 px-4 py-3 text-slate-600 hover:bg-teal-700 rounded-lg transition-colors duration-200"
@@ -87,7 +87,7 @@
       <span class="ml-4 font-medium text-white">Gráficos</span>
     </a>
     <a
-      (click)="onLinkClicked()"
+      (click)="LinkClicked()"
       routerLink="/transporte"
       routerLinkActive="active"
       class="nav-link flex items-center mt-4 px-4 py-3 text-slate-600 hover:bg-teal-700 rounded-lg transition-colors duration-200"
@@ -109,7 +109,7 @@
       <span class="ml-4 font-medium text-white">Transporte</span>
     </a>
     <a
-      (click)="onLinkClicked()"
+      (click)="LinkClicked()"
       routerLink="/eventos"
       routerLinkActive="active"
       class="nav-link flex items-center mt-4 px-4 py-3 text-slate-600 hover:bg-teal-700 rounded-lg transition-colors duration-200"
