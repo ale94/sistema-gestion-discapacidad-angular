@@ -5,14 +5,15 @@ import { Router } from '@angular/router';
   providedIn: 'root',
 })
 export class AuthService {
-
   private router: Router = inject(Router);
   isAuthenticated = signal<boolean>(sessionStorage.getItem('is_authenticated') === 'true');
-  username = signal<string | null>(null);
+  username = signal<string | null>(sessionStorage.getItem('username'));
 
   login(username: string, password: string): boolean {
     if (username === 'admin' && password === 'admin') {
       sessionStorage.setItem('is_authenticated', 'true');
+      sessionStorage.setItem('username', username);
+
       this.username.set(username);
       this.isAuthenticated.set(true);
       return true;
@@ -22,6 +23,9 @@ export class AuthService {
 
   logout(): void {
     sessionStorage.removeItem('is_authenticated');
+    sessionStorage.removeItem('username');
+
+    this.username.set(null);
     this.isAuthenticated.set(false);
     this.router.navigate(['/login']);
   }
