@@ -1,11 +1,13 @@
 import { Component, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 
 import { Auth } from '../../services/auth';
 
 @Component({
   selector: 'login-page',
-  imports: [],
+  standalone: true,
+  imports: [FormsModule],
   templateUrl: './login-page.html',
 })
 export default class LoginPage {
@@ -17,7 +19,7 @@ export default class LoginPage {
   password = signal('');
   errorMessage = signal<string | null>(null);
 
-  onLogin(): void {
+  login(): void {
     this.errorMessage.set(null);
     if (this.authService.login(this.username(), this.password())) {
       this.router.navigate(['/dashboard']);
