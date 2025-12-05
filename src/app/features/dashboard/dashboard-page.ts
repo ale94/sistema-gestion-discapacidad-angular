@@ -1,12 +1,12 @@
 import { Component, computed, inject } from '@angular/core';
+import { RouterLink } from '@angular/router';
+
 import { PersonService } from '../../shared/services/person.service';
-
-
 
 @Component({
   selector: 'dashboard-page',
   standalone: true,
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './dashboard-page.html',
 })
 export default class DashboardPage {
