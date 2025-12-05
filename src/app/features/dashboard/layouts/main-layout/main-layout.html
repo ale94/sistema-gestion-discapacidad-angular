@@ -1,0 +1,27 @@
+<div class="flex h-screen bg-slate-50 text-slate-800">
+  <!-- Static sidebar for desktop -->
+  <div class="hidden lg:flex lg:shrink-0">
+    <sidebar class="w-64" />
+  </div>
+
+  <!-- Mobile sidebar -->
+  @if (isMobileSidebarOpen()) {
+  <!-- Backdrop -->
+  <div
+    class="fixed inset-0 bg-black/60 z-30 lg:hidden"
+    (click)="isMobileSidebarOpen.set(false)"
+  ></div>
+
+  <!-- Sidebar -->
+  <div class="fixed top-0 left-0 bottom-0 z-40 lg:hidden animate-slide-in-left">
+    <sidebar class="w-64 h-full" (linkClicked)="isMobileSidebarOpen.set(false)" />
+  </div>
+  }
+
+  <div class="flex-1 flex flex-col overflow-hidden">
+    <app-head (toggleMobileSidebar)="toggleMobileSidebar()"/>
+    <main class="flex-1 overflow-x-hidden overflow-y-auto bg-slate-100 p-4 sm:p-6 md:p-8">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>
