@@ -1,1 +1,224 @@
-<p>person-list works!</p>,
+<div class="container mx-auto">
+  <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+    <h1 class="text-3xl font-bold text-slate-900">Gestión de Personas</h1>
+    <button
+      (click)="openAddModal()"
+      class="flex items-center bg-teal-600 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-5 w-5 mr-2"
+        viewBox="0 0 20 20"
+        fill="currentColor"
+      >
+        <path
+          fill-rule="evenodd"
+          d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+          clip-rule="evenodd"
+        />
+      </svg>
+      Agregar Persona
+    </button>
+  </div>
+
+  <div class="mb-4">
+    <input
+      type="text"
+      [ngModel]="searchTerm()"
+      (ngModelChange)="onSearchChange($event)"
+      placeholder="Buscar por Apellido y Nombre, DNI, Diagnóstico..."
+      class="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 text-slate-900"
+    />
+  </div>
+
+  <div class="bg-white border border-slate-200 rounded-xl shadow-lg overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="min-w-full divide-y divide-slate-200">
+        <thead class="bg-slate-50">
+          <tr>
+            <th
+              scope="col"
+              class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider"
+            >
+              Apellido y Nombre
+            </th>
+            <th
+              scope="col"
+              class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider"
+            >
+              DNI
+            </th>
+            <th
+              scope="col"
+              class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider"
+            >
+              Edad
+            </th>
+            <th
+              scope="col"
+              class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider"
+            >
+              Discapacidad
+            </th>
+            <th
+              scope="col"
+              class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider"
+            >
+              CUD Vigente
+            </th>
+            <th
+              scope="col"
+              class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider"
+            >
+              Acciones
+            </th>
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-slate-200">
+          @for (person of filteredPeople(); track person.id) {
+          <tr
+            (click)="viewProfile(person)"
+            class="cursor-pointer hover:bg-slate-50 transition-colors"
+          >
+            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-900">
+              {{ person.nombreCompleto }}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600">{{ person.dni }}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600">
+              {{ getAge(person.fechaNacimiento) }}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600">
+              {{ person.tipoDiscapacidad }}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm">
+              @if(person.cudVigente) {
+              <span
+                class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800"
+                >Sí</span
+              >
+              } @else {
+              <span
+                class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800"
+                >No</span
+              >
+              }
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-4">
+              <button
+                (click)="$event.stopPropagation(); openEditModal(person)"
+                class="text-teal-600 hover:text-teal-700 font-semibold inline-flex items-center gap-1"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-4 w-4"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"
+                  />
+                  <path
+                    fill-rule="evenodd"
+                    d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+                Editar
+              </button>
+              <button
+                (click)="$event.stopPropagation(); requestDelete(person)"
+                class="text-red-600 hover:text-red-700 font-semibold inline-flex items-center gap-1"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-4 w-4"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+                Eliminar
+              </button>
+            </td>
+          </tr>
+          } @empty {
+          <tr>
+            <td colspan="6" class="px-6 py-8 text-center text-slate-500">
+              No se encontraron registros.
+            </td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+@if (isModalOpen()) {
+<div
+  class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 animate-fade-in p-4"
+>
+  <div
+    class="bg-white rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col border border-slate-200 animate-slide-up"
+  >
+    <person-form [person]="editingPerson()" (save)="handleSave($event)" (cancel)="closeModal()" />
+  </div>
+</div>
+} @if (personToDelete(); as person) {
+<div
+  class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 animate-fade-in p-4"
+  (click)="cancelDelete()"
+>
+  <div
+    class="bg-white rounded-xl shadow-2xl w-full max-w-md border border-slate-200 animate-slide-up"
+    (click)="$event.stopPropagation()"
+  >
+    <div class="p-6 text-center">
+      <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100">
+        <svg
+          class="h-6 w-6 text-red-600"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          aria-hidden="true"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"
+          />
+        </svg>
+      </div>
+      <h3 class="mt-4 text-lg font-semibold leading-6 text-slate-900">Eliminar Persona</h3>
+      <div class="mt-2">
+        <p class="text-sm text-slate-500">
+          ¿Está seguro de que desea eliminar a
+          <strong class="text-slate-700">{{ person.nombreCompleto }}</strong> (DNI:
+          {{ person.dni }})? Esta acción no se puede deshacer.
+        </p>
+      </div>
+    </div>
+    <div class="p-4 bg-slate-50 rounded-b-xl flex justify-center space-x-4">
+      <button
+        type="button"
+        (click)="cancelDelete()"
+        class="px-6 py-2 rounded-lg text-slate-700 bg-white hover:bg-slate-100 transition-colors font-medium border border-slate-300"
+      >
+        Cancelar
+      </button>
+      <button
+        type="button"
+        (click)="confirmDeleteAction()"
+        class="px-6 py-2 rounded-lg text-white bg-red-600 hover:bg-red-700 transition-colors font-medium"
+      >
+        Eliminar
+      </button>
+    </div>
+  </div>
+</div>
+}
