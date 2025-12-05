@@ -2,7 +2,7 @@ import { Component, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 
-import { Auth } from '../../services/auth';
+import { Auth } from '../../../../shared/services/auth';
 
 @Component({
   selector: 'login-page',
