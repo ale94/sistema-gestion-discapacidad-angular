@@ -36,5 +36,4 @@
 .form-checkbox:focus {
   outline: none;
   box-shadow: 0 0 0 2px #14b8a6, 0 0 0 4px #f8fafc;
-  /* focus:ring-teal-500 + focus:ring-offset-slate-50 */
 }
