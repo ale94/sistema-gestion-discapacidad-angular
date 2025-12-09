@@ -1,0 +1,62 @@
+<form [formGroup]="eventForm" (ngSubmit)="onSubmit()" class="flex flex-col h-full">
+  <div class="p-6 border-b border-slate-200">
+    <h2 class="text-xl font-semibold text-slate-900">
+      {{ isEditMode ? 'Editar Evento' : 'Agregar Nuevo Evento' }}
+    </h2>
+  </div>
+
+  <div class="p-6 flex-grow overflow-y-auto bg-slate-50">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="md:col-span-2">
+        <label for="name" class="form-label">Nombre del Evento</label>
+        <input id="name" formControlName="name" type="text" class="form-input" />
+      </div>
+
+      <div>
+        <label for="type" class="form-label">Tipo de Evento</label>
+        <select id="type" formControlName="type" class="form-input">
+          @for (type of eventTypes; track type) {
+          <option [value]="type">{{ type }}</option>
+          }
+        </select>
+      </div>
+
+      <div>
+        <label for="date" class="form-label">Fecha</label>
+        <input id="date" formControlName="date" type="date" class="form-input" />
+      </div>
+
+      <div class="md:col-span-2">
+        <label for="attendees" class="form-label">N° de Asistentes</label>
+        <input id="attendees" formControlName="attendees" type="number" class="form-input" />
+      </div>
+
+      <div class="md:col-span-2">
+        <label for="description" class="form-label">Descripción</label>
+        <textarea
+          id="description"
+          formControlName="description"
+          rows="4"
+          class="form-input"
+        ></textarea>
+      </div>
+    </div>
+  </div>
+
+  <div class="p-4 bg-white border-t border-slate-200 flex justify-end space-x-4">
+    <button
+      type="button"
+      (click)="onCancel()"
+      class="px-6 py-2 rounded-lg text-slate-700 bg-white hover:bg-slate-100 transition-colors border border-slate-300"
+    >
+      Cancelar
+    </button>
+    <button
+      type="submit"
+      [disabled]="eventForm.invalid"
+      class="px-6 py-2 rounded-lg text-white bg-teal-600 hover:bg-teal-700 disabled:bg-slate-400 disabled:cursor-not-allowed transition-colors"
+    >
+      Guardar
+    </button>
+  </div>
+</form>
