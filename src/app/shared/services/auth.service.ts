@@ -10,7 +10,7 @@ export class AuthService {
   username = signal<string | null>(sessionStorage.getItem('username'));
 
   login(username: string, password: string): boolean {
-    if (username === 'admin' && password === 'admin') {
+    if (username === 'eugenia' && password === 'admin') {
       sessionStorage.setItem('is_authenticated', 'true');
       sessionStorage.setItem('username', username);
 

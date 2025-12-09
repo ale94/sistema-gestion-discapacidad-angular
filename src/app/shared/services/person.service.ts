@@ -11,7 +11,7 @@ export class PersonService {
   constructor() {
     // Load initial mock data
     if (this.people().length === 0) {
-      this.people.set(this.generateMockData(100));
+      this.people.set(this.generateMockData(1200));
     }
   }
 
