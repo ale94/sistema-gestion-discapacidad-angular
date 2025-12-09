@@ -83,7 +83,9 @@
             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-900">
               {{ person.nombreCompleto }}
             </td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600">{{ person.dni }}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600">
+              {{ person.dni | number }}
+            </td>
             <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600">
               {{ getAge(person.fechaNacimiento) }}
             </td>
@@ -199,7 +201,7 @@
         <p class="text-sm text-slate-500">
           ¿Está seguro de que desea eliminar a
           <strong class="text-slate-700">{{ person.nombreCompleto }}</strong> (DNI:
-          {{ person.dni }})? Esta acción no se puede deshacer.
+          {{ person.dni | number }})? Esta acción no se puede deshacer.
         </p>
       </div>
     </div>

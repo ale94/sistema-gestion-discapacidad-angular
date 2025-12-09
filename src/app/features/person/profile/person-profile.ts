@@ -1,11 +1,12 @@
 import { Component, computed, inject } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { PersonService } from '../../../shared/services/person.service';
+import { DecimalPipe } from '@angular/common';
 
 @Component({
   selector: 'person-profile',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, DecimalPipe],
   templateUrl: './person-profile.html',
 })
 export default class PersonProfile {

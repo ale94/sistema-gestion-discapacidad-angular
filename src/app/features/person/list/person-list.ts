@@ -4,11 +4,12 @@ import { Router } from '@angular/router';
 import { Person } from '../../../shared/interfaces/person.interface';
 import { FormsModule } from '@angular/forms';
 import { PersonForm } from "../form/person-form";
+import { DecimalPipe } from '@angular/common';
 
 @Component({
   selector: 'person-list',
   standalone: true,
-  imports: [FormsModule, PersonForm],
+  imports: [FormsModule, PersonForm, DecimalPipe],
   templateUrl: './person-list.html',
 })
 export default class PersonList {

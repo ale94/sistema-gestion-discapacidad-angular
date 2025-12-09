@@ -2,12 +2,12 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 import { PersonService } from '../../shared/services/person.service';
-import { TitleCasePipe } from '@angular/common';
+import { DecimalPipe, TitleCasePipe } from '@angular/common';
 
 @Component({
   selector: 'dashboard-page',
   standalone: true,
-  imports: [RouterLink, TitleCasePipe],
+  imports: [RouterLink, TitleCasePipe, DecimalPipe],
   templateUrl: './dashboard-page.html',
 })
 export default class DashboardPage {
