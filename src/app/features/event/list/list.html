@@ -1,1 +1,253 @@
-<p>list works!</p>,
+<div class="container mx-auto">
+  <!-- Header -->
+  <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+    <h1 class="text-3xl font-bold text-slate-900">Gestión de Eventos</h1>
+    <div class="flex items-center gap-4">
+      <!-- Year Selector -->
+      <div class="flex items-center gap-2 bg-white p-1 rounded-lg border border-slate-200">
+        <button
+          (click)="changeYear(-1)"
+          class="p-2 rounded-md text-slate-600 hover:bg-slate-100 transition-colors"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+          </svg>
+        </button>
+        <span class="text-xl font-bold text-slate-800 w-24 text-center">{{ selectedYear() }}</span>
+        <button
+          (click)="changeYear(1)"
+          class="p-2 rounded-md text-slate-600 hover:bg-slate-100 transition-colors"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
+      </div>
+      <!-- Add Button -->
+      <button
+        (click)="openAddModal()"
+        class="flex items-center bg-teal-600 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg h-full"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-5 w-5 mr-2"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+            clip-rule="evenodd"
+          />
+        </svg>
+        Agregar Evento
+      </button>
+    </div>
+  </div>
+
+  <!-- Events List by Month -->
+  <div class="space-y-8">
+    @for (group of eventsByMonth(); track group.monthIndex) {
+    <div>
+      <h2 class="text-2xl font-semibold text-teal-600 border-b-2 border-slate-200 pb-2 mb-4">
+        {{ group.month }} {{ selectedYear() }}
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        @for (event of group.events; track event.id) {
+        <div
+          class="bg-white border border-slate-200 rounded-xl shadow-md flex flex-col justify-between hover:border-teal-500 transition-colors duration-300"
+        >
+          <div class="p-4">
+            <div class="flex justify-between items-start">
+              <h3 class="text-lg font-bold text-slate-900 mb-1">{{ event.name }}</h3>
+              <span
+                class="text-xs font-semibold px-2 py-1 rounded-full"
+                [class.bg-sky-100]="event.type === 'Taller'"
+                [class.text-sky-800]="event.type === 'Taller'"
+                [class.bg-amber-100]="event.type === 'Capacitación'"
+                [class.text-amber-800]="event.type === 'Capacitación'"
+                [class.bg-indigo-100]="event.type === 'Charla'"
+                [class.text-indigo-800]="event.type === 'Charla'"
+                [class.bg-rose-100]="event.type === 'Evento Social'"
+                [class.text-rose-800]="event.type === 'Evento Social'"
+                [class.bg-slate-200]="event.type === 'Otro'"
+              >
+                {{ event.type }}
+              </span>
+            </div>
+            <p class="text-sm text-slate-500 mb-2">{{ event.date }}</p>
+            <p class="text-sm text-slate-600 mb-3">{{ event.description }}</p>
+            <div class="text-sm text-slate-500 flex items-center">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-4 w-4 mr-2"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"
+                />
+              </svg>
+              <span>{{ event.attendees }} Asistentes</span>
+            </div>
+          </div>
+          <div
+            class="p-2 bg-slate-50 rounded-b-xl flex justify-end space-x-2 border-t border-slate-200"
+          >
+            <button
+              (click)="openEditModal(event)"
+              class="text-teal-600 hover:text-teal-700 font-semibold inline-flex items-center gap-1 text-xs px-2 py-1 rounded-md hover:bg-slate-100"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-4 w-4"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"
+                />
+                <path
+                  fill-rule="evenodd"
+                  d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+              Editar
+            </button>
+            <button
+              (click)="requestDelete(event)"
+              class="text-red-600 hover:text-red-700 font-semibold inline-flex items-center gap-1 text-xs px-2 py-1 rounded-md hover:bg-slate-100"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-4 w-4"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+              Eliminar
+            </button>
+          </div>
+        </div>
+        }
+      </div>
+    </div>
+    } @empty {
+    <div class="text-center py-16 bg-white rounded-xl border border-dashed border-slate-300">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="mx-auto h-12 w-12 text-slate-400"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        stroke-width="1"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+        />
+      </svg>
+      <h3 class="mt-2 text-lg font-medium text-slate-800">
+        No hay eventos para {{ selectedYear() }}
+      </h3>
+      <p class="mt-1 text-sm text-slate-500">
+        Puedes agregar un nuevo evento usando el botón de arriba.
+      </p>
+    </div>
+    }
+  </div>
+</div>
+
+<!-- Add/Edit Modal -->
+@if (isModalOpen()) {
+<div
+  class="fixed inset-0 bg-gray-800/30 backdrop-blur-md flex items-center justify-center z-50 animate-fade-in p-4"
+>
+  <div
+    class="bg-white rounded-xl shadow-2xl w-full max-w-4xl flex flex-col border border-slate-200 animate-slide-up overflow-hidden"
+  >
+    <event-form
+      [event]="editingEvent()"
+      (save)="handleSave($event)"
+      (cancel)="closeModal()"
+    />
+  </div>
+</div>
+}
+
+<!-- Delete Confirmation Modal -->
+@if (eventToDelete(); as event) {
+<div
+  class="fixed inset-0 bg-gray-800/30 backdrop-blur-md flex items-center justify-center z-50 animate-fade-in p-4"
+  (click)="cancelDelete()"
+>
+  <div
+    class="bg-white rounded-xl shadow-2xl w-full max-w-md border border-slate-200 animate-slide-up"
+    (click)="$event.stopPropagation()"
+  >
+    <div class="p-6 text-center">
+      <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100">
+        <svg
+          class="h-6 w-6 text-red-600"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          aria-hidden="true"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"
+          />
+        </svg>
+      </div>
+      <h3 class="mt-4 text-lg font-semibold leading-6 text-slate-900">Eliminar Evento</h3>
+      <div class="mt-2">
+        <p class="text-sm text-slate-500">
+          ¿Está seguro de que desea eliminar el evento
+          <strong class="text-slate-700">{{ event.name }}</strong
+          >? Esta acción no se puede deshacer.
+        </p>
+      </div>
+    </div>
+    <div class="p-4 bg-slate-50 rounded-b-xl flex justify-center space-x-4">
+      <button
+        type="button"
+        (click)="cancelDelete()"
+        class="px-6 py-2 rounded-lg text-slate-700 bg-white hover:bg-slate-100 transition-colors font-medium border border-slate-300"
+      >
+        Cancelar
+      </button>
+      <button
+        type="button"
+        (click)="confirmDeleteAction()"
+        class="px-6 py-2 rounded-lg text-white bg-red-600 hover:bg-red-700 transition-colors font-medium"
+      >
+        Eliminar
+      </button>
+    </div>
+  </div>
+</div>
+}
