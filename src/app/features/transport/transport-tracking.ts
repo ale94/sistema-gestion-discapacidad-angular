@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { TransportService } from '../../shared/services/transport.service';
 
 @Component({
   selector: 'transport-tracking',
@@ -6,4 +7,6 @@ import { Component } from '@angular/core';
   imports: [],
   templateUrl: './transport-tracking.html',
 })
-export default class TransportTracking { }
+export default class TransportTracking {
+  transportService = inject(TransportService);
+}
