@@ -1,17 +1,19 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 import { PersonService } from '../../shared/services/person.service';
+import { TitleCasePipe } from '@angular/common';
 
 @Component({
   selector: 'dashboard-page',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, TitleCasePipe],
   templateUrl: './dashboard-page.html',
 })
 export default class DashboardPage {
   private personService = inject(PersonService);
   private people = this.personService.getPeople();
+  username = signal<string | null>(sessionStorage.getItem('username'));
 
   totalPeople = computed(() => this.people().length);
   withCUD = computed(() => this.people().filter(p => p.cudVigente).length);
