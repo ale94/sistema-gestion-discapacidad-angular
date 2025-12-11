@@ -3,10 +3,10 @@ import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
 import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
-import { registerLocaleData } from '@angular/common';
-import localeEs from '@angular/common/locales/es-AR'
+import { HashLocationStrategy, LocationStrategy, registerLocaleData } from '@angular/common';
+import localeEs from '@angular/common/locales/es-AR';
 
-registerLocaleData(localeEs, "es")
+registerLocaleData(localeEs, 'es');
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -15,7 +15,11 @@ export const appConfig: ApplicationConfig = {
     provideCharts(withDefaultRegisterables()),
     {
       provide: LOCALE_ID,
-      useValue: "es"
-    }
-  ]
+      useValue: 'es',
+    },
+    {
+      provide: LocationStrategy,
+      useClass: HashLocationStrategy,
+    },
+  ],
 };
