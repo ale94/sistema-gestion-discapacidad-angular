@@ -17,9 +17,6 @@ import { AuthService } from '../../services/auth.service';
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         transition: all 0.2s ease-in-out;
       }
-      .nav-link.active svg {
-        stroke: white;
-      }
     `,
   ],
 })
