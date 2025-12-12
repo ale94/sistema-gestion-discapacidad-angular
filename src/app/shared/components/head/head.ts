@@ -12,5 +12,5 @@ export class Head {
   toggleMobileSidebar = output<void>();
   authService = inject(AuthService);
   username = computed(() => this.authService.username());
-
+  user = this.authService.HASHED_USERS.find((u) => u.username === this.username());
 }

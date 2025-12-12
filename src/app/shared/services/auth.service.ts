@@ -1,16 +1,27 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
 
+function simpleHash(text: string): string {
+  return btoa(text).substring(0, 15);
+}
+
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private router: Router = inject(Router);
+  HASHED_USERS = [
+    { username: 'eugenia', position: 'directora', passwordHash: simpleHash('admin') },
+    { username: 'maria', position: 'administrativa', passwordHash: simpleHash('1234') },
+  ];
   isAuthenticated = signal<boolean>(sessionStorage.getItem('is_authenticated') === 'true');
   username = signal<string | null>(sessionStorage.getItem('username'));
+  private router: Router = inject(Router);
 
   login(username: string, password: string): boolean {
-    if (username === 'eugenia' && password === 'admin') {
+    const user = this.HASHED_USERS.find((u) => u.username === username);
+    const passwordHash = simpleHash(password);
+
+    if (user && user.passwordHash === passwordHash) {
       sessionStorage.setItem('is_authenticated', 'true');
       sessionStorage.setItem('username', username);
 
