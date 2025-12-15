@@ -24,7 +24,7 @@ export default class LoginPage {
     if (this.authService.login(this.username(), this.password())) {
       this.router.navigate(['/dashboard']);
     } else {
-      this.errorMessage.set('Credenciales inválidas. Intente con "admin" y "admin".');
+      this.errorMessage.set('Credenciales inválidas. Intente nuevamente.');
     }
   }
 }
