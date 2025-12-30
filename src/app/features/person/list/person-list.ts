@@ -3,13 +3,13 @@ import { PersonService } from '../../../shared/services/person.service';
 import { Router } from '@angular/router';
 import { Person } from '../../../shared/interfaces/person.interface';
 import { FormsModule } from '@angular/forms';
-import { PersonForm } from "../form/person-form";
-import { DecimalPipe } from '@angular/common';
+import { PersonForm } from '../form/person-form';
+import { DecimalPipe, NgClass } from '@angular/common';
 
 @Component({
   selector: 'person-list',
   standalone: true,
-  imports: [FormsModule, PersonForm, DecimalPipe],
+  imports: [FormsModule, PersonForm, DecimalPipe, NgClass],
   templateUrl: './person-list.html',
 })
 export default class PersonList {
@@ -20,20 +20,36 @@ export default class PersonList {
   isModalOpen = signal(false);
   editingPerson = signal<Person | null>(null);
   personToDelete = signal<Person | null>(null);
+  activeFilter = signal<'ALL' | 'CUD' | 'PENSION' | 'PASE_LIBRE' | 'INDICADORES'>('ALL');
 
   searchTerm = signal('');
 
   filteredPeople = computed(() => {
-    const term = this.searchTerm().toLowerCase();
-    if (!term) {
-      return this.people();
-    }
-    return this.people().filter(
-      (person) =>
+    const term = this.searchTerm().toLowerCase().trim();
+    const filter = this.activeFilter();
+    const people = this.people();
+
+    const filtersMap: Record<string, (p: Person) => boolean> = {
+      ALL: () => true,
+      CUD: (p) => p.cudVigente,
+      PENSION: (p) => p.pension,
+      PASE_LIBRE: (p) => p.paseLibre,
+      // INDICADORES: (p) => p.indicadores?.length > 0,
+    };
+
+    return people.filter((person) => {
+      // Búsqueda por texto
+      const matchesText =
+        !term ||
         person.nombreCompleto.toLowerCase().includes(term) ||
         person.dni.includes(term) ||
-        person.diagnostico.toLowerCase().includes(term)
-    );
+        person.diagnostico.toLowerCase().includes(term);
+
+      // Filtro por estado
+      const matchesFilter = (filtersMap[filter] ?? (() => true))(person);
+
+      return matchesText && matchesFilter;
+    });
   });
 
   onSearchChange(term: string) {
