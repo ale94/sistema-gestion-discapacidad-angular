@@ -14,33 +14,41 @@ export const routes: Routes = [
       {
         path: '',
         redirectTo: 'dashboard',
-        pathMatch: 'full'
+        pathMatch: 'full',
       },
       {
         path: 'dashboard',
-        loadComponent: () => import('./features/dashboard/dashboard-page')
+        loadComponent: () => import('./features/dashboard/dashboard-page'),
       },
       {
         path: 'personas',
-        loadComponent: () => import('./features/person/list/person-list')
+        loadComponent: () => import('./features/person/list/person-list'),
+      },
+      {
+        path: 'indicadores',
+        loadComponent: () => import('./features/person/indicator/person-indicator'),
       },
       {
         path: 'personas/:id',
-        loadComponent: () => import('./features/person/profile/person-profile')
+        loadComponent: () => import('./features/person/profile/person-profile'),
       },
       {
         path: 'graficos',
-        loadComponent: () => import('./features/chart/chart-page')
+        loadComponent: () => import('./features/chart/chart-page'),
       },
       {
-        path: 'transporte',
-        loadComponent: () => import('./features/transport/transport-tracking')
+        path: 'equipamientos',
+        loadComponent: () => import('./features/equipment/equipment-page'),
+      },
+      {
+        path: 'transportes',
+        loadComponent: () => import('./features/transport/transport-tracking'),
       },
       {
         path: 'eventos',
-        loadComponent: () => import('./features/event/list/list')
+        loadComponent: () => import('./features/event/list/list'),
       },
-    ]
+    ],
   },
   {
     path: '**',
