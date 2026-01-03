@@ -9,7 +9,7 @@
   </div>
 
   <!-- Stats Cards -->
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
     <div
       class="bg-white p-6 rounded-xl border border-slate-200 flex items-start justify-between hover:border-sky-500 transition-all duration-300 transform hover:-translate-y-1 shadow-sm hover:shadow-lg"
     >
@@ -55,6 +55,27 @@
       </div>
     </div>
     <div
+      class="bg-white p-6 rounded-xl border border-slate-200 flex items-start justify-between hover:border-rose-500 transition-all duration-300 transform hover:-translate-y-1 shadow-sm hover:shadow-lg"
+    >
+      <div>
+        <h2 class="text-sm font-medium text-slate-500">Con Pase Libre</h2>
+        <p class="text-3xl font-bold text-rose-500 mt-2">{{ withPaseLibre() }}</p>
+      </div>
+      <div class="bg-rose-100 p-3 rounded-lg">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="bi bi-unlock h-6 w-6 text-rose-600"
+          fill="currentColor"
+          viewBox="0 0 18 18"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M12 0a4 4 0 0 1 4 4v2.5h-1V4a3 3 0 1 0-6 0v2h.5A2.5 2.5 0 0 1 12 8.5v5A2.5 2.5 0 0 1 9.5 16h-7A2.5 2.5 0 0 1 0 13.5v-5A2.5 2.5 0 0 1 2.5 6H8V4a4 4 0 0 1 4-4M2.5 7A1.5 1.5 0 0 0 1 8.5v5A1.5 1.5 0 0 0 2.5 15h7a1.5 1.5 0 0 0 1.5-1.5v-5A1.5 1.5 0 0 0 9.5 7z"
+          />
+        </svg>
+      </div>
+    </div>
+    <div
       class="bg-white p-6 rounded-xl border border-slate-200 flex items-start justify-between hover:border-amber-500 transition-all duration-300 transform hover:-translate-y-1 shadow-sm hover:shadow-lg"
     >
       <div>
@@ -79,23 +100,23 @@
       </div>
     </div>
     <div
-      class="bg-white p-6 rounded-xl border border-slate-200 flex items-start justify-between hover:border-rose-500 transition-all duration-300 transform hover:-translate-y-1 shadow-sm hover:shadow-lg"
+      class="bg-white p-6 rounded-xl border border-slate-200 flex items-start justify-between hover:border-pink-500 transition-all duration-300 transform hover:-translate-y-1 shadow-sm hover:shadow-lg"
     >
       <div>
-        <h2 class="text-sm font-medium text-slate-500">Con Pase Libre</h2>
-        <p class="text-3xl font-bold text-rose-500 mt-2">{{ withPaseLibre() }}</p>
+        <h2 class="text-sm font-medium text-slate-500">Con Indicadores</h2>
+        <p class="text-3xl font-bold text-pink-500 mt-2">{{ withIndicators() }}</p>
       </div>
-      <div class="bg-rose-100 p-3 rounded-lg">
+      <div class="bg-pink-100 p-3 rounded-lg">
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          class="bi bi-unlock h-6 w-6 text-rose-600"
           fill="currentColor"
+          class="h-6 w-6 text-pink-600"
           viewBox="0 0 18 18"
         >
           <path
-            fill-rule="evenodd"
-            d="M12 0a4 4 0 0 1 4 4v2.5h-1V4a3 3 0 1 0-6 0v2h.5A2.5 2.5 0 0 1 12 8.5v5A2.5 2.5 0 0 1 9.5 16h-7A2.5 2.5 0 0 1 0 13.5v-5A2.5 2.5 0 0 1 2.5 6H8V4a4 4 0 0 1 4-4M2.5 7A1.5 1.5 0 0 0 1 8.5v5A1.5 1.5 0 0 0 2.5 15h7a1.5 1.5 0 0 0 1.5-1.5v-5A1.5 1.5 0 0 0 9.5 7z"
+            d="M5.5 2A3.5 3.5 0 0 0 2 5.5v5A3.5 3.5 0 0 0 5.5 14h5a3.5 3.5 0 0 0 3.5-3.5V8a.5.5 0 0 1 1 0v2.5a4.5 4.5 0 0 1-4.5 4.5h-5A4.5 4.5 0 0 1 1 10.5v-5A4.5 4.5 0 0 1 5.5 1H8a.5.5 0 0 1 0 1z"
           />
+          <path d="M16 3a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
         </svg>
       </div>
     </div>
