@@ -3,6 +3,6 @@ export interface PeopleIndicator {
   apellidoNombre: string;
   dni: string;
   indicadores: string;
-  direccion: string;
+  domicilio: string;
   fechaConsulta: string;
 }

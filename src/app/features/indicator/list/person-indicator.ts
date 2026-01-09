@@ -1,12 +1,13 @@
 import { Component, computed, inject, signal } from '@angular/core';
-import { PeopleIndicatorsService } from '../../../shared/services/people.indicators.service';
-import { PeopleIndicator } from '../../../shared/interfaces/people.indicator.interface';
 import { DecimalPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { IndicatorForm } from '../form/indicator-form';
+import { PeopleIndicatorsService } from '../../../shared/services/people.indicators.service';
+import { PeopleIndicator } from '../../../shared/interfaces/people.indicator.interface';
 
 @Component({
   selector: 'person-indicator',
-  imports: [FormsModule, DecimalPipe],
+  imports: [FormsModule, DecimalPipe, IndicatorForm],
   templateUrl: './person-indicator.html',
 })
 export default class PersonIndicator {

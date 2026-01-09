@@ -69,7 +69,7 @@ export class PeopleIndicatorsService {
         apellidoNombre: `${apellido}, ${nombre}`,
         dni: Math.floor(20000000 + Math.random() * 30000000).toString(),
         indicadores,
-        direccion: `Calle ${i + 100} Nº ${Math.floor(Math.random() * 500)}`,
+        domicilio: `Calle ${i + 100} Nº ${Math.floor(Math.random() * 500)}`,
         fechaConsulta,
       });
     }

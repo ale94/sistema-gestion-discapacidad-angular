@@ -1,0 +1,56 @@
+<form
+  [formGroup]="personForm"
+  (ngSubmit)="onSubmit()"
+  class="flex flex-col w-full max-w-5xl max-h-[90vh] rounded-lg overflow-hidden"
+>
+  <div class="p-6 border-b border-slate-200">
+    <h2 class="text-xl font-semibold text-slate-900">
+      {{ isEditMode ? 'Editar Persona' : 'Agregar Nueva Persona' }}
+    </h2>
+  </div>
+
+  <div class="p-6 grow overflow-y-auto bg-slate-50">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- Personal Info -->
+      <div class="lg:col-span-1">
+        <label class="form-label">Apellido y Nombre</label>
+        <input formControlName="nombreCompleto" type="text" class="form-input" />
+      </div>
+      <div class="lg:col-span-1">
+        <label class="form-label">D.N.I</label>
+        <input formControlName="dni" type="text" class="form-input" />
+      </div>
+      <div class="lg:col-span-1">
+        <label class="form-label">Fecha de Consulta</label>
+        <input formControlName="fechaConsulta" type="date" class="form-input" />
+      </div>
+
+      <div class="lg:col-span-3">
+        <label class="form-label">Domicilio</label>
+        <input formControlName="domicilio" type="text" class="form-input" />
+      </div>
+
+      <div class="lg:col-span-3">
+        <label class="form-label">Tipo de Indicador</label>
+        <input formControlName="indicadores" type="text" class="form-input" />
+      </div>
+    </div>
+  </div>
+
+  <div class="p-4 bg-white border-t border-slate-200 flex justify-end space-x-4">
+    <button
+      type="button"
+      (click)="onCancel()"
+      class="px-6 py-2 rounded-lg text-slate-700 bg-white hover:bg-slate-100 transition-colors border border-slate-300"
+    >
+      Cancelar
+    </button>
+    <button
+      type="submit"
+      [disabled]="personForm.invalid"
+      class="px-6 py-2 rounded-lg text-white bg-teal-600 hover:bg-teal-700 disabled:bg-slate-400 disabled:cursor-not-allowed transition-colors"
+    >
+      Guardar
+    </button>
+  </div>
+</form>
