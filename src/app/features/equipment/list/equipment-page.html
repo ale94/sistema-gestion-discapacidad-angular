@@ -35,6 +35,21 @@
         </svg>
         Nuevo Equipo
       </button>
+
+      <button
+        type="button"
+        class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500"
+      >
+        <svg class="-ml-1 mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"
+          />
+        </svg>
+        Prestamo
+      </button>
     </div>
   </div>
 
@@ -59,6 +74,12 @@
             class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider"
           >
             Estado
+          </th>
+          <th
+            scope="col"
+            class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider"
+          >
+            Prestatario
           </th>
           <th
             scope="col"
@@ -99,9 +120,8 @@
               {{ e.state }}
             </span>
           </td>
-          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-            {{ e.loanDate | date }}
-          </td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ 'Hugo Rua' }}</td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ e.loanDate | date }}</td>
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
             {{ e.returnDate | date }}
           </td>
