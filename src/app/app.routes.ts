@@ -38,7 +38,7 @@ export const routes: Routes = [
       },
       {
         path: 'equipamientos',
-        loadComponent: () => import('./features/equipment/list/equipment-page'),
+        loadComponent: () => import('./features/equipment/equipment-page'),
       },
       {
         path: 'transportes',
