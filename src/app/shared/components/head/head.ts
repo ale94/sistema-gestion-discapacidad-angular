@@ -1,11 +1,10 @@
 import { Component, computed, inject, output } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
-import { TitleCasePipe } from '@angular/common';
 
 @Component({
   selector: 'app-head',
   standalone: true,
-  imports: [TitleCasePipe],
+  imports: [],
   templateUrl: './head.html',
 })
 export class Head {

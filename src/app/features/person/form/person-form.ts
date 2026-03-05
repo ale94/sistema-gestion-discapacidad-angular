@@ -1,23 +1,29 @@
 import { Component, inject, input, output } from '@angular/core';
 import { Person } from '../../../shared/interfaces/person.interface';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 
 @Component({
   selector: 'person-form',
   standalone: true,
-  imports: [ReactiveFormsModule, FormsModule],
+  imports: [ReactiveFormsModule, ],
   templateUrl: './person-form.html',
   styleUrls: ['./person-form.css'],
 })
 export class PersonForm {
-
-  familiares: any[] = [];
+  //familiares: any[] = [];
   person = input<Person | null>(null);
 
   save = output<Omit<Person, 'id'> | Person>();
   cancel = output<void>();
 
   private fb: FormBuilder = inject(FormBuilder);
+
   personForm!: FormGroup;
 
   isEditMode = false;

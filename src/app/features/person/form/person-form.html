@@ -15,7 +15,7 @@
       <legend class="px-2 text-md font-semibold text-slate-700">1. Datos de la Persona</legend>
 
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-2">
-        <div>
+        <!-- <div>
           <input formControlName="apellido" type="text" class="form-input" placeholder="Apellido" />
         </div>
         <div>
@@ -23,7 +23,7 @@
         </div>
         <div>
           <input formControlName="dni" type="text" class="form-input" placeholder="D.N.I" />
-        </div>
+        </div> -->
         <div>
           <label class="form-label">Fecha de Nacimiento</label>
           <input formControlName="fechaNacimiento" type="date" class="form-input" />
@@ -31,19 +31,19 @@
         <div>
           <label class="form-label">Sexo</label>
           <select formControlName="sexo" class="form-input">
-            @for (gender of ['Masculino', 'Femenino']; track gender) {
+            @for (gender of genders; track gender) {
               <option [value]="gender">{{ gender }}</option>
             }
           </select>
         </div>
-        <div>
+        <!-- <div>
           <label class="form-label">Estado Civil</label>
           <select formControlName="estadoCivil" class="form-input">
             @for (type of ['Soltero', 'Casado', 'Divorciado', 'Viudo']; track type) {
               <option [value]="type">{{ type }}</option>
             }
           </select>
-        </div>
+        </div> -->
         <div>
           <input
             formControlName="telefono"
@@ -61,13 +61,13 @@
           />
         </div>
 
-        <div>
+        <!-- <div>
           <input formControlName="barrio" type="text" class="form-input" placeholder="Barrio" />
         </div>
         <div>
           <input formControlName="calle" type="text" class="form-input" placeholder="Calle" />
-        </div>
-        <div>
+        </div> -->
+        <!-- <div>
           <input
             formControlName="localidad"
             type="text"
@@ -82,12 +82,12 @@
             class="form-input"
             placeholder="Provincia"
           />
-        </div>
+        </div> -->
       </div>
     </fieldset>
 
     <!-- GRUPO FAMILIAR -->
-    <fieldset class="lg:col-span-3 border border-slate-300 rounded-lg p-4 mb-4 bg-white">
+    <!-- <fieldset class="lg:col-span-3 border border-slate-300 rounded-lg p-4 mb-4 bg-white">
       <legend class="px-2 text-md font-semibold text-slate-700">2. Grupo Familiar</legend>
 
       <div class="space-y-3 mt-4">
@@ -132,10 +132,10 @@
           + Agregar Familiar
         </button>
       </div>
-    </fieldset>
+    </fieldset> -->
 
     <!-- SITUACION DE SALUD -->
-    <fieldset class="lg:col-span-3 border border-slate-300 rounded-lg p-4 mb-4 bg-white">
+    <!-- <fieldset class="lg:col-span-3 border border-slate-300 rounded-lg p-4 mb-4 bg-white">
       <legend class="px-2 text-md font-semibold text-slate-700">3. Situación de Salud</legend>
 
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-2">
@@ -189,10 +189,10 @@
           </select>
         </div>
       </div>
-    </fieldset>
+    </fieldset> -->
 
     <!-- SITUACION LABORAL -->
-    <fieldset class="lg:col-span-3 border border-slate-300 rounded-lg p-4 mb-4 bg-white">
+    <!-- <fieldset class="lg:col-span-3 border border-slate-300 rounded-lg p-4 mb-4 bg-white">
       <legend class="px-2 text-md font-semibold text-slate-700">4. Situación Laboral</legend>
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-2">
@@ -240,10 +240,10 @@
           />
         </div>
       </div>
-    </fieldset>
+    </fieldset> -->
 
     <!-- SITUACION DE EDUCACION -->
-    <fieldset class="lg:col-span-3 border border-slate-300 rounded-lg p-4 mb-4 bg-white">
+    <!-- <fieldset class="lg:col-span-3 border border-slate-300 rounded-lg p-4 mb-4 bg-white">
       <legend class="px-2 text-md font-semibold text-slate-700">5. Situación de Educación</legend>
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-2">
@@ -274,10 +274,10 @@
           />
         </div>
       </div>
-    </fieldset>
+    </fieldset> -->
 
     <!-- BENEFICIOS -->
-    <fieldset class="lg:col-span-3 border border-slate-300 rounded-lg p-4 mb-4 bg-white">
+    <!-- <fieldset class="lg:col-span-3 border border-slate-300 rounded-lg p-4 mb-4 bg-white">
       <legend class="px-2 text-md font-semibold text-slate-700">6. Beneficios</legend>
 
       <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-2">
@@ -306,7 +306,7 @@
           <label class="ml-2 text-sm text-slate-700">Pase Libre</label>
         </div>
       </div>
-    </fieldset>
+    </fieldset> -->
   </div>
 
   <div class="p-4 bg-white border-t border-slate-200 flex justify-end space-x-4">
