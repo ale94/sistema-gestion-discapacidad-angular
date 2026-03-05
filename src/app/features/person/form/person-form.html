@@ -87,6 +87,52 @@
     </fieldset>
 
     <!-- GRUPO FAMILIAR -->
+    <fieldset class="lg:col-span-3 border border-slate-300 rounded-lg p-4 mb-4 bg-white">
+      <legend class="px-2 text-md font-semibold text-slate-700">2. Grupo Familiar</legend>
+
+      <div class="space-y-3 mt-4">
+        @for (familiar of familiares; track $index; let i = $index) {
+          <div
+            class="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-8 gap-2 bg-slate-50 p-3 rounded-lg"
+          >
+            <input [(ngModel)]="familiar.apellido" placeholder="Apellido" class="form-input" />
+            <input [(ngModel)]="familiar.nombre" placeholder="Nombre" class="form-input" />
+            <input [(ngModel)]="familiar.dni" placeholder="DNI" class="form-input" />
+            <input
+              [(ngModel)]="familiar.edad"
+              type="number"
+              placeholder="Edad"
+              class="form-input"
+            />
+            <input
+              [(ngModel)]="familiar.estadoCivil"
+              placeholder="Estado Civil"
+              class="form-input"
+            />
+            <input [(ngModel)]="familiar.parentesco" placeholder="Parentesco" class="form-input" />
+            <input [(ngModel)]="familiar.ocupacion" placeholder="Ocupación" class="form-input" />
+
+            <button
+              type="button"
+              (click)="familiares.splice(i, 1)"
+              class="bg-red-500 text-white px-2 rounded"
+            >
+              X
+            </button>
+          </div>
+        }
+      </div>
+
+      <div class="mt-4">
+        <button
+          type="button"
+          (click)="familiares.push({})"
+          class="px-4 py-2 bg-teal-600 text-white rounded-md"
+        >
+          + Agregar Familiar
+        </button>
+      </div>
+    </fieldset>
 
     <!-- SITUACION DE SALUD -->
     <fieldset class="lg:col-span-3 border border-slate-300 rounded-lg p-4 mb-4 bg-white">
@@ -95,7 +141,12 @@
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-2">
         <div class="lg:col-span-2">
           <label class="form-label">Diagnóstico</label>
-          <input formControlName="diagnostico" type="text" class="form-input" placeholder="Ingrese el diagnóstico"/>
+          <input
+            formControlName="diagnostico"
+            type="text"
+            class="form-input"
+            placeholder="Ingrese el diagnóstico"
+          />
         </div>
 
         <div>
@@ -109,7 +160,12 @@
 
         <div>
           <label class="form-label">Número CUD</label>
-          <input formControlName="numeroCUD" type="text" class="form-input" placeholder="Ingrese el CUD"/>
+          <input
+            formControlName="numeroCUD"
+            type="text"
+            class="form-input"
+            placeholder="Ingrese el CUD"
+          />
         </div>
 
         <div>
@@ -150,11 +206,21 @@
         </div>
         <div>
           <label class="form-label">Nombre</label>
-          <input formControlName="nombreEmpresa" type="text" class="form-input" placeholder="Nombre de la Empresa"/>
+          <input
+            formControlName="nombreEmpresa"
+            type="text"
+            class="form-input"
+            placeholder="Nombre de la Empresa"
+          />
         </div>
         <div>
           <label class="form-label">Direccion</label>
-          <input formControlName="direccionEmpresa" type="text" class="form-input" placeholder="Dirección de la Empresa"/>
+          <input
+            formControlName="direccionEmpresa"
+            type="text"
+            class="form-input"
+            placeholder="Dirección de la Empresa"
+          />
         </div>
         <div>
           <label class="form-label">Obra Social</label>
@@ -166,7 +232,12 @@
         </div>
         <div class="lg:col-span-2">
           <label class="form-label">Nombre</label>
-          <input formControlName="nombreObraSocial" type="text" class="form-input" placeholder="Nombre de la Obra Social"/>
+          <input
+            formControlName="nombreObraSocial"
+            type="text"
+            class="form-input"
+            placeholder="Nombre de la Obra Social"
+          />
         </div>
       </div>
     </fieldset>
@@ -186,11 +257,21 @@
         </div>
         <div>
           <label class="form-label">Nombre</label>
-          <input formControlName="nombreEscuela" type="text" class="form-input" placeholder="Nombre de la Escuela"/>
+          <input
+            formControlName="nombreEscuela"
+            type="text"
+            class="form-input"
+            placeholder="Nombre de la Escuela"
+          />
         </div>
         <div>
           <label class="form-label">Direccion</label>
-          <input formControlName="direccionEscuela" type="text" class="form-input" placeholder="Dirección de la Escuela"/>
+          <input
+            formControlName="direccionEscuela"
+            type="text"
+            class="form-input"
+            placeholder="Dirección de la Escuela"
+          />
         </div>
       </div>
     </fieldset>

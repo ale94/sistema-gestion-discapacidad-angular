@@ -1,15 +1,17 @@
 import { Component, inject, input, output } from '@angular/core';
 import { Person } from '../../../shared/interfaces/person.interface';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 
 @Component({
   selector: 'person-form',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, FormsModule],
   templateUrl: './person-form.html',
   styleUrls: ['./person-form.css'],
 })
 export class PersonForm {
+
+  familiares: any[] = [];
   person = input<Person | null>(null);
 
   save = output<Omit<Person, 'id'> | Person>();
