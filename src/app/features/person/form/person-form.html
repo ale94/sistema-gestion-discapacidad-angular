@@ -12,29 +12,22 @@
   <div class="p-6 grow overflow-y-auto bg-slate-50">
     <!-- DATOS DE LA PERSONA -->
     <fieldset class="lg:col-span-3 border border-slate-300 rounded-lg p-4 mb-4 bg-white">
-      <legend class="px-2 text-sm font-semibold text-slate-700">1. Datos de la Persona</legend>
+      <legend class="px-2 text-md font-semibold text-slate-700">1. Datos de la Persona</legend>
 
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-2">
         <div>
-          <label class="form-label">Apellido</label>
-          <input formControlName="apellido" type="text" class="form-input" />
+          <input formControlName="apellido" type="text" class="form-input" placeholder="Apellido" />
         </div>
-
         <div>
-          <label class="form-label">Nombre</label>
-          <input formControlName="nombre" type="text" class="form-input" />
+          <input formControlName="nombre" type="text" class="form-input" placeholder="Nombre" />
         </div>
-
         <div>
-          <label class="form-label">D.N.I</label>
-          <input formControlName="dni" type="text" class="form-input" />
+          <input formControlName="dni" type="text" class="form-input" placeholder="D.N.I" />
         </div>
-
         <div>
           <label class="form-label">Fecha de Nacimiento</label>
           <input formControlName="fechaNacimiento" type="date" class="form-input" />
         </div>
-
         <div>
           <label class="form-label">Sexo</label>
           <select formControlName="sexo" class="form-input">
@@ -43,7 +36,6 @@
             }
           </select>
         </div>
-
         <div>
           <label class="form-label">Estado Civil</label>
           <select formControlName="estadoCivil" class="form-input">
@@ -52,31 +44,44 @@
             }
           </select>
         </div>
+        <div>
+          <input
+            formControlName="telefono"
+            type="number"
+            class="form-input"
+            placeholder="Teléfono"
+          />
+        </div>
+        <div>
+          <input
+            formControlName="tutor"
+            type="text"
+            class="form-input"
+            placeholder="Nombre del Tutor"
+          />
+        </div>
 
         <div>
-          <label class="form-label">Telefono</label>
-          <input formControlName="telefono" type="number" class="form-input" />
+          <input formControlName="barrio" type="text" class="form-input" placeholder="Barrio" />
         </div>
         <div>
-          <label class="form-label">Tutor</label>
-          <input formControlName="tutor" type="text" class="form-input" />
-        </div>
-
-        <div>
-          <label class="form-label">Barrio</label>
-          <input formControlName="barrio" type="text" class="form-input" />
+          <input formControlName="calle" type="text" class="form-input" placeholder="Calle" />
         </div>
         <div>
-          <label class="form-label">Calle</label>
-          <input formControlName="calle" type="text" class="form-input" />
+          <input
+            formControlName="localidad"
+            type="text"
+            class="form-input"
+            placeholder="Localidad"
+          />
         </div>
         <div>
-          <label class="form-label">Localidad</label>
-          <input formControlName="localidad" type="text" class="form-input" />
-        </div>
-        <div>
-          <label class="form-label">Nacionalidad</label>
-          <input formControlName="nacionalidad" type="text" class="form-input" />
+          <input
+            formControlName="provincia"
+            type="text"
+            class="form-input"
+            placeholder="Provincia"
+          />
         </div>
       </div>
     </fieldset>
@@ -85,12 +90,12 @@
 
     <!-- SITUACION DE SALUD -->
     <fieldset class="lg:col-span-3 border border-slate-300 rounded-lg p-4 mb-4 bg-white">
-      <legend class="px-2 text-sm font-semibold text-slate-700">2. Situación de Salud</legend>
+      <legend class="px-2 text-md font-semibold text-slate-700">3. Situación de Salud</legend>
 
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-2">
         <div class="lg:col-span-2">
           <label class="form-label">Diagnóstico</label>
-          <input formControlName="diagnostico" type="text" class="form-input" />
+          <input formControlName="diagnostico" type="text" class="form-input" placeholder="Ingrese el diagnóstico"/>
         </div>
 
         <div>
@@ -104,7 +109,7 @@
 
         <div>
           <label class="form-label">Número CUD</label>
-          <input formControlName="numeroCUD" type="text" class="form-input" />
+          <input formControlName="numeroCUD" type="text" class="form-input" placeholder="Ingrese el CUD"/>
         </div>
 
         <div>
@@ -132,7 +137,7 @@
 
     <!-- SITUACION LABORAL -->
     <fieldset class="lg:col-span-3 border border-slate-300 rounded-lg p-4 mb-4 bg-white">
-      <legend class="px-2 text-sm font-semibold text-slate-700">3. Situación Laboral</legend>
+      <legend class="px-2 text-md font-semibold text-slate-700">4. Situación Laboral</legend>
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-2">
         <div>
@@ -144,12 +149,12 @@
           </select>
         </div>
         <div>
-          <label class="form-label">Nombre Empresa</label>
-          <input formControlName="nombreEmpresa" type="text" class="form-input" />
+          <label class="form-label">Nombre</label>
+          <input formControlName="nombreEmpresa" type="text" class="form-input" placeholder="Nombre de la Empresa"/>
         </div>
         <div>
           <label class="form-label">Direccion</label>
-          <input formControlName="direccionEmpresa" type="text" class="form-input" />
+          <input formControlName="direccionEmpresa" type="text" class="form-input" placeholder="Dirección de la Empresa"/>
         </div>
         <div>
           <label class="form-label">Obra Social</label>
@@ -160,20 +165,49 @@
           </select>
         </div>
         <div class="lg:col-span-2">
-          <label class="form-label">Nombre Obra Social</label>
-          <input formControlName="nombreObraSocial" type="text" class="form-input" />
+          <label class="form-label">Nombre</label>
+          <input formControlName="nombreObraSocial" type="text" class="form-input" placeholder="Nombre de la Obra Social"/>
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- SITUACION DE EDUCACION -->
+    <fieldset class="lg:col-span-3 border border-slate-300 rounded-lg p-4 mb-4 bg-white">
+      <legend class="px-2 text-md font-semibold text-slate-700">5. Situación de Educación</legend>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-2">
+        <div>
+          <label class="form-label">Nivel Educativo</label>
+          <select formControlName="nivelEducativo" class="form-input">
+            @for (status of ['Primario', 'Secundario', 'Terciario']; track status) {
+              <option [value]="status">{{ status }}</option>
+            }
+          </select>
+        </div>
+        <div>
+          <label class="form-label">Nombre</label>
+          <input formControlName="nombreEscuela" type="text" class="form-input" placeholder="Nombre de la Escuela"/>
+        </div>
+        <div>
+          <label class="form-label">Direccion</label>
+          <input formControlName="direccionEscuela" type="text" class="form-input" placeholder="Dirección de la Escuela"/>
         </div>
       </div>
     </fieldset>
 
     <!-- BENEFICIOS -->
     <fieldset class="lg:col-span-3 border border-slate-300 rounded-lg p-4 mb-4 bg-white">
-      <legend class="px-2 text-sm font-semibold text-slate-700">4. Beneficios</legend>
+      <legend class="px-2 text-md font-semibold text-slate-700">6. Beneficios</legend>
 
       <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-2">
         <div class="flex items-center">
-          <input formControlName="cudVigente" type="checkbox" class="form-checkbox" />
-          <label class="ml-2 text-sm text-slate-700">CUD Vigente</label>
+          <input formControlName="auh" type="checkbox" class="form-checkbox" />
+          <label class="ml-2 text-sm text-slate-700">AUH</label>
+        </div>
+
+        <div class="flex items-center">
+          <input formControlName="incluirSalud" type="checkbox" class="form-checkbox" />
+          <label class="ml-2 text-sm text-slate-700">Incluir Salud</label>
         </div>
 
         <div class="flex items-center">
