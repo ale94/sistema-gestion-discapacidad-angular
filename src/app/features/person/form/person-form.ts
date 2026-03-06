@@ -1,5 +1,5 @@
 import { Component, inject, input, output } from '@angular/core';
-import { Person } from '../../../shared/interfaces/person.interface';
+import { Person } from '../../../shared/interfaces/person';
 import {
   FormBuilder,
   FormGroup,
@@ -28,51 +28,52 @@ export class PersonForm {
 
   isEditMode = false;
 
-  disabilityTypes: Person['tipoDiscapacidad'][] = [
-    'Física',
-    'Sensorial',
-    'Intelectual',
-    'Psíquica',
-    'Múltiple',
-  ];
-  educationLevels: Person['escolaridad'][] = [
-    'Ninguna',
-    'Primaria',
-    'Secundaria',
-    'Terciaria',
-    'Universitaria',
-  ];
-  jobStatuses: Person['situacionLaboral'][] = [
-    'Empleado',
-    'Desempleado',
-    'Independiente',
-    'No aplica',
-  ];
-  genders: Person['sexo'][] = ['Masculino', 'Femenino', 'Otro'];
+  // disabilityTypes: Person['tipoDiscapacidad'][] = [
+  //   'Física',
+  //   'Sensorial',
+  //   'Intelectual',
+  //   'Psíquica',
+  //   'Múltiple',
+  // ];
+  // educationLevels: Person['escolaridad'][] = [
+  //   'Ninguna',
+  //   'Primaria',
+  //   'Secundaria',
+  //   'Terciaria',
+  //   'Universitaria',
+  // ];
+  // jobStatuses: Person['situacionLaboral'][] = [
+  //   'Empleado',
+  //   'Desempleado',
+  //   'Independiente',
+  //   'No aplica',
+  // ];
+  genders: string[] = ['Masculino', 'Femenino', 'Otro'];
 
   ngOnInit(): void {
     const currentPerson = this.person();
     this.isEditMode = !!currentPerson;
 
     this.personForm = this.fb.group({
-      nombreCompleto: [currentPerson?.nombreCompleto || '', Validators.required],
+      firstName: [currentPerson?.firstName || '', Validators.required],
+      lastName: [currentPerson?.lastName || '', Validators.required],
       dni: [currentPerson?.dni || '', [Validators.required, Validators.pattern('^[0-9]{7,8}$')]],
-      fechaNacimiento: [currentPerson?.fechaNacimiento || '', Validators.required],
-      domicilio: [currentPerson?.domicilio || '', Validators.required],
-      tutor: [currentPerson?.tutor || '', Validators.required],
-      telefono: [currentPerson?.telefono || '', Validators.required],
-      sexo: [currentPerson?.sexo || 'Masculino', Validators.required],
-      fechaEmpadronamiento: [currentPerson?.fechaEmpadronamiento || '', Validators.required],
-      diagnostico: [currentPerson?.diagnostico || '', Validators.required],
-      tipoDiscapacidad: [currentPerson?.tipoDiscapacidad || 'Física', Validators.required],
-      numeroCUD: [currentPerson?.numeroCUD || ''],
-      cudVigente: [currentPerson?.cudVigente || false],
-      obraSocial: [currentPerson?.obraSocial || ''],
-      escolaridad: [currentPerson?.escolaridad || 'Ninguna', Validators.required],
-      situacionLaboral: [currentPerson?.situacionLaboral || 'No aplica', Validators.required],
-      pension: [currentPerson?.pension || false],
-      bolsonMercaderia: [currentPerson?.bolsonMercaderia || false],
-      paseLibre: [currentPerson?.paseLibre || false],
+      // fechaNacimiento: [currentPerson?.fechaNacimiento || '', Validators.required],
+      // domicilio: [currentPerson?.domicilio || '', Validators.required],
+      // tutor: [currentPerson?.tutor || '', Validators.required],
+      // telefono: [currentPerson?.telefono || '', Validators.required],
+      // sexo: [currentPerson?.sexo || 'Masculino', Validators.required],
+      // fechaEmpadronamiento: [currentPerson?.fechaEmpadronamiento || '', Validators.required],
+      // diagnostico: [currentPerson?.diagnostico || '', Validators.required],
+      // tipoDiscapacidad: [currentPerson?.tipoDiscapacidad || 'Física', Validators.required],
+      // numeroCUD: [currentPerson?.numeroCUD || ''],
+      // cudVigente: [currentPerson?.cudVigente || false],
+      // obraSocial: [currentPerson?.obraSocial || ''],
+      // escolaridad: [currentPerson?.escolaridad || 'Ninguna', Validators.required],
+      // situacionLaboral: [currentPerson?.situacionLaboral || 'No aplica', Validators.required],
+      // pension: [currentPerson?.pension || false],
+      // bolsonMercaderia: [currentPerson?.bolsonMercaderia || false],
+      // paseLibre: [currentPerson?.paseLibre || false],
     });
   }
 

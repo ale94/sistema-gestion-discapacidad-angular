@@ -18,7 +18,7 @@ export default class PersonProfile {
     if (!personId) return undefined;
     return this.personService
       .getPeople()()
-      .find((p) => p.id === personId);
+      .find((p) => p.id === +personId);
   });
 
   getAge(birthDate: string | undefined): number | null {

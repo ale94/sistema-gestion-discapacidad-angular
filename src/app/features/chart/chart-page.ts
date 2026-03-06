@@ -2,7 +2,7 @@ import { Component, effect, inject, signal } from '@angular/core';
 import { ChartConfiguration, ChartData } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
 import { PersonService } from '../../shared/services/person.service';
-import { Person } from '../../shared/interfaces/person.interface';
+import { Person } from '../../shared/interfaces/person';
 
 @Component({
   selector: 'chart-page',
@@ -52,7 +52,7 @@ export default class ChartPage {
 
     people.forEach(person => {
       // Usamos el campo correcto: fechaEmpadronamiento (formato YYYY-MM-DD)
-      const dateString = person.fechaEmpadronamiento;
+      const dateString = person.registrationDate;
 
       // 1. Convertir la cadena de fecha a un objeto Date y extraer el año
       const date = new Date(dateString);

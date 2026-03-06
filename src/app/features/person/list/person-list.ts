@@ -1,10 +1,11 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { PersonService } from '../../../shared/services/person.service';
 import { Router } from '@angular/router';
-import { Person } from '../../../shared/interfaces/person.interface';
+import { Person } from '../../../shared/interfaces/person';
 import { FormsModule } from '@angular/forms';
 import { PersonForm } from '../form/person-form';
 import { DecimalPipe, NgClass } from '@angular/common';
+import { Status } from '../../../shared/enums/status';
 
 @Component({
   selector: 'person-list',
@@ -15,6 +16,8 @@ import { DecimalPipe, NgClass } from '@angular/common';
 export default class PersonList {
   private personService = inject(PersonService);
   private router = inject(Router);
+
+  status = Status;
 
   people = this.personService.getPeople();
   isModalOpen = signal(false);
@@ -31,9 +34,9 @@ export default class PersonList {
 
     const filtersMap: Record<string, (p: Person) => boolean> = {
       ALL: () => true,
-      CUD: (p) => p.cudVigente,
-      PENSION: (p) => p.pension,
-      PASE_LIBRE: (p) => p.paseLibre,
+      CUD: (p) => p.health?.activeCud ?? false,
+      PENSION: (p) => p.benefit?.pension ?? false,
+      PASE_LIBRE: (p) => p.benefit?.freePass ?? false,
       // INDICADORES: (p) => p.indicadores?.length > 0,
     };
 
@@ -41,9 +44,10 @@ export default class PersonList {
       // Búsqueda por texto
       const matchesText =
         !term ||
-        person.nombreCompleto.toLowerCase().includes(term) ||
+        person.firstName.toLowerCase().includes(term) ||
+        person.lastName.toLowerCase().includes(term) ||
         person.dni.includes(term) ||
-        person.diagnostico.toLowerCase().includes(term);
+        person.health.diagnostic.toLowerCase().includes(term);
 
       // Filtro por estado
       const matchesFilter = (filtersMap[filter] ?? (() => true))(person);
@@ -85,7 +89,7 @@ export default class PersonList {
     if ('id' in personData) {
       this.personService.updatePerson(personData);
     } else {
-      this.personService.addPerson(personData);
+      // this.personService.addPerson(personData);
     }
     this.closeModal();
   }
