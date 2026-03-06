@@ -17,8 +17,6 @@ export default class PersonList {
   private personService = inject(PersonService);
   private router = inject(Router);
 
-  status = Status;
-
   people = this.personService.getPeople();
   isModalOpen = signal(false);
   editingPerson = signal<Person | null>(null);
@@ -33,11 +31,13 @@ export default class PersonList {
     const people = this.people();
 
     const filtersMap: Record<string, (p: Person) => boolean> = {
-      ALL: () => true,
-      CUD: (p) => p.health?.activeCud ?? false,
-      PENSION: (p) => p.benefit?.pension ?? false,
-      PASE_LIBRE: (p) => p.benefit?.freePass ?? false,
-      // INDICADORES: (p) => p.indicadores?.length > 0,
+      ALL: (p) => p.status === Status.REGISTRADO,
+
+      CUD: (p) => p.status === Status.REGISTRADO && (p.health?.activeCud ?? false),
+
+      PENSION: (p) => p.status === Status.REGISTRADO && (p.benefit?.pension ?? false),
+
+      PASE_LIBRE: (p) => p.status === Status.REGISTRADO && (p.benefit?.freePass ?? false),
     };
 
     return people.filter((person) => {
