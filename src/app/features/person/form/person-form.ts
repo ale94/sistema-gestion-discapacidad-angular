@@ -3,7 +3,6 @@ import { Person } from '../../../shared/interfaces/person';
 import {
   FormBuilder,
   FormGroup,
-
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
@@ -16,7 +15,7 @@ import {
   styleUrls: ['./person-form.css'],
 })
 export class PersonForm {
-  //familiares: any[] = [];
+
   person = input<Person | null>(null);
 
   save = output<Omit<Person, 'id'> | Person>();
@@ -28,13 +27,7 @@ export class PersonForm {
 
   isEditMode = false;
 
-  // disabilityTypes: Person['tipoDiscapacidad'][] = [
-  //   'Física',
-  //   'Sensorial',
-  //   'Intelectual',
-  //   'Psíquica',
-  //   'Múltiple',
-  // ];
+
   // educationLevels: Person['escolaridad'][] = [
   //   'Ninguna',
   //   'Primaria',
@@ -42,14 +35,22 @@ export class PersonForm {
   //   'Terciaria',
   //   'Universitaria',
   // ];
-  // jobStatuses: Person['situacionLaboral'][] = [
-  //   'Empleado',
-  //   'Desempleado',
-  //   'Independiente',
-  //   'No aplica',
-  // ];
+
   genders: string[] = ['Masculino', 'Femenino', 'Otro'];
   civilStatuses: string[] = ['Soltero/a', 'Casado/a', 'Divorciado/a', 'Viudo/a', 'Otro']
+  disabilityTypes: string[] = [
+    'Física',
+    'Sensorial',
+    'Intelectual',
+    'Psíquica',
+    'Múltiple',
+  ];
+  jobStatuses: string[] = [
+    'Empleado',
+    'Desempleado',
+    'Independiente',
+    'No aplica',
+  ];
 
   ngOnInit(): void {
     const currentPerson = this.person();
@@ -73,9 +74,19 @@ export class PersonForm {
       locality: [currentPerson?.address.locality || '', Validators.required],
       province: [currentPerson?.address.province || '', Validators.required],
 
+      // SALUD
+      diagnostic: [currentPerson?.health?.diagnostic || '', Validators.required],
+      disabilityType: [currentPerson?.health?.disabilityType || 'Física', Validators.required],
+      cudNumber: [currentPerson?.health?.cudNumber || ''],
+      cudActive: [currentPerson?.health?.activeCud || false],
+      rehabilitationTreatment: [currentPerson?.health?.rehabilitationTreatment || ''],
 
-
-
+      // TRABAJO
+      companyName: [currentPerson?.work?.companyName || ''],
+      jobStatus: [currentPerson?.work?.status || 'No aplica', Validators.required],
+      address: [currentPerson?.work?.address || ''],
+      socialWork: [currentPerson?.work?.socialWork || false],
+      nameSocialWork: [currentPerson?.work?.nameSocialWork || ''],
 
       // fechaNacimiento: [currentPerson?.fechaNacimiento || '', Validators.required],
       // domicilio: [currentPerson?.domicilio || '', Validators.required],

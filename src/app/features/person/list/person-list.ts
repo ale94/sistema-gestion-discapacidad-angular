@@ -1,15 +1,16 @@
-import { DecimalPipe, NgClass } from '@angular/common';
+import { DecimalPipe, NgClass, TitleCasePipe } from '@angular/common';
 import { Component, computed, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Person } from '../../../shared/interfaces/person';
 import { PersonService } from '../../../shared/services/person.service';
 import { PersonForm } from '../form/person-form';
+import { Title } from 'chart.js';
 
 @Component({
   selector: 'person-list',
   standalone: true,
-  imports: [FormsModule, PersonForm, DecimalPipe, NgClass],
+  imports: [FormsModule, PersonForm, DecimalPipe, NgClass, TitleCasePipe],
   templateUrl: './person-list.html',
 })
 export default class PersonList {

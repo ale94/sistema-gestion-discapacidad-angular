@@ -136,14 +136,14 @@
     </fieldset> -->
 
     <!-- SITUACION DE SALUD -->
-    <!-- <fieldset class="lg:col-span-3 border border-slate-300 rounded-lg p-4 mb-4 bg-white">
+    <fieldset class="lg:col-span-3 border border-slate-300 rounded-lg p-4 mb-4 bg-white">
       <legend class="px-2 text-md font-semibold text-slate-700">3. Situación de Salud</legend>
 
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-2">
         <div class="lg:col-span-2">
           <label class="form-label">Diagnóstico</label>
           <input
-            formControlName="diagnostico"
+            formControlName="diagnostic"
             type="text"
             class="form-input"
             placeholder="Ingrese el diagnóstico"
@@ -152,7 +152,7 @@
 
         <div>
           <label class="form-label">Tipo de Discapacidad</label>
-          <select formControlName="tipoDiscapacidad" class="form-input">
+          <select formControlName="disabilityType" class="form-input">
             @for (type of disabilityTypes; track type) {
               <option [value]="type">{{ type }}</option>
             }
@@ -162,7 +162,7 @@
         <div>
           <label class="form-label">Número CUD</label>
           <input
-            formControlName="numeroCUD"
+            formControlName="cudNumber"
             type="text"
             class="form-input"
             placeholder="Ingrese el CUD"
@@ -171,36 +171,36 @@
 
         <div>
           <label class="form-label">Fecha Empadronamiento</label>
-          <input formControlName="fechaEmpadronamiento" type="date" class="form-input" />
+          <input formControlName="registrationDate" type="date" class="form-input" />
         </div>
 
-        <div class="lg:col-span-2 text-sm font-semibold text-slate-600">
-          <label for="opciones">¿CUD vigente?</label>
-          <select id="opciones" name="opciones">
-            <option value="opcion1" selected>Si</option>
-            <option value="opcion2">No</option>
+        <div>
+          <label class="form-label">¿CUD vigente?</label>
+          <select formControlName="cudActive" class="form-input">
+            <option value="true">Si</option>
+            <option value="false">No</option>
           </select>
         </div>
 
-        <div class="lg:col-span-2 text-sm font-semibold text-slate-600">
-          <label for="opciones">¿Realiza tratamiento/rehabilitación?</label>
-          <select id="opciones" name="opciones">
-            <option value="opcion1" selected>Si</option>
-            <option value="opcion2">No</option>
+        <div>
+          <label class="form-label">¿Realiza tratamiento/rehabilitación?</label>
+          <select formControlName="rehabilitationTreatment" class="form-input">
+            <option value="true">Si</option>
+            <option value="false">No</option>
           </select>
         </div>
       </div>
-    </fieldset> -->
+    </fieldset>
 
     <!-- SITUACION LABORAL -->
-    <!-- <fieldset class="lg:col-span-3 border border-slate-300 rounded-lg p-4 mb-4 bg-white">
+    <fieldset class="lg:col-span-3 border border-slate-300 rounded-lg p-4 mb-4 bg-white">
       <legend class="px-2 text-md font-semibold text-slate-700">4. Situación Laboral</legend>
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-2">
         <div>
           <label class="form-label">Situación Laboral</label>
-          <select formControlName="situacionLaboral" class="form-input">
-            @for (status of ['Empleado', 'Desempleado', 'Jubilado']; track status) {
+          <select formControlName="jobStatus" class="form-input">
+            @for (status of jobStatuses; track status) {
               <option [value]="status">{{ status }}</option>
             }
           </select>
@@ -208,7 +208,7 @@
         <div>
           <label class="form-label">Nombre</label>
           <input
-            formControlName="nombreEmpresa"
+            formControlName="companyName"
             type="text"
             class="form-input"
             placeholder="Nombre de la Empresa"
@@ -217,7 +217,7 @@
         <div>
           <label class="form-label">Direccion</label>
           <input
-            formControlName="direccionEmpresa"
+            formControlName="address"
             type="text"
             class="form-input"
             placeholder="Dirección de la Empresa"
@@ -225,23 +225,22 @@
         </div>
         <div>
           <label class="form-label">Obra Social</label>
-          <select formControlName="obraSocial" class="form-input">
-            @for (status of ['Si', 'No']; track status) {
-              <option [value]="status">{{ status }}</option>
-            }
+          <select formControlName="socialWork" class="form-input">
+            <option value="true">Si</option>
+            <option value="false">No</option>
           </select>
         </div>
         <div class="lg:col-span-2">
           <label class="form-label">Nombre</label>
           <input
-            formControlName="nombreObraSocial"
+            formControlName="nameSocialWork"
             type="text"
             class="form-input"
             placeholder="Nombre de la Obra Social"
           />
         </div>
       </div>
-    </fieldset> -->
+    </fieldset>
 
     <!-- SITUACION DE EDUCACION -->
     <!-- <fieldset class="lg:col-span-3 border border-slate-300 rounded-lg p-4 mb-4 bg-white">
