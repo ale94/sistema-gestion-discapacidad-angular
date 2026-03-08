@@ -1,9 +1,8 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
-import { PersonService } from '../../shared/services/person.service';
 import { DecimalPipe, TitleCasePipe } from '@angular/common';
-import { PeopleIndicatorsService } from '../../shared/services/people.indicators.service';
+import { PersonService } from '../../shared/services/person.service';
 
 @Component({
   selector: 'dashboard-page',
@@ -12,21 +11,17 @@ import { PeopleIndicatorsService } from '../../shared/services/people.indicators
   templateUrl: './dashboard-page.html',
 })
 export default class DashboardPage {
+
   private personService = inject(PersonService);
-  private peopleIndicatorsService = inject(PeopleIndicatorsService);
 
-  private people = this.personService.getPeople();
-  private peopleIndicators = this.peopleIndicatorsService.getPeopleIndicators();
-  username = signal<string | null>(sessionStorage.getItem('username'));
-
-  totalPeople = computed(() => this.people().length);
-  withCUD = computed(() => this.people().filter((p) => p.health?.activeCud).length);
-  withPaseLibre = computed(() => this.people().filter((p) => p.benefit?.freePass).length);
-  withPension = computed(() => this.people().filter((p) => p.benefit?.pension).length);
-  withIndicators = computed(() => this.peopleIndicators().filter((p) => p.indicadores).length);
+  totalPeople = computed(() => this.personService.persons().length);
+  withCUD = computed(() => this.personService.persons().filter((p) => p.health?.activeCud).length);
+  withPaseLibre = computed(() => this.personService.persons().filter((p) => p.benefit?.freePass).length);
+  withPension = computed(() => this.personService.persons().filter((p) => p.benefit?.pension).length);
+  withIndicators = computed(() => this.personService.persons().filter((p) => p.indicatorType).length);
 
   latestPeople = computed(() => {
-    return [...this.people()]
+    return [...this.personService.persons()]
       .sort(
         (a, b) =>
           new Date(b.registrationDate).getTime() - new Date(a.registrationDate).getTime()
@@ -34,14 +29,14 @@ export default class DashboardPage {
       .slice(0, 5);
   });
 
-  getAge(birthDate: string): number {
-    const today = new Date();
-    const birth = new Date(birthDate);
-    let age = today.getFullYear() - birth.getFullYear();
-    const m = today.getMonth() - birth.getMonth();
-    if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) {
-      age--;
-    }
-    return age;
-  }
+  // getAge(birthDate: string): number {
+  //   const today = new Date();
+  //   const birth = new Date(birthDate);
+  //   let age = today.getFullYear() - birth.getFullYear();
+  //   const m = today.getMonth() - birth.getMonth();
+  //   if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) {
+  //     age--;
+  //   }
+  //   return age;
+  // }
 }

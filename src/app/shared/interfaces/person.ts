@@ -1,6 +1,4 @@
-import { CivilStatus } from '../enums/civil-status';
-import { Gender } from '../enums/gender';
-import { Status } from '../enums/status';
+
 import { Address } from './address';
 import { Benefit } from './benefit';
 import { Education } from './education';
@@ -12,13 +10,13 @@ export interface Person {
   firstName: string;
   lastName: string;
   dni: string;
-  civilStatus: CivilStatus;
+  civilStatus: string;
   dateBirth: Date;
   tutor: string;
   phone: string;
-  gender: Gender;
+  gender: string;
   registrationDate: Date;
-  status: Status;
+  status: string;
   indicatorType: string;
   consultationDate: Date;
   education: Education;

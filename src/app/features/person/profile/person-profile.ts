@@ -16,9 +16,9 @@ export default class PersonProfile {
   person = computed(() => {
     const personId = this.route.snapshot.paramMap.get('id');
     if (!personId) return undefined;
-    return this.personService
-      .getPeople()()
-      .find((p) => p.id === +personId);
+    // return this.personService
+    //   .getPeople()()
+    //   .find((p) => p.id === +personId);
   });
 
   getAge(birthDate: string | undefined): number | null {

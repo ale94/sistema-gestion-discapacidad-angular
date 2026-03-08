@@ -1,11 +1,10 @@
+import { DecimalPipe, NgClass } from '@angular/common';
 import { Component, computed, inject, signal } from '@angular/core';
-import { PersonService } from '../../../shared/services/person.service';
+import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Person } from '../../../shared/interfaces/person';
-import { FormsModule } from '@angular/forms';
+import { PersonService } from '../../../shared/services/person.service';
 import { PersonForm } from '../form/person-form';
-import { DecimalPipe, NgClass } from '@angular/common';
-import { Status } from '../../../shared/enums/status';
 
 @Component({
   selector: 'person-list',
@@ -14,40 +13,38 @@ import { Status } from '../../../shared/enums/status';
   templateUrl: './person-list.html',
 })
 export default class PersonList {
-  private personService = inject(PersonService);
+
+  personService = inject(PersonService);
   private router = inject(Router);
 
-  people = this.personService.getPeople();
   isModalOpen = signal(false);
   editingPerson = signal<Person | null>(null);
   personToDelete = signal<Person | null>(null);
-  activeFilter = signal<'ALL' | 'CUD' | 'PENSION' | 'PASE_LIBRE' | 'INDICADORES'>('ALL');
+  activeFilter = signal<'ALL' | 'CUD' | 'PENSION' | 'PASE_LIBRE'>('ALL');
 
   searchTerm = signal('');
 
   filteredPeople = computed(() => {
     const term = this.searchTerm().toLowerCase().trim();
     const filter = this.activeFilter();
-    const people = this.people();
 
     const filtersMap: Record<string, (p: Person) => boolean> = {
-      ALL: (p) => p.status === Status.REGISTRADO,
+      ALL: (p) => p.status === "registrado",
 
-      CUD: (p) => p.status === Status.REGISTRADO && (p.health?.activeCud ?? false),
+      CUD: (p) => p.status === "registrado" && (p.health?.activeCud ?? false),
 
-      PENSION: (p) => p.status === Status.REGISTRADO && (p.benefit?.pension ?? false),
+      PENSION: (p) => p.status === "registrado" && (p.benefit?.pension ?? false),
 
-      PASE_LIBRE: (p) => p.status === Status.REGISTRADO && (p.benefit?.freePass ?? false),
+      PASE_LIBRE: (p) => p.status === "registrado" && (p.benefit?.freePass ?? false),
     };
 
-    return people.filter((person) => {
+    return this.personService.persons().filter((person) => {
       // Búsqueda por texto
       const matchesText =
         !term ||
         person.firstName.toLowerCase().includes(term) ||
         person.lastName.toLowerCase().includes(term) ||
-        person.dni.includes(term) ||
-        person.health.diagnostic.toLowerCase().includes(term);
+        person.dni.includes(term);
 
       // Filtro por estado
       const matchesFilter = (filtersMap[filter] ?? (() => true))(person);
@@ -55,6 +52,7 @@ export default class PersonList {
       return matchesText && matchesFilter;
     });
   });
+
 
   onSearchChange(term: string) {
     this.searchTerm.set(term);
@@ -76,7 +74,7 @@ export default class PersonList {
 
   confirmDeleteAction(): void {
     if (this.personToDelete()) {
-      this.personService.deletePerson(this.personToDelete()!.id);
+      // this.personService.deletePerson(this.personToDelete()!.id);
       this.cancelDelete();
     }
   }
@@ -87,7 +85,7 @@ export default class PersonList {
 
   handleSave(personData: Omit<Person, 'id'> | Person) {
     if ('id' in personData) {
-      this.personService.updatePerson(personData);
+      // this.personService.updatePerson(personData);
     } else {
       // this.personService.addPerson(personData);
     }

@@ -11,7 +11,7 @@ import {
 @Component({
   selector: 'person-form',
   standalone: true,
-  imports: [ReactiveFormsModule, ],
+  imports: [ReactiveFormsModule,],
   templateUrl: './person-form.html',
   styleUrls: ['./person-form.css'],
 })
@@ -49,6 +49,7 @@ export class PersonForm {
   //   'No aplica',
   // ];
   genders: string[] = ['Masculino', 'Femenino', 'Otro'];
+  civilStatuses: string[] = ['Soltero/a', 'Casado/a', 'Divorciado/a', 'Viudo/a', 'Otro']
 
   ngOnInit(): void {
     const currentPerson = this.person();
@@ -58,6 +59,24 @@ export class PersonForm {
       firstName: [currentPerson?.firstName || '', Validators.required],
       lastName: [currentPerson?.lastName || '', Validators.required],
       dni: [currentPerson?.dni || '', [Validators.required, Validators.pattern('^[0-9]{7,8}$')]],
+      civilStatus: [currentPerson?.civilStatus || 'Soltero/a', Validators.required],
+      dateBirth: [currentPerson?.dateBirth || '', Validators.required],
+      tutor: [currentPerson?.tutor || '', Validators.required],
+      phone: [currentPerson?.phone || '', Validators.required],
+      gender: [currentPerson?.gender || 'Masculino', Validators.required],
+      registrationDate: [currentPerson?.registrationDate || '', Validators.required],
+      status: [currentPerson?.status || 'Activo', Validators.required],
+
+      //DIRECION
+      district: [currentPerson?.address.district || '', Validators.required],
+      street: [currentPerson?.address.street || '', Validators.required],
+      locality: [currentPerson?.address.locality || '', Validators.required],
+      province: [currentPerson?.address.province || '', Validators.required],
+
+
+
+
+
       // fechaNacimiento: [currentPerson?.fechaNacimiento || '', Validators.required],
       // domicilio: [currentPerson?.domicilio || '', Validators.required],
       // tutor: [currentPerson?.tutor || '', Validators.required],

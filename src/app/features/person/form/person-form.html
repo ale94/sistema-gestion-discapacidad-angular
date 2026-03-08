@@ -15,43 +15,43 @@
       <legend class="px-2 text-md font-semibold text-slate-700">1. Datos de la Persona</legend>
 
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-2">
-        <!-- <div>
-          <input formControlName="apellido" type="text" class="form-input" placeholder="Apellido" />
+        <div>
+          <input formControlName="lastName" type="text" class="form-input" placeholder="Apellido" />
         </div>
         <div>
-          <input formControlName="nombre" clear
-          type="text" class="form-input" placeholder="Nombre" />
+          <input
+            formControlName="firstName"
+            clear
+            type="text"
+            class="form-input"
+            placeholder="Nombre"
+          />
         </div>
         <div>
           <input formControlName="dni" type="text" class="form-input" placeholder="D.N.I" />
-        </div> -->
+        </div>
         <div>
           <label class="form-label">Fecha de Nacimiento</label>
-          <input formControlName="fechaNacimiento" type="date" class="form-input" />
+          <input formControlName="dateBirth" type="date" class="form-input" />
         </div>
         <div>
           <label class="form-label">Sexo</label>
-          <select formControlName="sexo" class="form-input">
+          <select formControlName="gender" class="form-input">
             @for (gender of genders; track gender) {
               <option [value]="gender">{{ gender }}</option>
             }
           </select>
         </div>
-        <!-- <div>
+        <div>
           <label class="form-label">Estado Civil</label>
-          <select formControlName="estadoCivil" class="form-input">
-            @for (type of ['Soltero', 'Casado', 'Divorciado', 'Viudo']; track type) {
+          <select formControlName="civilStatus" class="form-input">
+            @for (type of civilStatuses; track type) {
               <option [value]="type">{{ type }}</option>
             }
           </select>
-        </div> -->
+        </div>
         <div>
-          <input
-            formControlName="telefono"
-            type="number"
-            class="form-input"
-            placeholder="Teléfono"
-          />
+          <input formControlName="phone" type="text" class="form-input" placeholder="Teléfono" />
         </div>
         <div>
           <input
@@ -62,15 +62,15 @@
           />
         </div>
 
-        <!-- <div>
-          <input formControlName="barrio" type="text" class="form-input" placeholder="Barrio" />
+        <div>
+          <input formControlName="district" type="text" class="form-input" placeholder="Barrio" />
         </div>
         <div>
-          <input formControlName="calle" type="text" class="form-input" placeholder="Calle" />
-        </div> -->
-        <!-- <div>
+          <input formControlName="street" type="text" class="form-input" placeholder="Calle" />
+        </div>
+        <div>
           <input
-            formControlName="localidad"
+            formControlName="locality"
             type="text"
             class="form-input"
             placeholder="Localidad"
@@ -78,12 +78,12 @@
         </div>
         <div>
           <input
-            formControlName="provincia"
+            formControlName="province"
             type="text"
             class="form-input"
             placeholder="Provincia"
           />
-        </div> -->
+        </div>
       </div>
     </fieldset>
 
