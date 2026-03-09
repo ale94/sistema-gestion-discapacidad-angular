@@ -18,7 +18,7 @@ export class PersonForm {
 
   person = input<Person | null>(null);
 
-  save = output<Omit<Person, 'id'> | Person>();
+  save = output<Person>();
   cancel = output<void>();
 
   private fb: FormBuilder = inject(FormBuilder);
@@ -27,83 +27,78 @@ export class PersonForm {
 
   isEditMode = false;
 
-
-  // educationLevels: Person['escolaridad'][] = [
-  //   'Ninguna',
-  //   'Primaria',
-  //   'Secundaria',
-  //   'Terciaria',
-  //   'Universitaria',
-  // ];
-
-  genders: string[] = ['Masculino', 'Femenino', 'Otro'];
-  civilStatuses: string[] = ['Soltero/a', 'Casado/a', 'Divorciado/a', 'Viudo/a', 'Otro']
+  educationLevels: string[] = [
+    'ninguna',
+    'primaria',
+    'secundaria',
+    'terciaria',
+    'universitaria',
+  ];
   disabilityTypes: string[] = [
-    'Física',
-    'Sensorial',
-    'Intelectual',
-    'Psíquica',
-    'Múltiple',
+    'fisica',
+    'sensorial',
+    'intelectual',
+    'psiquica',
+    'multiple',
   ];
   jobStatuses: string[] = [
-    'Empleado',
-    'Desempleado',
-    'Independiente',
-    'No aplica',
+    'empleado',
+    'desempleado',
+    'independiente',
+    'no aplica',
   ];
+  genders: string[] = ['masculino', 'femenino', 'otro'];
+  civilStatuses: string[] = ['soltero', 'casado', 'divorciado', 'viudo', 'otro']
+
 
   ngOnInit(): void {
     const currentPerson = this.person();
     this.isEditMode = !!currentPerson;
 
     this.personForm = this.fb.group({
+
+      // Person
       firstName: [currentPerson?.firstName || '', Validators.required],
       lastName: [currentPerson?.lastName || '', Validators.required],
       dni: [currentPerson?.dni || '', [Validators.required, Validators.pattern('^[0-9]{7,8}$')]],
-      civilStatus: [currentPerson?.civilStatus || 'Soltero/a', Validators.required],
+      civilStatus: [currentPerson?.civilStatus || '', Validators.required],
       dateBirth: [currentPerson?.dateBirth || '', Validators.required],
       tutor: [currentPerson?.tutor || '', Validators.required],
       phone: [currentPerson?.phone || '', Validators.required],
-      gender: [currentPerson?.gender || 'Masculino', Validators.required],
-      registrationDate: [currentPerson?.registrationDate || '', Validators.required],
-      status: [currentPerson?.status || 'Activo', Validators.required],
+      gender: [currentPerson?.gender || '', Validators.required],
 
-      //DIRECION
+      // Address
       district: [currentPerson?.address.district || '', Validators.required],
       street: [currentPerson?.address.street || '', Validators.required],
       locality: [currentPerson?.address.locality || '', Validators.required],
       province: [currentPerson?.address.province || '', Validators.required],
 
-      // SALUD
+      // Health
       diagnostic: [currentPerson?.health?.diagnostic || '', Validators.required],
-      disabilityType: [currentPerson?.health?.disabilityType || 'Física', Validators.required],
+      disabilityType: [currentPerson?.health?.disabilityType || '', Validators.required],
       cudNumber: [currentPerson?.health?.cudNumber || ''],
-      cudActive: [currentPerson?.health?.activeCud || false],
+      activeCud: [currentPerson?.health?.activeCud || false],
       rehabilitationTreatment: [currentPerson?.health?.rehabilitationTreatment || ''],
 
-      // TRABAJO
+      // Work
       companyName: [currentPerson?.work?.companyName || ''],
-      jobStatus: [currentPerson?.work?.status || 'No aplica', Validators.required],
-      address: [currentPerson?.work?.address || ''],
+      employmentStatus: [currentPerson?.work?.status || '', Validators.required],
+      workAddress: [currentPerson?.work?.address || ''],
       socialWork: [currentPerson?.work?.socialWork || false],
       nameSocialWork: [currentPerson?.work?.nameSocialWork || ''],
 
-      // fechaNacimiento: [currentPerson?.fechaNacimiento || '', Validators.required],
-      // domicilio: [currentPerson?.domicilio || '', Validators.required],
-      // tutor: [currentPerson?.tutor || '', Validators.required],
-      // telefono: [currentPerson?.telefono || '', Validators.required],
-      // sexo: [currentPerson?.sexo || 'Masculino', Validators.required],
-      // fechaEmpadronamiento: [currentPerson?.fechaEmpadronamiento || '', Validators.required],
-      // diagnostico: [currentPerson?.diagnostico || '', Validators.required],
-      // tipoDiscapacidad: [currentPerson?.tipoDiscapacidad || 'Física', Validators.required],
-      // numeroCUD: [currentPerson?.numeroCUD || ''],
-      // cudVigente: [currentPerson?.cudVigente || false],
-      // obraSocial: [currentPerson?.obraSocial || ''],
-      // escolaridad: [currentPerson?.escolaridad || 'Ninguna', Validators.required],
-      // situacionLaboral: [currentPerson?.situacionLaboral || 'No aplica', Validators.required],
-      // pension: [currentPerson?.pension || false],
-      // bolsonMercaderia: [currentPerson?.bolsonMercaderia || false],
-      // paseLibre: [currentPerson?.paseLibre || false],
+      // Education
+      educationLevel: [currentPerson?.education?.educationLevel || '', Validators.required],
+      schoolName: [currentPerson?.education?.name || ''],
+      educationAddress: [currentPerson?.education?.address || ''],
+
+      // Benefits
+      federalProgram: [currentPerson?.benefit?.federalProgram || false],
+      pension: [currentPerson?.benefit?.pension || false],
+      auh: [currentPerson?.benefit?.auh || false],
+      merchandise: [currentPerson?.benefit?.merchandise || false],
+      freePass: [currentPerson?.benefit?.freePass || false],
+
     });
   }
 

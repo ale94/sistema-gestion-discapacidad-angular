@@ -75,7 +75,7 @@ export default class PersonList {
 
   confirmDeleteAction(): void {
     if (this.personToDelete()) {
-      // this.personService.deletePerson(this.personToDelete()!.id);
+      this.personService.deletePerson(this.personToDelete()!.id);
       this.cancelDelete();
     }
   }
@@ -84,11 +84,11 @@ export default class PersonList {
     this.personToDelete.set(null);
   }
 
-  handleSave(personData: Omit<Person, 'id'> | Person) {
+  handleSave(personData: Person) {
     if ('id' in personData) {
       // this.personService.updatePerson(personData);
     } else {
-      // this.personService.addPerson(personData);
+      this.personService.addPerson(personData);
     }
     this.closeModal();
   }

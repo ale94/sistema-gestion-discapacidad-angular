@@ -22,19 +22,27 @@ export class PersonService {
       })
   }
 
-  //addPerson(person: Omit<Person, number>) {
-  // const newPerson: Person = { ...person, id: this.generateId() };
-  // this.people.update((people) => [...people, newPerson]);
-  //}
+  addPerson(person: Person) {
+    this.http.post<Person>(`${this.url}` + "/persons", person)
+      .subscribe((newPerson) => {
+        this.persons.update((persons) => [...persons, newPerson]);
+      });
+  }
 
-  // updatePerson(updatedPerson: Person) {
-  //   this.people.update((people) =>
-  //     people.map((p) => (p.id === updatedPerson.id ? updatedPerson : p)),
-  //   );
-  // }
+  updatePerson(updatedPerson: Person) {
+    this.http.put<Person>(`${this.url}/persons/${updatedPerson.id}`, updatedPerson)
+      .subscribe((person) => {
+        this.persons.update((persons) =>
+          persons.map((p) => (p.id === person.id ? person : p)),
+        );
+      });
+  }
 
-  // deletePerson(id: number) {
-  //   this.people.update((people) => people.filter((p) => p.id !== id));
-  // }
+  deletePerson(id: number) {
+    this.http.delete(`${this.url}/persons/${id}`)
+      .subscribe(() => {
+        this.persons.update((persons) => persons.filter((p) => p.id !== id));
+      });
+  }
 
 }
