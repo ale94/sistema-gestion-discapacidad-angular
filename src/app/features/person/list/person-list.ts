@@ -86,7 +86,7 @@ export default class PersonList {
 
   handleSave(personData: Person) {
     if ('id' in personData) {
-      // this.personService.updatePerson(personData);
+      this.personService.updatePerson(personData);
     } else {
       this.personService.addPerson(personData);
     }
