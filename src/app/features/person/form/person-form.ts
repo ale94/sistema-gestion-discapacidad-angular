@@ -1,6 +1,7 @@
 import { Component, inject, input, output } from '@angular/core';
 import { Person } from '../../../shared/interfaces/person';
 import {
+  FormArray,
   FormBuilder,
   FormGroup,
   ReactiveFormsModule,
@@ -99,6 +100,16 @@ export class PersonForm {
       merchandise: [currentPerson?.benefit?.merchandise || false],
       freePass: [currentPerson?.benefit?.freePass || false],
 
+      familyMembers: this.fb.array(currentPerson?.familyMembers?.map(family => this.fb.group({
+        firstName: [family.firstName || '', Validators.required],
+        lastName: [family.lastName || '', Validators.required],
+        dni: [family.dni || '', Validators.required],
+        age: [family.age || '', Validators.required],
+        civilStatus: [family.civilStatus || '', Validators.required],
+        parentage: [family.parentage || '', Validators.required],
+        occupation: [family.occupation || '', Validators.required]
+      })) || [])
+
     });
   }
 
@@ -116,4 +127,32 @@ export class PersonForm {
   onCancel() {
     this.cancel.emit();
   }
+
+  get familyMembers() {
+    return this.personForm.get('familyMembers') as FormArray;
+  }
+
+  createFamily(): FormGroup {
+    return this.fb.group({
+      firstName: [''],
+      lastName: [''],
+      dni: [''],
+      age: [''],
+      civilStatus: [''],
+      parentage: [''],
+      occupation: ['']
+    });
+  }
+
+  addFamily() {
+    const familyMembers = this.familyMembers;
+    if (familyMembers) {
+      familyMembers.push(this.createFamily());
+    }
+  }
+
+  removeFamily(index: number) {
+    this.familyMembers.removeAt(index);
+  }
+
 }

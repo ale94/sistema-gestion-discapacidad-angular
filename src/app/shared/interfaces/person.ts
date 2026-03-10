@@ -2,6 +2,7 @@
 import { Address } from './address';
 import { Benefit } from './benefit';
 import { Education } from './education';
+import { FamilyMember } from './family-member';
 import { Health } from './health';
 import { Work } from './work';
 
@@ -24,4 +25,6 @@ export interface Person {
   health: Health;
   address: Address;
   benefit: Benefit;
+
+  familyMembers: FamilyMember[];
 }
