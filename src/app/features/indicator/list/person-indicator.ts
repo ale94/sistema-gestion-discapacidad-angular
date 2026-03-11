@@ -4,7 +4,6 @@ import { FormsModule } from '@angular/forms';
 import { IndicatorForm } from '../form/indicator-form';
 import { Person } from '../../../shared/interfaces/person';
 import { PersonService } from '../../../shared/services/person.service';
-import { Title } from 'chart.js';
 
 @Component({
   selector: 'person-indicator',
@@ -25,6 +24,8 @@ export default class PersonIndicator {
     const people = this.personService.persons();
 
     return people.filter((person) => {
+      if (person.status !== 'en_seguimiento') return false;
+
       if (!term) return true;
 
       return person.firstName.toLowerCase().includes(term) || person.dni.includes(term);
