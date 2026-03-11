@@ -1,32 +1,33 @@
 import { Component, computed, inject, signal } from '@angular/core';
-import { DecimalPipe } from '@angular/common';
+import { DatePipe, DecimalPipe, TitleCasePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IndicatorForm } from '../form/indicator-form';
-import { PeopleIndicatorsService } from '../../../shared/services/people.indicators.service';
-import { PeopleIndicator } from '../../../shared/interfaces/people.indicator.interface';
+import { Person } from '../../../shared/interfaces/person';
+import { PersonService } from '../../../shared/services/person.service';
+import { Title } from 'chart.js';
 
 @Component({
   selector: 'person-indicator',
-  imports: [FormsModule, DecimalPipe, IndicatorForm],
+  imports: [FormsModule, DecimalPipe, IndicatorForm, TitleCasePipe, DatePipe],
   templateUrl: './person-indicator.html',
 })
 export default class PersonIndicator {
-  private peopleIndicators = inject(PeopleIndicatorsService);
-  people = this.peopleIndicators.getPeopleIndicators();
+  private personService = inject(PersonService);
+
   isModalOpen = signal(false);
-  editingPerson = signal<PeopleIndicator | null>(null);
-  personToDelete = signal<PeopleIndicator | null>(null);
+  editingPerson = signal<Person | null>(null);
+  personToDelete = signal<Person | null>(null);
 
   searchTerm = signal('');
 
   filteredPeopleIndicators = computed(() => {
     const term = this.searchTerm().toLowerCase().trim();
-    const people = this.people();
+    const people = this.personService.persons();
 
     return people.filter((person) => {
       if (!term) return true;
 
-      return person.apellidoNombre.toLowerCase().includes(term) || person.dni.includes(term);
+      return person.firstName.toLowerCase().includes(term) || person.dni.includes(term);
     });
   });
 
@@ -39,18 +40,18 @@ export default class PersonIndicator {
     this.isModalOpen.set(true);
   }
 
-  openEditModal(person: PeopleIndicator) {
+  openEditModal(person: Person) {
     this.editingPerson.set(person);
     this.isModalOpen.set(true);
   }
 
-  requestDelete(person: PeopleIndicator): void {
+  requestDelete(person: Person): void {
     this.personToDelete.set(person);
   }
 
   confirmDeleteAction(): void {
     if (this.personToDelete()) {
-      this.peopleIndicators.deletePerson(this.personToDelete()!.id);
+      this.personService.deletePerson(this.personToDelete()!.id);
       this.cancelDelete();
     }
   }
@@ -59,11 +60,11 @@ export default class PersonIndicator {
     this.personToDelete.set(null);
   }
 
-  handleSave(personData: Omit<PeopleIndicator, 'id'> | PeopleIndicator) {
+  handleSave(personData: Person) {
     if ('id' in personData) {
-      this.peopleIndicators.updatePerson(personData);
+      this.personService.updatePerson(personData);
     } else {
-      this.peopleIndicators.addPerson(personData);
+      this.personService.addPerson(personData);
     }
     this.closeModal();
   }
