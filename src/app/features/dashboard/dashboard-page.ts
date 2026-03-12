@@ -3,6 +3,7 @@ import { RouterLink } from '@angular/router';
 
 import { DecimalPipe, TitleCasePipe } from '@angular/common';
 import { PersonService } from '../../shared/services/person.service';
+import { PersonTrackingService } from '../../shared/services/person-tracking.service';
 
 @Component({
   selector: 'dashboard-page',
@@ -11,20 +12,25 @@ import { PersonService } from '../../shared/services/person.service';
   templateUrl: './dashboard-page.html',
 })
 export default class DashboardPage {
-
   private personService = inject(PersonService);
+  private personTrackingService = inject(PersonTrackingService);
 
   totalPeople = computed(() => this.personService.persons().length);
   withCUD = computed(() => this.personService.persons().filter((p) => p.health?.activeCud).length);
-  withPaseLibre = computed(() => this.personService.persons().filter((p) => p.benefit?.freePass).length);
-  withPension = computed(() => this.personService.persons().filter((p) => p.benefit?.pension).length);
-  withIndicators = computed(() => this.personService.persons().filter((p) => p.indicatorType).length);
+  withPaseLibre = computed(
+    () => this.personService.persons().filter((p) => p.benefit?.freePass).length,
+  );
+  withPension = computed(
+    () => this.personService.persons().filter((p) => p.benefit?.pension).length,
+  );
+  withIndicators = computed(
+    () => this.personTrackingService.personsTracking().filter((p) => p.indicatorType).length,
+  );
 
   latestPeople = computed(() => {
     return [...this.personService.persons()]
       .sort(
-        (a, b) =>
-          new Date(b.registrationDate).getTime() - new Date(a.registrationDate).getTime()
+        (a, b) => new Date(b.registrationDate).getTime() - new Date(a.registrationDate).getTime(),
       )
       .slice(0, 5);
   });

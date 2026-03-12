@@ -34,7 +34,16 @@
 
       <div class="lg:col-span-3">
         <label class="form-label">Tipo de Indicador</label>
-        <input formControlName="indicatorType" type="text" class="form-input" />
+
+        <textarea formControlName="indicatorType" class="form-input" rows="3" maxlength="200">
+        </textarea>
+
+        <div
+          class="text-sm text-right mt-1"
+          [class.text-red-500]="(personForm.get('indicatorType')?.value?.length || 0) > 180"
+        >
+          {{ personForm.get('indicatorType')?.value?.length || 0 }}/200 caracteres
+        </div>
       </div>
     </div>
   </div>
