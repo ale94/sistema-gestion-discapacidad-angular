@@ -1,4 +1,4 @@
-<!-- <form
+<form
   [formGroup]="personForm"
   (ngSubmit)="onSubmit()"
   class="flex flex-col w-full max-w-5xl max-h-[90vh] rounded-lg overflow-hidden"
@@ -11,28 +11,30 @@
 
   <div class="p-6 grow overflow-y-auto bg-slate-50">
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-       Personal Info
       <div class="lg:col-span-1">
-        <label class="form-label">Apellido y Nombre</label>
-        <input formControlName="nombreCompleto" type="text" class="form-input" />
+        <label class="form-label">Apellido</label>
+        <input formControlName="lastName" type="text" class="form-input" />
+      </div>
+      <div class="lg:col-span-1">
+        <label class="form-label">Nombre</label>
+        <input formControlName="firstName" type="text" class="form-input" />
       </div>
       <div class="lg:col-span-1">
         <label class="form-label">D.N.I</label>
         <input formControlName="dni" type="text" class="form-input" />
       </div>
       <div class="lg:col-span-1">
-        <label class="form-label">Fecha de Consulta</label>
-        <input formControlName="fechaConsulta" type="date" class="form-input" />
+        <label class="form-label">Telefono</label>
+        <input formControlName="phone" type="text" class="form-input" />
       </div>
-
-      <div class="lg:col-span-3">
-        <label class="form-label">Domicilio</label>
-        <input formControlName="domicilio" type="text" class="form-input" />
+      <div class="lg:col-span-2">
+        <label class="form-label">Dirección</label>
+        <input formControlName="address" type="text" class="form-input" />
       </div>
 
       <div class="lg:col-span-3">
         <label class="form-label">Tipo de Indicador</label>
-        <input formControlName="indicadores" type="text" class="form-input" />
+        <input formControlName="indicatorType" type="text" class="form-input" />
       </div>
     </div>
   </div>
@@ -53,4 +55,4 @@
       Guardar
     </button>
   </div>
-</form> -->
+</form>

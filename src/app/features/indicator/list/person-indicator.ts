@@ -1,35 +1,33 @@
 import { Component, computed, inject, signal } from '@angular/core';
-import { DatePipe, DecimalPipe, TitleCasePipe } from '@angular/common';
+import { DecimalPipe, TitleCasePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IndicatorForm } from '../form/indicator-form';
-import { Person } from '../../../shared/interfaces/person';
-import { PersonService } from '../../../shared/services/person.service';
+import { PersonTracking } from '../../../shared/interfaces/person-tracking';
+import { PersonTrackingService } from '../../../shared/services/person-tracking.service';
 
 @Component({
   selector: 'person-indicator',
-  imports: [FormsModule, DecimalPipe, IndicatorForm, TitleCasePipe, DatePipe],
+  imports: [FormsModule, DecimalPipe, IndicatorForm, TitleCasePipe],
   templateUrl: './person-indicator.html',
 })
 export default class PersonIndicator {
-  private personService = inject(PersonService);
+  private personService = inject(PersonTrackingService);
 
   isModalOpen = signal(false);
-  editingPerson = signal<Person | null>(null);
-  personToDelete = signal<Person | null>(null);
+  editingPerson = signal<PersonTracking | null>(null);
+  personToDelete = signal<PersonTracking | null>(null);
 
   searchTerm = signal('');
 
   filteredPeopleIndicators = computed(() => {
-    const term = this.searchTerm().toLowerCase().trim();
-    const people = this.personService.persons();
+    const term = this.searchTerm().trim().toLowerCase();
+    const people = this.personService.personsTracking();
 
-    return people.filter((person) => {
-      if (person.status !== 'en_seguimiento') return false;
+    if (!term) return people;
 
-      if (!term) return true;
-
-      return person.firstName.toLowerCase().includes(term) || person.dni.includes(term);
-    });
+    return people.filter(({ firstName, dni }) =>
+      firstName.toLowerCase().includes(term) || dni.includes(term)
+    );
   });
 
   onSearchChange(term: string) {
@@ -41,12 +39,12 @@ export default class PersonIndicator {
     this.isModalOpen.set(true);
   }
 
-  openEditModal(person: Person) {
+  openEditModal(person: PersonTracking) {
     this.editingPerson.set(person);
     this.isModalOpen.set(true);
   }
 
-  requestDelete(person: Person): void {
+  requestDelete(person: PersonTracking): void {
     this.personToDelete.set(person);
   }
 
@@ -61,7 +59,7 @@ export default class PersonIndicator {
     this.personToDelete.set(null);
   }
 
-  handleSave(personData: Person) {
+  handleSave(personData: PersonTracking) {
     if ('id' in personData) {
       this.personService.updatePerson(personData);
     } else {
