@@ -1,14 +1,14 @@
 import { Component, computed, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
-import { DecimalPipe, TitleCasePipe } from '@angular/common';
+import { DatePipe, DecimalPipe, TitleCasePipe } from '@angular/common';
 import { PersonService } from '../../shared/services/person.service';
 import { PersonTrackingService } from '../../shared/services/person-tracking.service';
 
 @Component({
   selector: 'dashboard-page',
   standalone: true,
-  imports: [RouterLink, TitleCasePipe, DecimalPipe],
+  imports: [RouterLink, TitleCasePipe, DecimalPipe, DatePipe],
   templateUrl: './dashboard-page.html',
 })
 export default class DashboardPage {

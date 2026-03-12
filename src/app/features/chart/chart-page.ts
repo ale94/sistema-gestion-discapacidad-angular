@@ -1,4 +1,4 @@
-import { Component, effect, inject, signal } from '@angular/core';
+import { Component, effect, inject } from '@angular/core';
 import { ChartConfiguration, ChartData } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
 import { PersonService } from '../../shared/services/person.service';
@@ -34,12 +34,11 @@ export default class ChartPage {
   personService = inject(PersonService);
 
   constructor() {
-    // const peopleService = this.personService.getPeople();
+    const personService = this.personService.persons();
 
     // EFFECT: Reacciona a los cambios en la señal de personas
     effect(() => {
-      // const people = peopleService();
-      // this.processData(people);
+      this.processData(personService);
     });
   }
 
