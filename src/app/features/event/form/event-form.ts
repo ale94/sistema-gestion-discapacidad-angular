@@ -10,7 +10,7 @@ import { Event } from '../../../shared/interfaces/event.interface';
 })
 export class EventForm {
   event = input<Event | null>(null);
-  save = output<Omit<Event, 'id'> | Event>();
+  save = output<Event>();
   cancel = output<void>();
 
   private fb = inject(FormBuilder);

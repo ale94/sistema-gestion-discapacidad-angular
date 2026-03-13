@@ -2,7 +2,6 @@ import { Component, computed, inject } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { PersonService } from '../../../shared/services/person.service';
 import { DecimalPipe, TitleCasePipe, UpperCasePipe } from '@angular/common';
-import { Title } from 'chart.js';
 
 @Component({
   selector: 'person-profile',

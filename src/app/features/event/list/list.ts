@@ -4,7 +4,6 @@ import { GroupedEvent } from '../../../shared/interfaces/grouped.event.interface
 import { EventForm } from '../form/event-form';
 import { Event } from '../../../shared/interfaces/event.interface';
 
-
 @Component({
   selector: 'list',
   standalone: true,
@@ -18,8 +17,6 @@ export default class List {
   editingEvent = signal<Event | null>(null);
   eventToDelete = signal<Event | null>(null);
   selectedYear = signal(new Date().getFullYear());
-
-  private allEvents = this.eventService.getEvents();
 
   monthNames = [
     'Enero',
@@ -38,7 +35,7 @@ export default class List {
 
   eventsByMonth = computed<GroupedEvent[]>(() => {
     const year = this.selectedYear();
-    const filteredEvents = this.allEvents().filter(
+    const filteredEvents = this.eventService.events().filter(
       (event) => new Date(event.date).getFullYear() === year
     );
 
@@ -78,7 +75,7 @@ export default class List {
     this.editingEvent.set(null);
   }
 
-  handleSave(eventData: Omit<Event, 'id'> | Event) {
+  handleSave(eventData: Event) {
     if ('id' in eventData) {
       this.eventService.updateEvent(eventData);
     } else {
