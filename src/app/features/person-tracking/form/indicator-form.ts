@@ -2,6 +2,7 @@ import { Component, inject, input, output } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { PersonTracking } from '../../../shared/interfaces/person-tracking';
 
+
 @Component({
   selector: 'indicator-form',
   standalone: true,

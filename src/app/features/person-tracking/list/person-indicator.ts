@@ -2,8 +2,9 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { DecimalPipe, TitleCasePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IndicatorForm } from '../form/indicator-form';
-import { PersonTracking } from '../../../shared/interfaces/person-tracking';
 import { PersonTrackingService } from '../../../shared/services/person-tracking.service';
+import { PersonTracking } from '../../../shared/interfaces/person-tracking';
+
 
 @Component({
   selector: 'person-indicator',
@@ -25,8 +26,8 @@ export default class PersonIndicator {
 
     if (!term) return people;
 
-    return people.filter(({ firstName, dni }) =>
-      firstName.toLowerCase().includes(term) || dni.includes(term)
+    return people.filter(({ firstName, lastName, dni }) =>
+      firstName.toLowerCase().includes(term) || lastName.toLowerCase().includes(term) || dni.includes(term)
     );
   });
 

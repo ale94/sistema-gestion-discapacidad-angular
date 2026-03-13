@@ -26,7 +26,7 @@ export const routes: Routes = [
       },
       {
         path: 'indicadores',
-        loadComponent: () => import('./features/indicator/list/person-indicator'),
+        loadComponent: () => import('./features/person-tracking/list/person-indicator'),
       },
       {
         path: 'personas/:id',

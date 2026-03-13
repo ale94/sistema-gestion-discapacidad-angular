@@ -30,13 +30,13 @@ export default class PersonList {
     const filter = this.activeFilter();
 
     const filtersMap: Record<string, (p: Person) => boolean> = {
-      ALL: (p) => p.status === "registrado",
+      ALL: (p) => true,
 
-      CUD: (p) => p.status === "registrado" && (p.health?.activeCud ?? false),
+      CUD: (p) => p.health?.activeCud ?? false,
 
-      PENSION: (p) => p.status === "registrado" && (p.benefit?.pension ?? false),
+      PENSION: (p) => p.benefit?.pension ?? false,
 
-      PASE_LIBRE: (p) => p.status === "registrado" && (p.benefit?.freePass ?? false),
+      PASE_LIBRE: (p) => p.benefit?.freePass ?? false,
     };
 
     return this.personService.persons().filter((person) => {

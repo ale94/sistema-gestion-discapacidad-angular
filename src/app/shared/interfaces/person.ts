@@ -17,9 +17,6 @@ export interface Person {
   phone: string;
   gender: string;
   registrationDate: Date;
-  status: string;
-  indicatorType: string;
-  consultationDate: Date;
   education: Education;
   work: Work;
   health: Health;
