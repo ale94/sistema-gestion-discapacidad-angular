@@ -2,7 +2,7 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { EventService } from '../../../shared/services/event.service';
 import { GroupedEvent } from '../../../shared/interfaces/grouped.event.interface';
 import { EventForm } from '../form/event-form';
-import { Event } from '../../../shared/interfaces/event.interface';
+import { Event } from '../../../shared/interfaces/event';
 
 @Component({
   selector: 'list',

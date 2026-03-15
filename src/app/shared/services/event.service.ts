@@ -1,5 +1,5 @@
 import { effect, inject, Injectable, signal } from '@angular/core';
-import { Event } from '../interfaces/event.interface';
+import { Event } from '../interfaces/event';
 import { HttpClient } from '@angular/common/http';
 
 @Injectable({

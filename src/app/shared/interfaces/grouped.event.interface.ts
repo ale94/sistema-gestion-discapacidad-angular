@@ -1,4 +1,4 @@
-import { Event } from "./event.interface";
+import { Event } from "./event";
 
 export interface GroupedEvent {
   month: string;

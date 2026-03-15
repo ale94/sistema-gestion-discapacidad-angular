@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
-import { Equipment } from '../../shared/interfaces/equipment.interface';
-import { EquipmentService } from '../../shared/services/equipment.service';
+import { Component, inject } from '@angular/core';
+import { Equipment } from '../../../shared/interfaces/equipment';
+import { EquipmentService } from '../../../shared/services/equipment.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { FormType } from '../form-type/form-type';
 
 @Component({
   selector: 'equipment-page',
@@ -10,22 +11,18 @@ import { CommonModule } from '@angular/common';
   templateUrl: './equipment-page.html',
 })
 export default class EquipmentPage {
+
+  equipmentsService = inject(EquipmentService)
+
   equipments: Equipment[] = [];
   filterState = 'TODOS';
   isModalOpen: boolean = false;
-  isLoanModalOpen: boolean = false;
+  isTypeModalOpen: boolean = false;
 
-
-  constructor(private service: EquipmentService) { }
-
-  ngOnInit(): void {
-    this.service.getAll().subscribe((data) => (this.equipments = data));
-  }
-
-  get filtered(): Equipment[] {
-    if (this.filterState === 'TODOS') return this.equipments;
-    return this.equipments.filter((e) => e.state === this.filterState);
-  }
+  // get filtered(): Equipment[] {
+  //   if (this.filterState === 'TODOS') return this.equipments;
+  //   return this.equipments.filter((e) => e.state === this.filterState);
+  // }
 
   // Abrir modal de nuevo equipo
   openModal(): void {
@@ -37,14 +34,14 @@ export default class EquipmentPage {
     this.isModalOpen = false;
   }
 
-  // Abrir modal de préstamo
-  openLoanModal(): void {
-    this.isLoanModalOpen = true;
+  // Abrir modal de tipo de equipo
+  openTypeModal(): void {
+    this.isTypeModalOpen = true;
   }
 
-  // Cerrar modal de préstamo
-  closeLoanModal(): void {
-    this.isLoanModalOpen = false;
+  // Cerrar modal de tipo de equipo
+  closeTypeModal(): void {
+    this.isTypeModalOpen = false;
   }
 
   deleteEquipment(code: string): void {

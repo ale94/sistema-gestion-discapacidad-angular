@@ -1,6 +1,6 @@
 import { Component, inject, input, output } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Event } from '../../../shared/interfaces/event.interface';
+import { Event } from '../../../shared/interfaces/event';
 
 @Component({
   selector: 'event-form',
