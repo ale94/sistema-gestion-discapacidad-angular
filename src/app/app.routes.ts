@@ -25,7 +25,7 @@ export const routes: Routes = [
         loadComponent: () => import('./features/person/list/person-list'),
       },
       {
-        path: 'indicadores',
+        path: 'seguimientos',
         loadComponent: () => import('./features/person-tracking/list/person-indicator'),
       },
       {
@@ -37,7 +37,7 @@ export const routes: Routes = [
         loadComponent: () => import('./features/chart/chart-page'),
       },
       {
-        path: 'equipamientos',
+        path: 'prestamos',
         loadComponent: () => import('./features/equipment/equipment-page'),
       },
       {
