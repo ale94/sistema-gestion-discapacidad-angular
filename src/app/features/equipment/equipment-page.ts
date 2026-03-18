@@ -1,11 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Equipment } from '../../shared/interfaces/equipment';
 
 @Component({
   selector: 'equipment-page',
-  imports: [ReactiveFormsModule, CommonModule,],
+  imports: [ReactiveFormsModule, CommonModule, FormsModule],
   templateUrl: './equipment-page.html',
 })
 export default class EquipmentPage {
@@ -101,4 +101,10 @@ export default class EquipmentPage {
     this.editingCode = null;
     this.form.reset();
   }
+
+  searchTerm() {}
+
+  onSearchChange(value: string) {}
+
+  openAddModal() {}
 }
