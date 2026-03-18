@@ -1,52 +1,44 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { LoanEquipment } from '../interfaces/loan.equipment.interface';
-import { EquipmentService } from './equipment.service';
-import { Observable, of } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
 })
 export class LoanEquipmentService {
-  // private loans: LoanEquipment[] = [
-  //   {
-  //     id: 1,
-  //     personId: 101,
-  //     equipmentId: 2,
-  //     deliveryDate: '2026-01-01',
-  //     state: 'ACTIVO',
-  //     observations: 'Entrega domiciliaria',
-  //   },
-  // ];
+  private http = inject(HttpClient);
+  private url = 'http://localhost:8080';
+  loans = signal<LoanEquipment[]>([]);
 
-  // constructor(private equipmentService: EquipmentService) {}
+  constructor() {
+    this.loadLoans();
+  }
 
-  // getActivos(): Observable<LoanEquipment[]> {
-  //   return of(this.loans.filter((p) => p.state === 'ACTIVO'));
-  // }
+  loadLoans() {
+    this.http.get<LoanEquipment[]>(`${this.url}` + '/loans').subscribe((data) => {
+      this.loans.set(data);
+    });
+  }
 
-  // prestar(data: Partial<LoanEquipment>): Observable<LoanEquipment> {
-  //   const nuevo: LoanEquipment = {
-  //     id: this.loans.length + 1,
-  //     personId: data.personId!,
-  //     equipmentId: data.equipmentId!,
-  //     deliveryDate: new Date().toISOString().split('T')[0],
-  //     state: 'ACTIVO',
-  //     observations: data.observations,
-  //   };
+  addLoan(loan: LoanEquipment) {
+    this.http.post<LoanEquipment>(`${this.url}` + '/loans', loan).subscribe((newLoan) => {
+      this.loans.update((loans) => [...loans, newLoan]);
+    });
+  }
 
-  //   this.loans.push(nuevo);
-  //   this.equipmentService.updateState(data.equipmentId!, 'PRESTADO');
+  updateLoan(updatedLoan: LoanEquipment) {
+    this.http
+      .put<LoanEquipment>(`${this.url}/loans/${updatedLoan.id}`, updatedLoan)
+      .subscribe((loan) => {
+        this.loans.update((loans) =>
+          loans.map((l) => (l.id === loan.id ? loan : l)),
+        );
+      });
+  }
 
-  //   return of(nuevo);
-  // }
-
-  // devolver(id: number): Observable<void> {
-  //   const loan = this.loans.find((p) => p.id === id);
-  //   if (loan) {
-  //     loan.state = 'DEVUELTO';
-  //     loan.deliveryDate = new Date().toISOString().split('T')[0];
-  //     this.equipmentService.updateState(loan.equipmentId, 'DISPONIBLE');
-  //   }
-  //   return of();
-  // }
+  deleteLoan(id: number) {
+    this.http.delete(`${this.url}/loans/${id}`).subscribe(() => {
+      this.loans.update((loans) => loans.filter((l) => l.id !== id));
+    });
+  }
 }

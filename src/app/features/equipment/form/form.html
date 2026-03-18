@@ -1,0 +1,79 @@
+<form
+  [formGroup]="loanForm"
+  (ngSubmit)="onSubmit()"
+  class="flex flex-col w-full max-w-5xl max-h-[90vh] rounded-lg overflow-hidden"
+>
+  <div class="p-6 border-b border-slate-200">
+    <h2 class="text-xl font-semibold text-slate-900">
+      {{ isEditMode ? 'Editar Prestamo' : 'Agregar Nuevo Prestamo' }}
+    </h2>
+  </div>
+
+  <div class="p-6 grow overflow-y-auto bg-slate-50">
+    <fieldset class="lg:col-span-3 border border-slate-300 rounded-lg p-4 mb-4 bg-white">
+      <legend class="px-2 text-md font-semibold text-slate-700">Nuevo Préstamo</legend>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-2">
+        <div>
+          <select formControlName="type" class="form-input">
+            <option value="" disabled selected>Tipo de Préstamo</option>
+
+            @for (type of loanTypes; track type) {
+              <option [value]="type">
+                {{ type }}
+              </option>
+            }
+          </select>
+        </div>
+        <div>
+          <input
+            formControlName="equipmentNumber"
+            type="text"
+            class="form-input"
+            placeholder="Número de Equipo"
+          />
+        </div>
+        <div>
+          <input
+            formControlName="applicant"
+            type="text"
+            class="form-input"
+            placeholder="Solicitante"
+          />
+        </div>
+        <div>
+          <label for="dni" class="form-label">D.N.I</label>
+          <input formControlName="dni" type="text" class="form-input" placeholder=" Ingresar el D.N.I" />
+        </div>
+        <div>
+          <label for="phone" class="form-label">Teléfono</label>
+          <input formControlName="phone" type="text" class="form-input" placeholder="Ingresar el Teléfono" />
+        </div>
+        <div>
+          <label class="form-label">Fecha de Expiración</label>
+          <input formControlName="expiration" type="date" class="form-input" placeholder="Fecha de Expiración" />
+        </div>
+        <div class="lg:col-span-2">
+          <input formControlName="address" type="text" class="form-input" placeholder="Dirección" />
+        </div>
+      </div>
+    </fieldset>
+  </div>
+
+  <div class="p-4 bg-white border-t border-slate-200 flex justify-end space-x-4">
+    <button
+      type="button"
+      (click)="onCancel()"
+      class="px-6 py-2 rounded-lg text-slate-700 bg-white hover:bg-slate-100 transition-colors border border-slate-300"
+    >
+      Cancelar
+    </button>
+    <button
+      type="submit"
+      [disabled]="loanForm.invalid"
+      class="px-6 py-2 rounded-lg text-white bg-teal-600 hover:bg-teal-700 disabled:bg-slate-400 disabled:cursor-not-allowed transition-colors"
+    >
+      Guardar
+    </button>
+  </div>
+</form>

@@ -1,11 +1,13 @@
 export interface LoanEquipment {
   id: number;
-  equipmentId: number;
-  personId: number;
-  deliveryDate: string;
-  returnDate?: string;
-  state: LoanState;
-  observations?: string;
+  requestDate: Date;
+  expiration: Date;
+  type: string;
+  equipmentNumber: number;
+  year: number;
+  applicant: string;
+  dni: string;
+  address: string;
+  phone: string;
+  returnDate?: Date;
 }
-
-export type LoanState = 'ACTIVO' | 'DEVUELTO' | 'EXPIRADO';
