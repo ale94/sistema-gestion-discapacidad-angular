@@ -1,6 +1,7 @@
 import { effect, inject, Injectable, signal } from '@angular/core';
 import { Event } from '../interfaces/event';
 import { HttpClient } from '@angular/common/http';
+import { catchError, tap, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -24,26 +25,40 @@ export class EventService {
   }
 
   addEvent(event: Event) {
-    this.http.post<Event>(`${this.url}/events`, event)
-      .subscribe((newEvent) => {
-        this.events.update((events) => [...events, newEvent]);
-      });
+    return this.http.post<Event>(`${this.url}/events`, event)
+      .pipe(
+        tap((newEvent) => {
+          this.events.update((events) => [...events, newEvent]);
+        }),
+        catchError(() => {
+          return throwError(() => new Error("No se pudo crear un evento"))
+        })
+      );
   }
 
   updateEvent(updatedEvent: Event) {
-    this.http.put<Event>(`${this.url}/events/${updatedEvent.id}`, updatedEvent)
-      .subscribe((updatedEvent) => {
-        this.events.update((events) =>
-          events.map((e) => (e.id === updatedEvent.id ? updatedEvent : e))
-        );
-      });
+    return this.http.put<Event>(`${this.url}/events/${updatedEvent.id}`, updatedEvent)
+      .pipe(
+        tap((updatedEvent) => {
+          this.events.update((events) =>
+            events.map((e) => (e.id === updatedEvent.id ? updatedEvent : e)))
+        }),
+        catchError(() => {
+          return throwError(() => new Error("No se pudo actualizar un evento"))
+        })
+      );
   }
 
   deleteEvent(id: string) {
-    this.http.delete(`${this.url}/events/${id}`)
-      .subscribe(() => {
-        this.events.update((events) => events.filter((e) => e.id !== id));
-      });
+    return this.http.delete(`${this.url}/events/${id}`)
+      .pipe(
+        tap(() => {
+          this.events.update((events) => events.filter((e) => e.id !== id));
+        }),
+        catchError(() => {
+          return throwError(() => new Error("No se pudo borrar un evento"))
+        })
+      );
   }
 
   private loadFromStorage<T>(key: string, defaultValue: T): T {

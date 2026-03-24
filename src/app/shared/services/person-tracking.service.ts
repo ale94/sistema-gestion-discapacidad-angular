@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { PersonTracking } from '../interfaces/person-tracking';
+import { catchError, Observable, tap, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -22,27 +23,42 @@ export class PersonTrackingService {
       })
   }
 
-  addPerson(person: PersonTracking) {
-    this.http.post<PersonTracking>(`${this.url}` + "/persons-tracking", person)
-      .subscribe((newPerson) => {
-        this.personsTracking.update((persons) => [...persons, newPerson]);
-      });
+  addPerson(person: PersonTracking): Observable<PersonTracking> {
+    return this.http.post<PersonTracking>(`${this.url}` + "/persons-tracking", person)
+      .pipe(
+        tap((newPerson) =>
+          this.personsTracking.update((persons) => [...persons, newPerson])
+        ),
+        catchError(() => {
+          return throwError(() => new Error("No se pudo crear una persona con seguimiento"))
+        })
+      );
   }
 
-  updatePerson(updatedPerson: PersonTracking) {
-    this.http.put<PersonTracking>(`${this.url}/persons-tracking/${updatedPerson.id}`, updatedPerson)
-      .subscribe((person) => {
-        this.personsTracking.update((persons) =>
-          persons.map((p) => (p.id === person.id ? person : p)),
-        );
-      });
+  updatePerson(updatedPerson: PersonTracking): Observable<PersonTracking> {
+    return this.http.put<PersonTracking>(`${this.url}/persons-tracking/${updatedPerson.id}`, updatedPerson)
+      .pipe(
+        tap((person) => {
+          this.personsTracking.update((persons) =>
+            persons.map((p) => (p.id === person.id ? person : p)),
+          )
+        }),
+        catchError(() => {
+          return throwError(() => new Error("No se pudo actualizar una persona con seguimiento"))
+        })
+      );
   }
 
   deletePerson(id: number) {
-    this.http.delete(`${this.url}/persons-tracking/${id}`)
-      .subscribe(() => {
-        this.personsTracking.update((persons) => persons.filter((p) => p.id !== id));
-      });
+    return this.http.delete(`${this.url}/persons-tracking/${id}`)
+      .pipe(
+        tap(() => {
+          this.personsTracking.update((persons) => persons.filter((p) => p.id !== id));
+        }),
+        catchError(() => {
+          return throwError(() => new Error("No se pudo borrar una persona con seguimiento"))
+        })
+      );
   }
 
 }

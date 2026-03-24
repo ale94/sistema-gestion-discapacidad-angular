@@ -51,7 +51,7 @@ export default class PersonIndicator {
 
   confirmDeleteAction(): void {
     if (this.personToDelete()) {
-      this.personService.deletePerson(this.personToDelete()!.id);
+      this.personService.deletePerson(this.personToDelete()!.id).subscribe();
       this.cancelDelete();
     }
   }
@@ -62,9 +62,9 @@ export default class PersonIndicator {
 
   handleSave(personData: PersonTracking) {
     if ('id' in personData) {
-      this.personService.updatePerson(personData);
+      this.personService.updatePerson(personData).subscribe();
     } else {
-      this.personService.addPerson(personData);
+      this.personService.addPerson(personData).subscribe();
     }
     this.closeModal();
   }

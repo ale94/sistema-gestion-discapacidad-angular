@@ -11,7 +11,7 @@ import {
 @Component({
   selector: 'person-form',
   standalone: true,
-  imports: [ReactiveFormsModule,],
+  imports: [ReactiveFormsModule],
   templateUrl: './person-form.html',
   styleUrls: ['./person-form.css'],
 })
@@ -100,15 +100,16 @@ export class PersonForm {
       merchandise: [currentPerson?.benefit?.merchandise || false],
       freePass: [currentPerson?.benefit?.freePass || false],
 
-      familyMembers: this.fb.array(currentPerson?.familyMembers?.map(family => this.fb.group({
-        firstName: [family.firstName || '', Validators.required],
-        lastName: [family.lastName || '', Validators.required],
-        dni: [family.dni || '', Validators.required],
-        age: [family.age || '', Validators.required],
-        civilStatus: [family.civilStatus || '', Validators.required],
-        parentage: [family.parentage || '', Validators.required],
-        occupation: [family.occupation || '', Validators.required]
-      })) || [])
+      familyMembers: this.fb.array(currentPerson?.familyMembers?.map(family =>
+        this.fb.group({
+          firstName: [family.firstName || '', Validators.required],
+          lastName: [family.lastName || '', Validators.required],
+          dni: [family.dni || '', Validators.required],
+          age: [family.age || '', Validators.required],
+          civilStatus: [family.civilStatus || '', Validators.required],
+          parentage: [family.parentage || '', Validators.required],
+          occupation: [family.occupation || '', Validators.required]
+        })) || [])
 
     });
   }

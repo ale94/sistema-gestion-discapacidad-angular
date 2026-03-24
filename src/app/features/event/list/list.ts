@@ -77,9 +77,9 @@ export default class List {
 
   handleSave(eventData: Event) {
     if ('id' in eventData) {
-      this.eventService.updateEvent(eventData);
+      this.eventService.updateEvent(eventData).subscribe();
     } else {
-      this.eventService.addEvent(eventData);
+      this.eventService.addEvent(eventData).subscribe();
     }
     this.closeModal();
   }
@@ -90,7 +90,7 @@ export default class List {
 
   confirmDeleteAction(): void {
     if (this.eventToDelete()) {
-      this.eventService.deleteEvent(this.eventToDelete()!.id);
+      this.eventService.deleteEvent(this.eventToDelete()!.id).subscribe();
       this.cancelDelete();
     }
   }

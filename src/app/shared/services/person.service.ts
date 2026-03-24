@@ -45,7 +45,6 @@ export class PersonService {
           return throwError(() => new Error("No se pudo actualizar una persona"))
         })
       )
-
   }
 
   deletePerson(id: number): Observable<void> {
@@ -58,5 +57,4 @@ export class PersonService {
         })
       )
   }
-
 }

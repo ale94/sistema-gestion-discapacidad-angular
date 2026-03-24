@@ -5,7 +5,6 @@ import { Router } from '@angular/router';
 import { Person } from '../../../shared/interfaces/person';
 import { PersonService } from '../../../shared/services/person.service';
 import { PersonForm } from '../form/person-form';
-import { Title } from 'chart.js';
 
 @Component({
   selector: 'person-list',
