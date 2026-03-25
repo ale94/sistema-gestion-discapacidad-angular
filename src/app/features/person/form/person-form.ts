@@ -69,36 +69,46 @@ export class PersonForm {
       gender: [currentPerson?.gender || '', Validators.required],
 
       // Address
-      district: [currentPerson?.address.district || '', Validators.required],
-      street: [currentPerson?.address.street || '', Validators.required],
-      locality: [currentPerson?.address.locality || '', Validators.required],
-      province: [currentPerson?.address.province || '', Validators.required],
+      address: this.fb.group({
+        street: [currentPerson?.address?.street || '', Validators.required],
+        district: [currentPerson?.address?.district || '', Validators.required],
+        locality: [currentPerson?.address?.locality || '', Validators.required],
+        province: [currentPerson?.address?.province || '', Validators.required]
+      }),
 
       // Health
-      diagnostic: [currentPerson?.health?.diagnostic || '', Validators.required],
-      disabilityType: [currentPerson?.health?.disabilityType || '', Validators.required],
-      cudNumber: [currentPerson?.health?.cudNumber || ''],
-      activeCud: [currentPerson?.health?.activeCud || false],
-      rehabilitationTreatment: [currentPerson?.health?.rehabilitationTreatment || ''],
+      health: this.fb.group({
+        diagnostic: [currentPerson?.health?.diagnostic || '', Validators.required],
+        disabilityType: [currentPerson?.health?.disabilityType || '', Validators.required],
+        cudNumber: [currentPerson?.health?.cudNumber || ''],
+        activeCud: [currentPerson?.health?.activeCud || false],
+        rehabilitationTreatment: [currentPerson?.health?.rehabilitationTreatment || ''],
+      }),
 
       // Work
-      companyName: [currentPerson?.work?.companyName || ''],
-      employmentStatus: [currentPerson?.work?.status || '', Validators.required],
-      workAddress: [currentPerson?.work?.address || ''],
-      socialWork: [currentPerson?.work?.socialWork || false],
-      nameSocialWork: [currentPerson?.work?.nameSocialWork || ''],
+      work: this.fb.group({
+        companyName: [currentPerson?.work?.companyName || ''],
+        employmentStatus: [currentPerson?.work?.status || '', Validators.required],
+        workAddress: [currentPerson?.work?.address || ''],
+        socialWork: [currentPerson?.work?.socialWork || false],
+        nameSocialWork: [currentPerson?.work?.nameSocialWork || ''],
+      }),
 
       // Education
-      educationLevel: [currentPerson?.education?.educationLevel || '', Validators.required],
-      schoolName: [currentPerson?.education?.name || ''],
-      educationAddress: [currentPerson?.education?.address || ''],
+      education: this.fb.group({
+        educationLevel: [currentPerson?.education?.educationLevel || '', Validators.required],
+        schoolName: [currentPerson?.education?.name || ''],
+        educationAddress: [currentPerson?.education?.address || ''],
+      }),
 
       // Benefits
-      federalProgram: [currentPerson?.benefit?.federalProgram || false],
-      pension: [currentPerson?.benefit?.pension || false],
-      auh: [currentPerson?.benefit?.auh || false],
-      merchandise: [currentPerson?.benefit?.merchandise || false],
-      freePass: [currentPerson?.benefit?.freePass || false],
+      benefit: this.fb.group({
+        federalProgram: [currentPerson?.benefit?.federalProgram || false],
+        pension: [currentPerson?.benefit?.pension || false],
+        auh: [currentPerson?.benefit?.auh || false],
+        merchandise: [currentPerson?.benefit?.merchandise || false],
+        freePass: [currentPerson?.benefit?.freePass || false],
+      }),
 
       familyMembers: this.fb.array(currentPerson?.familyMembers?.map(family =>
         this.fb.group({
@@ -110,7 +120,6 @@ export class PersonForm {
           parentage: [family.parentage || '', Validators.required],
           occupation: [family.occupation || '', Validators.required]
         })) || [])
-
     });
   }
 

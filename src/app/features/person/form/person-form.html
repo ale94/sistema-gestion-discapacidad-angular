@@ -2,6 +2,7 @@
   [formGroup]="personForm"
   (ngSubmit)="onSubmit()"
   class="flex flex-col w-full max-w-5xl max-h-[90vh] rounded-lg overflow-hidden"
+  autocomplete="off"
 >
   <div class="p-6 border-b border-slate-200">
     <h2 class="text-xl font-semibold text-slate-900">
@@ -16,19 +17,32 @@
 
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-2">
         <div>
-          <input formControlName="lastName" type="text" class="form-input" placeholder="Apellido" />
+          <label class="form-label">Apellido</label>
+          <input
+            formControlName="lastName"
+            type="text"
+            class="form-input"
+            placeholder="Ingrese su apellido"
+          />
         </div>
         <div>
+          <label class="form-label">Nombre</label>
           <input
             formControlName="firstName"
             clear
             type="text"
             class="form-input"
-            placeholder="Nombre"
+            placeholder="Ingrese su nombre"
           />
         </div>
         <div>
-          <input formControlName="dni" type="text" class="form-input" placeholder="D.N.I" />
+          <label class="form-label">D.N.I</label>
+          <input
+            formControlName="dni"
+            type="text"
+            class="form-input"
+            placeholder="Ingrese su dni"
+          />
         </div>
         <div>
           <label class="form-label">Fecha de Nacimiento</label>
@@ -51,9 +65,16 @@
           </select>
         </div>
         <div>
-          <input formControlName="phone" type="text" class="form-input" placeholder="Teléfono" />
+          <label class="form-label">Teléfono</label>
+          <input
+            formControlName="phone"
+            type="text"
+            class="form-input"
+            placeholder="Ingrese su teléfono"
+          />
         </div>
-        <div>
+        <div class="lg:col-span-2">
+          <label class="form-label">Tutor</label>
           <input
             formControlName="tutor"
             type="text"
@@ -61,27 +82,50 @@
             placeholder="Nombre del Tutor"
           />
         </div>
+      </div>
+    </fieldset>
 
+    <!-- DIRECCION -->
+    <fieldset
+      formGroupName="address"
+      class="lg:col-span-3 border border-slate-300 rounded-lg p-4 mb-4 bg-white"
+    >
+      <legend class="px-2 text-md font-semibold text-slate-700">Dirección</legend>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-2">
         <div>
-          <input formControlName="district" type="text" class="form-input" placeholder="Barrio" />
+          <label class="form-label">Barrio</label>
+          <input
+            formControlName="district"
+            type="text"
+            class="form-input"
+            placeholder="Ingrese su barrio"
+          />
+        </div>
+        <div class="lg:col-span-2">
+          <label class="form-label">Calle</label>
+          <input
+            formControlName="street"
+            type="text"
+            class="form-input"
+            placeholder="Ingrese su calle"
+          />
         </div>
         <div>
-          <input formControlName="street" type="text" class="form-input" placeholder="Calle" />
-        </div>
-        <div>
+          <label class="form-label">Localidad</label>
           <input
             formControlName="locality"
             type="text"
             class="form-input"
-            placeholder="Localidad"
+            placeholder="Ingrese su localidad"
           />
         </div>
-        <div>
+        <div class="lg:col-span-2">
+          <label class="form-label">Provincia</label>
           <input
             formControlName="province"
             type="text"
             class="form-input"
-            placeholder="Provincia"
+            placeholder="Ingrese su provincia"
           />
         </div>
       </div>
@@ -94,20 +138,79 @@
     >
       <legend class="px-2 text-md font-semibold text-slate-700">2. Grupo Familiar</legend>
 
-      @for (familiar of familyMembers.controls; track $index; let i = $index) {
-        <div [formGroupName]="i" class="grid grid-cols-8 gap-2 py-2">
-          <input formControlName="lastName" placeholder="Apellido" class="form-input" />
-          <input formControlName="firstName" placeholder="Nombre" class="form-input" />
-          <input formControlName="dni" placeholder="DNI" class="form-input" />
-          <input formControlName="age" type="number" placeholder="Edad" class="form-input" />
-          <input formControlName="civilStatus" placeholder="Estado Civil" class="form-input" />
-          <input formControlName="parentage" placeholder="Parentesco" class="form-input" />
-          <input formControlName="occupation" placeholder="Ocupación" class="form-input" />
-
-          <button type="button" (click)="removeFamily(i)">X</button>
+      @if (familyMembers.controls.length !== 0) {
+        <div class="hidden md:grid grid-cols-8 gap-4 py-2 border-b mb-2 items-center">
+          <label class="text-sm font-medium text-gray-700">Apellido</label>
+          <label class="text-sm font-medium text-gray-700">Nombre</label>
+          <label class="text-sm font-medium text-gray-700">DNI</label>
+          <label class="text-sm font-medium text-gray-700">Edad</label>
+          <label class="text-sm font-medium text-gray-700">Estado Civil</label>
+          <label class="text-sm font-medium text-gray-700">Parentesco</label>
+          <label class="text-sm font-medium text-gray-700">Ocupación</label>
+          <label class="text-sm font-medium text-gray-700 text-center">Acción</label>
         </div>
       }
 
+      @for (family of familyMembers.controls; track $index; let i = $index) {
+        <div
+          [formGroupName]="i"
+          class="grid grid-cols-1 md:grid-cols-8 gap-4 py-2 items-center border-b md:border-none"
+        >
+          <div class="flex flex-col gap-1">
+            <label class="md:hidden text-xs font-semibold text-gray-500">Apellido</label>
+            <input formControlName="lastName" placeholder="Apellido" class="form-input w-full" />
+          </div>
+
+          <div class="flex flex-col gap-1">
+            <label class="md:hidden text-xs font-semibold text-gray-500">Nombre</label>
+            <input formControlName="firstName" placeholder="Nombre" class="form-input w-full" />
+          </div>
+
+          <div class="flex flex-col gap-1">
+            <label class="md:hidden text-xs font-semibold text-gray-500">DNI</label>
+            <input formControlName="dni" placeholder="DNI" class="form-input w-full" />
+          </div>
+
+          <div class="flex flex-col gap-1">
+            <label class="md:hidden text-xs font-semibold text-gray-500">Edad</label>
+            <input
+              formControlName="age"
+              type="number"
+              placeholder="Edad"
+              class="form-input w-full"
+            />
+          </div>
+
+          <div class="flex flex-col gap-1">
+            <label class="md:hidden text-xs font-semibold text-gray-500">Estado Civil</label>
+            <input
+              formControlName="civilStatus"
+              placeholder="Estado Civil"
+              class="form-input w-full"
+            />
+          </div>
+
+          <div class="flex flex-col gap-1">
+            <label class="md:hidden text-xs font-semibold text-gray-500">Parentesco</label>
+            <input formControlName="parentage" placeholder="Parentesco" class="form-input w-full" />
+          </div>
+
+          <div class="flex flex-col gap-1">
+            <label class="md:hidden text-xs font-semibold text-gray-500">Ocupación</label>
+            <input formControlName="occupation" placeholder="Ocupación" class="form-input w-full" />
+          </div>
+
+          <div class="flex items-center justify-center pt-4 md:pt-0">
+            <button
+              type="button"
+              (click)="removeFamily(i)"
+              class="bg-red-500 text-white rounded-full h-8 w-8 flex items-center justify-center hover:bg-red-700 transition-colors shadow-sm"
+            >
+              ✕
+            </button>
+          </div>
+        </div>
+      }
       <button
         type="button"
         (click)="addFamily()"
@@ -118,7 +221,10 @@
     </fieldset>
 
     <!-- SITUACION DE SALUD -->
-    <fieldset class="lg:col-span-3 border border-slate-300 rounded-lg p-4 mb-4 bg-white">
+    <fieldset
+      formGroupName="health"
+      class="lg:col-span-3 border border-slate-300 rounded-lg p-4 mb-4 bg-white"
+    >
       <legend class="px-2 text-md font-semibold text-slate-700">3. Situación de Salud</legend>
 
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-2">
@@ -170,7 +276,10 @@
     </fieldset>
 
     <!-- SITUACION LABORAL -->
-    <fieldset class="lg:col-span-3 border border-slate-300 rounded-lg p-4 mb-4 bg-white">
+    <fieldset
+      formGroupName="work"
+      class="lg:col-span-3 border border-slate-300 rounded-lg p-4 mb-4 bg-white"
+    >
       <legend class="px-2 text-md font-semibold text-slate-700">4. Situación Laboral</legend>
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-2">
@@ -208,7 +317,7 @@
           </select>
         </div>
         <div class="lg:col-span-2">
-          <label class="form-label">Nombre</label>
+          <label class="form-label">Nombre Obra Social</label>
           <input
             formControlName="nameSocialWork"
             type="text"
@@ -220,7 +329,10 @@
     </fieldset>
 
     <!-- SITUACION DE EDUCACION -->
-    <fieldset class="lg:col-span-3 border border-slate-300 rounded-lg p-4 mb-4 bg-white">
+    <fieldset
+      formGroupName="education"
+      class="lg:col-span-3 border border-slate-300 rounded-lg p-4 mb-4 bg-white"
+    >
       <legend class="px-2 text-md font-semibold text-slate-700">5. Situación de Educación</legend>
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-2">
@@ -254,7 +366,10 @@
     </fieldset>
 
     <!-- BENEFICIOS -->
-    <fieldset class="lg:col-span-3 border border-slate-300 rounded-lg p-4 mb-4 bg-white">
+    <fieldset
+      formGroupName="benefit"
+      class="lg:col-span-3 border border-slate-300 rounded-lg p-4 mb-4 bg-white"
+    >
       <legend class="px-2 text-md font-semibold text-slate-700">6. Beneficios</legend>
 
       <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-2">
