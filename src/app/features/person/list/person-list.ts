@@ -44,7 +44,7 @@ export default class PersonList {
         !term ||
         person.firstName.toLowerCase().includes(term) ||
         person.lastName.toLowerCase().includes(term) ||
-        person.dni.includes(term);
+        person.dni.toString().includes(term);
 
       // Filtro por estado
       const matchesFilter = (filtersMap[filter] ?? (() => true))(person);

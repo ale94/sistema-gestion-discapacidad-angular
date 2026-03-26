@@ -40,11 +40,11 @@ export class PersonForm {
       // Person
       firstName: [currentPerson?.firstName || '', [Validators.required, Validators.minLength(3)]],
       lastName: [currentPerson?.lastName || '', [Validators.required, Validators.minLength(3)]],
-      dni: [currentPerson?.dni || '', [Validators.required, Validators.pattern('^[0-9]{7,8}$'), Validators.minLength(7)]],
+      dni: [currentPerson?.dni || '', [Validators.required, Validators.pattern('^[0-9]{7,8}$')]],
       civilStatus: [currentPerson?.civilStatus || '', Validators.required],
       dateBirth: [currentPerson?.dateBirth || '', Validators.required],
       tutor: [currentPerson?.tutor || '', [Validators.required, Validators.minLength(4)]],
-      phone: [currentPerson?.phone || '', [Validators.required, Validators.minLength(10)]],
+      phone: [currentPerson?.phone || '', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
       gender: [currentPerson?.gender || '', Validators.required],
 
       // Address
@@ -163,6 +163,10 @@ export class PersonForm {
           return `Mínimo de ${errors['minlength'].requiredLength} caracteres`;
         case 'min':
           return `Valor mínimo de ${errors['min'].min}`;
+        case 'pattern':
+          if (fieldName === 'dni') return 'El DNI debe tener entre 7 y 8 dígitos';
+          if (fieldName === 'phone') return 'El teléfono debe tener 10 dígitos';
+          return 'El formato es incorrecto';
       }
     }
     return null;

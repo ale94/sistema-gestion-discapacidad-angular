@@ -10,11 +10,11 @@ export interface Person {
   id: number;
   firstName: string;
   lastName: string;
-  dni: string;
+  dni: number;
   civilStatus: string;
   dateBirth: Date;
   tutor: string;
-  phone: string;
+  phone: number;
   gender: string;
   registrationDate: Date;
   education: Education;

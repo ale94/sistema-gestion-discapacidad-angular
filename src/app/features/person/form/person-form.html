@@ -45,7 +45,7 @@
           <label class="form-label">D.N.I</label>
           <input
             formControlName="dni"
-            type="text"
+            type="number"
             class="form-input"
             placeholder="Ingrese su dni"
           />
@@ -86,7 +86,7 @@
           <label class="form-label">Teléfono</label>
           <input
             formControlName="phone"
-            type="text"
+            type="number"
             class="form-input"
             placeholder="Ingrese su teléfono"
           />
@@ -247,6 +247,7 @@
           </div>
         </div>
       }
+
       <button
         type="button"
         (click)="addFamily()"
@@ -305,8 +306,8 @@
         <div>
           <label class="form-label">¿CUD vigente?</label>
           <select formControlName="activeCud" class="form-input">
-            <option value="true">Si</option>
-            <option value="false">No</option>
+            <option [value]="true">Sí</option>
+            <option [value]="false">No</option>
           </select>
           @if (isValidField('health.activeCud')) {
             <span class="text-xs text-red-600"> {{ getFieldError('health.activeCud') }} </span>
