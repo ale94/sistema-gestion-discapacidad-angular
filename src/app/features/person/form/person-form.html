@@ -24,6 +24,9 @@
             class="form-input"
             placeholder="Ingrese su apellido"
           />
+          @if (isValidField('lastName')) {
+            <span class="text-xs text-red-600"> {{ getFieldError('lastName') }} </span>
+          }
         </div>
         <div>
           <label class="form-label">Nombre</label>
@@ -34,6 +37,9 @@
             class="form-input"
             placeholder="Ingrese su nombre"
           />
+          @if (isValidField('firstName')) {
+            <span class="text-xs text-red-600"> {{ getFieldError('firstName') }} </span>
+          }
         </div>
         <div>
           <label class="form-label">D.N.I</label>
@@ -43,26 +49,38 @@
             class="form-input"
             placeholder="Ingrese su dni"
           />
+          @if (isValidField('dni')) {
+            <span class="text-xs text-red-600"> {{ getFieldError('dni') }} </span>
+          }
         </div>
         <div>
           <label class="form-label">Fecha de Nacimiento</label>
           <input formControlName="dateBirth" type="date" class="form-input" />
+          @if (isValidField('dateBirth')) {
+            <span class="text-xs text-red-600"> {{ getFieldError('dateBirth') }} </span>
+          }
         </div>
         <div>
           <label class="form-label">Sexo</label>
           <select formControlName="gender" class="form-input">
-            @for (gender of genders; track gender) {
+            @for (gender of personUtils.gender(); track gender) {
               <option [value]="gender">{{ gender }}</option>
             }
           </select>
+          @if (isValidField('gender')) {
+            <span class="text-xs text-red-600"> {{ getFieldError('gender') }} </span>
+          }
         </div>
         <div>
           <label class="form-label">Estado Civil</label>
           <select formControlName="civilStatus" class="form-input">
-            @for (type of civilStatuses; track type) {
+            @for (type of personUtils.civilStatuses(); track type) {
               <option [value]="type">{{ type }}</option>
             }
           </select>
+          @if (isValidField('civilStatus')) {
+            <span class="text-xs text-red-600"> {{ getFieldError('civilStatus') }} </span>
+          }
         </div>
         <div>
           <label class="form-label">Teléfono</label>
@@ -72,6 +90,9 @@
             class="form-input"
             placeholder="Ingrese su teléfono"
           />
+          @if (isValidField('phone')) {
+            <span class="text-xs text-red-600"> {{ getFieldError('phone') }} </span>
+          }
         </div>
         <div class="lg:col-span-2">
           <label class="form-label">Tutor</label>
@@ -81,6 +102,9 @@
             class="form-input"
             placeholder="Nombre del Tutor"
           />
+          @if (isValidField('tutor')) {
+            <span class="text-xs text-red-600"> {{ getFieldError('tutor') }} </span>
+          }
         </div>
       </div>
     </fieldset>
@@ -100,6 +124,9 @@
             class="form-input"
             placeholder="Ingrese su barrio"
           />
+          @if (isValidField('address.district')) {
+            <span class="text-xs text-red-600"> {{ getFieldError('address.district') }} </span>
+          }
         </div>
         <div class="lg:col-span-2">
           <label class="form-label">Calle</label>
@@ -109,6 +136,9 @@
             class="form-input"
             placeholder="Ingrese su calle"
           />
+          @if (isValidField('address.street')) {
+            <span class="text-xs text-red-600"> {{ getFieldError('address.street') }} </span>
+          }
         </div>
         <div>
           <label class="form-label">Localidad</label>
@@ -118,6 +148,9 @@
             class="form-input"
             placeholder="Ingrese su localidad"
           />
+          @if (isValidField('address.locality')) {
+            <span class="text-xs text-red-600"> {{ getFieldError('address.locality') }} </span>
+          }
         </div>
         <div class="lg:col-span-2">
           <label class="form-label">Provincia</label>
@@ -127,6 +160,9 @@
             class="form-input"
             placeholder="Ingrese su provincia"
           />
+          @if (isValidField('address.province')) {
+            <span class="text-xs text-red-600"> {{ getFieldError('address.province') }} </span>
+          }
         </div>
       </div>
     </fieldset>
@@ -236,15 +272,21 @@
             class="form-input"
             placeholder="Ingrese el diagnóstico"
           />
+          @if (isValidField('health.diagnostic')) {
+            <span class="text-xs text-red-600"> {{ getFieldError('health.diagnostic') }} </span>
+          }
         </div>
 
         <div>
           <label class="form-label">Tipo de Discapacidad</label>
           <select formControlName="disabilityType" class="form-input">
-            @for (type of disabilityTypes; track type) {
+            @for (type of personUtils.disabilityTypes(); track type) {
               <option [value]="type">{{ type }}</option>
             }
           </select>
+          @if (isValidField('health.disabilityType')) {
+            <span class="text-xs text-red-600"> {{ getFieldError('health.disabilityType') }} </span>
+          }
         </div>
 
         <div>
@@ -255,6 +297,9 @@
             class="form-input"
             placeholder="Ingrese el CUD"
           />
+          @if (isValidField('health.cudNumber')) {
+            <span class="text-xs text-red-600"> {{ getFieldError('health.cudNumber') }} </span>
+          }
         </div>
 
         <div>
@@ -263,6 +308,9 @@
             <option value="true">Si</option>
             <option value="false">No</option>
           </select>
+          @if (isValidField('health.activeCud')) {
+            <span class="text-xs text-red-600"> {{ getFieldError('health.activeCud') }} </span>
+          }
         </div>
 
         <div>
@@ -271,6 +319,11 @@
             <option value="true">Si</option>
             <option value="false">No</option>
           </select>
+          @if (isValidField('health.rehabilitationTreatment')) {
+            <span class="text-xs text-red-600">
+              {{ getFieldError('health.rehabilitationTreatment') }}
+            </span>
+          }
         </div>
       </div>
     </fieldset>
@@ -286,10 +339,13 @@
         <div>
           <label class="form-label">Situación Laboral</label>
           <select formControlName="employmentStatus" class="form-input">
-            @for (status of jobStatuses; track status) {
+            @for (status of personUtils.jobStatuses(); track status) {
               <option [value]="status">{{ status }}</option>
             }
           </select>
+          @if (isValidField('work.employmentStatus')) {
+            <span class="text-xs text-red-600"> {{ getFieldError('work.employmentStatus') }} </span>
+          }
         </div>
         <div>
           <label class="form-label">Nombre</label>
@@ -315,6 +371,9 @@
             <option value="true">Si</option>
             <option value="false">No</option>
           </select>
+          @if (isValidField('work.socialWork')) {
+            <span class="text-xs text-red-600"> {{ getFieldError('work.socialWork') }} </span>
+          }
         </div>
         <div class="lg:col-span-2">
           <label class="form-label">Nombre Obra Social</label>
@@ -339,10 +398,15 @@
         <div>
           <label class="form-label">Nivel Educativo</label>
           <select formControlName="educationLevel" class="form-input">
-            @for (level of educationLevels; track level) {
+            @for (level of personUtils.educationLevels(); track level) {
               <option [value]="level">{{ level }}</option>
             }
           </select>
+          @if (isValidField('education.educationLevel')) {
+            <span class="text-xs text-red-600">
+              {{ getFieldError('education.educationLevel') }}
+            </span>
+          }
         </div>
         <div>
           <label class="form-label">Nombre</label>
@@ -411,7 +475,6 @@
     </button>
     <button
       type="submit"
-      [disabled]="personForm.invalid"
       class="px-6 py-2 rounded-lg text-white bg-teal-600 hover:bg-teal-700 disabled:bg-slate-400 disabled:cursor-not-allowed transition-colors"
     >
       Guardar

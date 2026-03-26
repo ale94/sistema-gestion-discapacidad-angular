@@ -1,5 +1,4 @@
 import { Component, inject, input, output } from '@angular/core';
-import { Person } from '../../../shared/interfaces/person';
 import {
   FormArray,
   FormBuilder,
@@ -7,6 +6,8 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { Person } from '../../../shared/interfaces/person';
+import { PersonUtils } from '../../../shared/utils/PersonUtils';
 
 @Component({
   selector: 'person-form',
@@ -28,29 +29,7 @@ export class PersonForm {
 
   isEditMode = false;
 
-  educationLevels: string[] = [
-    'ninguna',
-    'primaria',
-    'secundaria',
-    'terciaria',
-    'universitaria',
-  ];
-  disabilityTypes: string[] = [
-    'fisica',
-    'sensorial',
-    'intelectual',
-    'psiquica',
-    'multiple',
-  ];
-  jobStatuses: string[] = [
-    'empleado',
-    'desempleado',
-    'independiente',
-    'no aplica',
-  ];
-  genders: string[] = ['masculino', 'femenino', 'otro'];
-  civilStatuses: string[] = ['soltero', 'casado', 'divorciado', 'viudo', 'otro']
-
+  personUtils = PersonUtils;
 
   ngOnInit(): void {
     const currentPerson = this.person();
@@ -59,38 +38,38 @@ export class PersonForm {
     this.personForm = this.fb.group({
 
       // Person
-      firstName: [currentPerson?.firstName || '', Validators.required],
-      lastName: [currentPerson?.lastName || '', Validators.required],
-      dni: [currentPerson?.dni || '', [Validators.required, Validators.pattern('^[0-9]{7,8}$')]],
+      firstName: [currentPerson?.firstName || '', [Validators.required, Validators.minLength(3)]],
+      lastName: [currentPerson?.lastName || '', [Validators.required, Validators.minLength(3)]],
+      dni: [currentPerson?.dni || '', [Validators.required, Validators.pattern('^[0-9]{7,8}$'), Validators.minLength(7)]],
       civilStatus: [currentPerson?.civilStatus || '', Validators.required],
       dateBirth: [currentPerson?.dateBirth || '', Validators.required],
-      tutor: [currentPerson?.tutor || '', Validators.required],
-      phone: [currentPerson?.phone || '', Validators.required],
+      tutor: [currentPerson?.tutor || '', [Validators.required, Validators.minLength(4)]],
+      phone: [currentPerson?.phone || '', [Validators.required, Validators.minLength(10)]],
       gender: [currentPerson?.gender || '', Validators.required],
 
       // Address
       address: this.fb.group({
-        street: [currentPerson?.address?.street || '', Validators.required],
-        district: [currentPerson?.address?.district || '', Validators.required],
-        locality: [currentPerson?.address?.locality || '', Validators.required],
-        province: [currentPerson?.address?.province || '', Validators.required]
+        street: [currentPerson?.address?.street || '', [Validators.required, Validators.minLength(4)]],
+        district: [currentPerson?.address?.district || '', [Validators.required, Validators.minLength(4)]],
+        locality: [currentPerson?.address?.locality || '', [Validators.required, Validators.minLength(4)]],
+        province: [currentPerson?.address?.province || '', [Validators.required, Validators.minLength(4)]]
       }),
 
       // Health
       health: this.fb.group({
-        diagnostic: [currentPerson?.health?.diagnostic || '', Validators.required],
+        diagnostic: [currentPerson?.health?.diagnostic || '', [Validators.required, Validators.minLength(4)]],
         disabilityType: [currentPerson?.health?.disabilityType || '', Validators.required],
-        cudNumber: [currentPerson?.health?.cudNumber || ''],
-        activeCud: [currentPerson?.health?.activeCud || false],
-        rehabilitationTreatment: [currentPerson?.health?.rehabilitationTreatment || ''],
+        cudNumber: [currentPerson?.health?.cudNumber || '', [Validators.required, Validators.minLength(4)]],
+        activeCud: [currentPerson?.health?.activeCud || false, Validators.required],
+        rehabilitationTreatment: [currentPerson?.health?.rehabilitationTreatment || '', Validators.required],
       }),
 
       // Work
       work: this.fb.group({
         companyName: [currentPerson?.work?.companyName || ''],
         employmentStatus: [currentPerson?.work?.status || '', Validators.required],
-        workAddress: [currentPerson?.work?.address || ''],
-        socialWork: [currentPerson?.work?.socialWork || false],
+        workAddress: [currentPerson?.work?.address || '',],
+        socialWork: [currentPerson?.work?.socialWork || false, Validators.required],
         nameSocialWork: [currentPerson?.work?.nameSocialWork || ''],
       }),
 
@@ -124,6 +103,7 @@ export class PersonForm {
   }
 
   onSubmit() {
+    this.personForm.markAllAsTouched();
     if (this.personForm.valid) {
       const formValue = this.personForm.value;
       if (this.isEditMode && this.person()) {
@@ -163,6 +143,29 @@ export class PersonForm {
 
   removeFamily(index: number) {
     this.familyMembers.removeAt(index);
+  }
+
+  isValidField(fieldName: string): boolean | null {
+    const control = this.personForm.get(fieldName);
+    return control ? (control.errors && control.touched) : null;
+  }
+
+  getFieldError(fieldName: string): string | null {
+    const control = this.personForm.get(fieldName);
+    if (!control || !control.errors) return null;
+
+    const errors = control.errors;
+    for (const key of Object.keys(errors)) {
+      switch (key) {
+        case 'required':
+          return 'Este campo es requerido';
+        case 'minlength':
+          return `Mínimo de ${errors['minlength'].requiredLength} caracteres`;
+        case 'min':
+          return `Valor mínimo de ${errors['min'].min}`;
+      }
+    }
+    return null;
   }
 
 }
