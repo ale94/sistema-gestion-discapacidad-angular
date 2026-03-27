@@ -63,8 +63,9 @@
         <div>
           <label class="form-label">Sexo</label>
           <select formControlName="gender" class="form-input">
+            <option value="" disabled selected>Seleccione una opción</option>
             @for (gender of personUtils.gender(); track gender) {
-              <option [value]="gender">{{ gender }}</option>
+              <option [value]="gender">{{ gender | titlecase }}</option>
             }
           </select>
           @if (isValidField('gender')) {
@@ -74,8 +75,9 @@
         <div>
           <label class="form-label">Estado Civil</label>
           <select formControlName="civilStatus" class="form-input">
+            <option value="" disabled selected>Seleccione una opción</option>
             @for (type of personUtils.civilStatuses(); track type) {
-              <option [value]="type">{{ type }}</option>
+              <option [value]="type">{{ type | titlecase }}</option>
             }
           </select>
           @if (isValidField('civilStatus')) {
@@ -307,8 +309,9 @@
         <div>
           <label class="form-label">Tipo de Discapacidad</label>
           <select formControlName="disabilityType" class="form-input">
+            <option value="" disabled selected>Seleccione una opción</option>
             @for (type of personUtils.disabilityTypes(); track type) {
-              <option [value]="type">{{ type }}</option>
+              <option [value]="type">{{ type | titlecase }}</option>
             }
           </select>
           @if (isValidField('health.disabilityType')) {
@@ -343,8 +346,8 @@
         <div>
           <label class="form-label">¿Realiza tratamiento/rehabilitación?</label>
           <select formControlName="rehabilitationTreatment" class="form-input">
-            <option [value]=true>Si</option>
-            <option [value]=false>No</option>
+            <option [value]="true">Si</option>
+            <option [value]="false">No</option>
           </select>
           @if (isValidField('health.rehabilitationTreatment')) {
             <span class="text-xs text-red-600">
@@ -366,12 +369,13 @@
         <div>
           <label class="form-label">Situación Laboral</label>
           <select formControlName="status" class="form-input">
+            <option value="" disabled selected>Seleccione una opción</option>
             @for (status of personUtils.jobStatuses(); track status) {
-              <option [value]="status">{{ status }}</option>
+              <option [value]="status">{{ status | titlecase }}</option>
             }
           </select>
-          @if (isValidField('work.employmentStatus')) {
-            <span class="text-xs text-red-600"> {{ getFieldError('work.employmentStatus') }} </span>
+          @if (isValidField('work.status')) {
+            <span class="text-xs text-red-600"> {{ getFieldError('work.status') }} </span>
           }
         </div>
         <div>
@@ -395,8 +399,8 @@
         <div>
           <label class="form-label">Obra Social</label>
           <select formControlName="socialWork" class="form-input">
-            <option [value]=true>Si</option>
-            <option [value]=false>No</option>
+            <option [value]="true">Si</option>
+            <option [value]="false">No</option>
           </select>
           @if (isValidField('work.socialWork')) {
             <span class="text-xs text-red-600"> {{ getFieldError('work.socialWork') }} </span>
@@ -425,8 +429,9 @@
         <div>
           <label class="form-label">Nivel Educativo</label>
           <select formControlName="educationLevel" class="form-input">
+            <option value="" disabled selected>Seleccione una opción</option>
             @for (level of personUtils.educationLevels(); track level) {
-              <option [value]="level">{{ level }}</option>
+              <option [value]="level">{{ level | titlecase }}</option>
             }
           </select>
           @if (isValidField('education.educationLevel')) {

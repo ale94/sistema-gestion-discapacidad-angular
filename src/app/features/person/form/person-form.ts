@@ -8,11 +8,12 @@ import {
 } from '@angular/forms';
 import { Person } from '../../../shared/interfaces/person';
 import { PersonUtils } from '../../../shared/utils/PersonUtils';
+import { TitleCasePipe } from '@angular/common';
 
 @Component({
   selector: 'person-form',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, TitleCasePipe],
   templateUrl: './person-form.html',
   styleUrls: ['./person-form.css'],
 })
