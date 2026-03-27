@@ -27,7 +27,7 @@ export default class PersonIndicator {
     if (!term) return people;
 
     return people.filter(({ firstName, lastName, dni }) =>
-      firstName.toLowerCase().includes(term) || lastName.toLowerCase().includes(term) || dni.includes(term)
+      firstName.toLowerCase().includes(term) || lastName.toLowerCase().includes(term) || dni.toString().includes(term)
     );
   });
 

@@ -67,17 +67,17 @@ export class PersonForm {
       // Work
       work: this.fb.group({
         companyName: [currentPerson?.work?.companyName || ''],
-        employmentStatus: [currentPerson?.work?.status || '', Validators.required],
-        workAddress: [currentPerson?.work?.address || '',],
-        socialWork: [currentPerson?.work?.socialWork || false, Validators.required],
+        status: [currentPerson?.work?.status || '', Validators.required],
+        address: [currentPerson?.work?.address || ''],
+        socialWork: [currentPerson?.work?.socialWork ?? false, Validators.required],
         nameSocialWork: [currentPerson?.work?.nameSocialWork || ''],
       }),
 
       // Education
       education: this.fb.group({
         educationLevel: [currentPerson?.education?.educationLevel || '', Validators.required],
-        schoolName: [currentPerson?.education?.name || ''],
-        educationAddress: [currentPerson?.education?.address || ''],
+        name: [currentPerson?.education?.name || ''],
+        address: [currentPerson?.education?.address || ''],
       }),
 
       // Benefits

@@ -6,8 +6,8 @@ export interface LoanEquipment {
   equipmentNumber: number;
   year: number;
   applicant: string;
-  dni: string;
+  dni: number;
   address: string;
-  phone: string;
+  phone: number;
   returnDate?: Date;
 }

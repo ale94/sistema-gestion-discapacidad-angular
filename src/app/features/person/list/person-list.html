@@ -142,7 +142,7 @@
                 {{ person.dni | number }}
               </td>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600">
-                {{ getAge(person.dateBirth.toString()) }}
+                {{ getAge(person.dateBirth) }}
               </td>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600">
                 {{ person?.health?.disabilityType | titlecase }}

@@ -101,7 +101,7 @@ export default class PersonList {
     this.router.navigate(['/personas', person.id]);
   }
 
-  getAge(birthDate: string): number {
+  getAge(birthDate: Date): number {
     const today = new Date();
     const birth = new Date(birthDate);
     let age = today.getFullYear() - birth.getFullYear();
