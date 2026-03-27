@@ -343,8 +343,8 @@
         <div>
           <label class="form-label">¿Realiza tratamiento/rehabilitación?</label>
           <select formControlName="rehabilitationTreatment" class="form-input">
-            <option value="true">Si</option>
-            <option value="false">No</option>
+            <option [value]=true>Si</option>
+            <option [value]=false>No</option>
           </select>
           @if (isValidField('health.rehabilitationTreatment')) {
             <span class="text-xs text-red-600">

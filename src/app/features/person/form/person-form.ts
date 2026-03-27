@@ -60,8 +60,8 @@ export class PersonForm {
         diagnostic: [currentPerson?.health?.diagnostic || '', [Validators.required, Validators.minLength(4)]],
         disabilityType: [currentPerson?.health?.disabilityType || '', Validators.required],
         cudNumber: [currentPerson?.health?.cudNumber || '', [Validators.required, Validators.minLength(4)]],
-        activeCud: [currentPerson?.health?.activeCud || false, Validators.required],
-        rehabilitationTreatment: [currentPerson?.health?.rehabilitationTreatment || '', Validators.required],
+        activeCud: [currentPerson?.health?.activeCud ?? false, Validators.required],
+        rehabilitationTreatment: [currentPerson?.health?.rehabilitationTreatment ?? false, Validators.required],
       }),
 
       // Work
@@ -82,11 +82,11 @@ export class PersonForm {
 
       // Benefits
       benefit: this.fb.group({
-        federalProgram: [currentPerson?.benefit?.federalProgram || false],
-        pension: [currentPerson?.benefit?.pension || false],
-        auh: [currentPerson?.benefit?.auh || false],
-        merchandise: [currentPerson?.benefit?.merchandise || false],
-        freePass: [currentPerson?.benefit?.freePass || false],
+        federalProgram: [currentPerson?.benefit?.federalProgram ?? false],
+        pension: [currentPerson?.benefit?.pension ?? false],
+        auh: [currentPerson?.benefit?.auh ?? false],
+        merchandise: [currentPerson?.benefit?.merchandise ?? false],
+        freePass: [currentPerson?.benefit?.freePass ?? false],
       }),
 
       familyMembers: this.fb.array(currentPerson?.familyMembers?.map(family =>

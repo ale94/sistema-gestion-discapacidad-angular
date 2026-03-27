@@ -19,8 +19,8 @@ export class PersonUtils {
   }
   static jobStatuses(): string[] {
     return [
-      'empleado',
-      'desempleado',
+      'empleado/a',
+      'desempleado/a',
       'independiente',
       'no aplica'
     ]
@@ -32,7 +32,7 @@ export class PersonUtils {
   }
   static civilStatuses(): string[] {
     return [
-      'soltero', 'casado', 'divorciado', 'viudo', 'otro'
+      'soltero/a', 'casado/a', 'divorciado/a', 'viudo/a', 'otro'
     ]
   }
 }
