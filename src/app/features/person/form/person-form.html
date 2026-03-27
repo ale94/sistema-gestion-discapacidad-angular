@@ -24,8 +24,10 @@
             class="form-input"
             placeholder="Ingrese su apellido"
           />
-          @if (isValidField('lastName')) {
-            <span class="text-xs text-red-600"> {{ getFieldError('lastName') }} </span>
+          @if (formUtils.isValidField(personForm, 'lastName')) {
+            <span class="text-xs text-red-600">
+              {{ formUtils.getFieldError(personForm, 'lastName') }}
+            </span>
           }
         </div>
         <div>
@@ -37,8 +39,10 @@
             class="form-input"
             placeholder="Ingrese su nombre"
           />
-          @if (isValidField('firstName')) {
-            <span class="text-xs text-red-600"> {{ getFieldError('firstName') }} </span>
+          @if (formUtils.isValidField(personForm, 'firstName')) {
+            <span class="text-xs text-red-600">
+              {{ formUtils.getFieldError(personForm, 'firstName') }}
+            </span>
           }
         </div>
         <div>
@@ -49,15 +53,19 @@
             class="form-input"
             placeholder="Ingrese su dni"
           />
-          @if (isValidField('dni')) {
-            <span class="text-xs text-red-600"> {{ getFieldError('dni') }} </span>
+          @if (formUtils.isValidField(personForm, 'dni')) {
+            <span class="text-xs text-red-600">
+              {{ formUtils.getFieldError(personForm, 'dni') }}
+            </span>
           }
         </div>
         <div>
           <label class="form-label">Fecha de Nacimiento</label>
           <input formControlName="dateBirth" type="date" class="form-input" />
-          @if (isValidField('dateBirth')) {
-            <span class="text-xs text-red-600"> {{ getFieldError('dateBirth') }} </span>
+          @if (formUtils.isValidField(personForm, 'dateBirth')) {
+            <span class="text-xs text-red-600">
+              {{ formUtils.getFieldError(personForm, 'dateBirth') }}
+            </span>
           }
         </div>
         <div>
@@ -68,8 +76,10 @@
               <option [value]="gender">{{ gender | titlecase }}</option>
             }
           </select>
-          @if (isValidField('gender')) {
-            <span class="text-xs text-red-600"> {{ getFieldError('gender') }} </span>
+          @if (formUtils.isValidField(personForm, 'gender')) {
+            <span class="text-xs text-red-600">
+              {{ formUtils.getFieldError(personForm, 'gender') }}
+            </span>
           }
         </div>
         <div>
@@ -80,8 +90,10 @@
               <option [value]="type">{{ type | titlecase }}</option>
             }
           </select>
-          @if (isValidField('civilStatus')) {
-            <span class="text-xs text-red-600"> {{ getFieldError('civilStatus') }} </span>
+          @if (formUtils.isValidField(personForm, 'civilStatus')) {
+            <span class="text-xs text-red-600">
+              {{ formUtils.getFieldError(personForm, 'civilStatus') }}
+            </span>
           }
         </div>
         <div>
@@ -92,8 +104,10 @@
             class="form-input"
             placeholder="Ingrese su teléfono"
           />
-          @if (isValidField('phone')) {
-            <span class="text-xs text-red-600"> {{ getFieldError('phone') }} </span>
+          @if (formUtils.isValidField(personForm, 'phone')) {
+            <span class="text-xs text-red-600">
+              {{ formUtils.getFieldError(personForm, 'phone') }}
+            </span>
           }
         </div>
         <div class="lg:col-span-2">
@@ -104,8 +118,10 @@
             class="form-input"
             placeholder="Nombre del Tutor"
           />
-          @if (isValidField('tutor')) {
-            <span class="text-xs text-red-600"> {{ getFieldError('tutor') }} </span>
+          @if (formUtils.isValidField(personForm, 'tutor')) {
+            <span class="text-xs text-red-600">
+              {{ formUtils.getFieldError(personForm, 'tutor') }}
+            </span>
           }
         </div>
       </div>
@@ -126,8 +142,10 @@
             class="form-input"
             placeholder="Ingrese su barrio"
           />
-          @if (isValidField('address.district')) {
-            <span class="text-xs text-red-600"> {{ getFieldError('address.district') }} </span>
+          @if (formUtils.isValidField(personForm, 'address.district')) {
+            <span class="text-xs text-red-600">
+              {{ formUtils.getFieldError(personForm, 'address.district') }}
+            </span>
           }
         </div>
         <div class="lg:col-span-2">
@@ -138,8 +156,10 @@
             class="form-input"
             placeholder="Ingrese su calle"
           />
-          @if (isValidField('address.street')) {
-            <span class="text-xs text-red-600"> {{ getFieldError('address.street') }} </span>
+          @if (formUtils.isValidField(personForm, 'address.street')) {
+            <span class="text-xs text-red-600">
+              {{ formUtils.getFieldError(personForm, 'address.street') }}
+            </span>
           }
         </div>
         <div>
@@ -150,8 +170,10 @@
             class="form-input"
             placeholder="Ingrese su localidad"
           />
-          @if (isValidField('address.locality')) {
-            <span class="text-xs text-red-600"> {{ getFieldError('address.locality') }} </span>
+          @if (formUtils.isValidField(personForm, 'address.locality')) {
+            <span class="text-xs text-red-600">
+              {{ formUtils.getFieldError(personForm, 'address.locality') }}
+            </span>
           }
         </div>
         <div class="lg:col-span-2">
@@ -162,8 +184,10 @@
             class="form-input"
             placeholder="Ingrese su provincia"
           />
-          @if (isValidField('address.province')) {
-            <span class="text-xs text-red-600"> {{ getFieldError('address.province') }} </span>
+          @if (formUtils.isValidField(personForm, 'address.province')) {
+            <span class="text-xs text-red-600">
+              {{ formUtils.getFieldError(personForm, 'address.province') }}
+            </span>
           }
         </div>
       </div>
@@ -301,8 +325,10 @@
             class="form-input"
             placeholder="Ingrese el diagnóstico"
           />
-          @if (isValidField('health.diagnostic')) {
-            <span class="text-xs text-red-600"> {{ getFieldError('health.diagnostic') }} </span>
+          @if (formUtils.isValidField(personForm, 'health.diagnostic')) {
+            <span class="text-xs text-red-600">
+              {{ formUtils.getFieldError(personForm, 'health.diagnostic') }}
+            </span>
           }
         </div>
 
@@ -314,8 +340,10 @@
               <option [value]="type">{{ type | titlecase }}</option>
             }
           </select>
-          @if (isValidField('health.disabilityType')) {
-            <span class="text-xs text-red-600"> {{ getFieldError('health.disabilityType') }} </span>
+          @if (formUtils.isValidField(personForm, 'health.disabilityType')) {
+            <span class="text-xs text-red-600">
+              {{ formUtils.getFieldError(personForm, 'health.disabilityType') }}
+            </span>
           }
         </div>
 
@@ -327,8 +355,10 @@
             class="form-input"
             placeholder="Ingrese el CUD"
           />
-          @if (isValidField('health.cudNumber')) {
-            <span class="text-xs text-red-600"> {{ getFieldError('health.cudNumber') }} </span>
+          @if (formUtils.isValidField(personForm, 'health.cudNumber')) {
+            <span class="text-xs text-red-600">
+              {{ formUtils.getFieldError(personForm, 'health.cudNumber') }}
+            </span>
           }
         </div>
 
@@ -338,8 +368,10 @@
             <option [value]="true">Sí</option>
             <option [value]="false">No</option>
           </select>
-          @if (isValidField('health.activeCud')) {
-            <span class="text-xs text-red-600"> {{ getFieldError('health.activeCud') }} </span>
+          @if (formUtils.isValidField(personForm, 'health.activeCud')) {
+            <span class="text-xs text-red-600">
+              {{ formUtils.getFieldError(personForm, 'health.activeCud') }}
+            </span>
           }
         </div>
 
@@ -349,9 +381,9 @@
             <option [value]="true">Si</option>
             <option [value]="false">No</option>
           </select>
-          @if (isValidField('health.rehabilitationTreatment')) {
+          @if (formUtils.isValidField(personForm, 'health.rehabilitationTreatment')) {
             <span class="text-xs text-red-600">
-              {{ getFieldError('health.rehabilitationTreatment') }}
+              {{ formUtils.getFieldError(personForm, 'health.rehabilitationTreatment') }}
             </span>
           }
         </div>
@@ -374,8 +406,10 @@
               <option [value]="status">{{ status | titlecase }}</option>
             }
           </select>
-          @if (isValidField('work.status')) {
-            <span class="text-xs text-red-600"> {{ getFieldError('work.status') }} </span>
+          @if (formUtils.isValidField(personForm, 'work.status')) {
+            <span class="text-xs text-red-600">
+              {{ formUtils.getFieldError(personForm, 'work.status') }}
+            </span>
           }
         </div>
         <div>
@@ -402,8 +436,10 @@
             <option [value]="true">Si</option>
             <option [value]="false">No</option>
           </select>
-          @if (isValidField('work.socialWork')) {
-            <span class="text-xs text-red-600"> {{ getFieldError('work.socialWork') }} </span>
+          @if (formUtils.isValidField(personForm, 'work.socialWork')) {
+            <span class="text-xs text-red-600">
+              {{ formUtils.getFieldError(personForm, 'work.socialWork') }}
+            </span>
           }
         </div>
         <div class="lg:col-span-2">
@@ -434,9 +470,9 @@
               <option [value]="level">{{ level | titlecase }}</option>
             }
           </select>
-          @if (isValidField('education.educationLevel')) {
+          @if (formUtils.isValidField(personForm, 'education.educationLevel')) {
             <span class="text-xs text-red-600">
-              {{ getFieldError('education.educationLevel') }}
+              {{ formUtils.getFieldError(personForm, 'education.educationLevel') }}
             </span>
           }
         </div>

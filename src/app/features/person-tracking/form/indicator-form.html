@@ -14,22 +14,47 @@
       <div class="lg:col-span-1">
         <label class="form-label">Apellido</label>
         <input formControlName="lastName" type="text" class="form-input" />
+        @if (formUtils.isValidField(personForm, 'lastName')) {
+          <span class="text-xs text-red-600">
+            {{ formUtils.getFieldError(personForm, 'lastName') }}
+          </span>
+        }
       </div>
       <div class="lg:col-span-1">
         <label class="form-label">Nombre</label>
         <input formControlName="firstName" type="text" class="form-input" />
+        @if (formUtils.isValidField(personForm, 'firstName')) {
+          <span class="text-xs text-red-600">
+            {{ formUtils.getFieldError(personForm, 'firstName') }}
+          </span>
+        }
       </div>
       <div class="lg:col-span-1">
         <label class="form-label">D.N.I</label>
-        <input formControlName="dni" type="text" class="form-input" />
+        <input formControlName="dni" type="number" class="form-input" />
+        @if (formUtils.isValidField(personForm, 'dni')) {
+          <span class="text-xs text-red-600">
+            {{ formUtils.getFieldError(personForm, 'dni') }}
+          </span>
+        }
       </div>
       <div class="lg:col-span-1">
         <label class="form-label">Telefono</label>
-        <input formControlName="phone" type="text" class="form-input" />
+        <input formControlName="phone" type="number" class="form-input" />
+        @if (formUtils.isValidField(personForm, 'phone')) {
+          <span class="text-xs text-red-600">
+            {{ formUtils.getFieldError(personForm, 'phone') }}
+          </span>
+        }
       </div>
       <div class="lg:col-span-2">
         <label class="form-label">Dirección</label>
         <input formControlName="address" type="text" class="form-input" />
+        @if (formUtils.isValidField(personForm, 'address')) {
+          <span class="text-xs text-red-600">
+            {{ formUtils.getFieldError(personForm, 'address') }}
+          </span>
+        }
       </div>
 
       <div class="lg:col-span-3">
@@ -44,6 +69,11 @@
         >
           {{ personForm.get('indicatorType')?.value?.length || 0 }}/200 caracteres
         </div>
+        @if (formUtils.isValidField(personForm, 'indicatorType')) {
+          <span class="text-xs text-red-600">
+            {{ formUtils.getFieldError(personForm, 'indicatorType') }}
+          </span>
+        }
       </div>
     </div>
   </div>
@@ -58,7 +88,6 @@
     </button>
     <button
       type="submit"
-      [disabled]="personForm.invalid"
       class="px-6 py-2 rounded-lg text-white bg-teal-600 hover:bg-teal-700 disabled:bg-slate-400 disabled:cursor-not-allowed transition-colors"
     >
       Guardar

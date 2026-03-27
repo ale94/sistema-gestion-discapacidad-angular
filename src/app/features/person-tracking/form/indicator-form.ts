@@ -1,6 +1,7 @@
 import { Component, inject, input, output } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { PersonTracking } from '../../../shared/interfaces/person-tracking';
+import { FormUtils } from '../../../shared/utils/form.utils';
 
 
 @Component({
@@ -19,6 +20,7 @@ export class IndicatorForm {
   private fb: FormBuilder = inject(FormBuilder);
   personForm!: FormGroup;
 
+  formUtils = FormUtils;
   isEditMode = false;
 
   ngOnInit(): void {
@@ -26,16 +28,17 @@ export class IndicatorForm {
     this.isEditMode = !!currentPerson;
 
     this.personForm = this.fb.group({
-      firstName: [currentPerson?.firstName || '', Validators.required],
-      lastName: [currentPerson?.lastName || '', Validators.required],
+      firstName: [currentPerson?.firstName || '', [Validators.required, Validators.minLength(3)]],
+      lastName: [currentPerson?.lastName || '', [Validators.required, Validators.minLength(3)]],
       dni: [currentPerson?.dni || '', [Validators.required, Validators.pattern('^[0-9]{7,8}$')]],
-      phone: [currentPerson?.phone || '', Validators.required],
-      indicatorType: [currentPerson?.indicatorType || '', Validators.required],
-      address: [currentPerson?.address || '', Validators.required],
+      phone: [currentPerson?.phone || '', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
+      indicatorType: [currentPerson?.indicatorType || '', [Validators.required, Validators.minLength(5)]],
+      address: [currentPerson?.address || '', [Validators.required, Validators.minLength(5)]],
     });
   }
 
   onSubmit() {
+    this.personForm.markAllAsTouched();
     if (this.personForm.valid) {
       const formValue = this.personForm.value;
       if (this.isEditMode && this.person()) {

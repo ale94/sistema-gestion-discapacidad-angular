@@ -7,8 +7,9 @@ import {
   Validators,
 } from '@angular/forms';
 import { Person } from '../../../shared/interfaces/person';
-import { PersonUtils } from '../../../shared/utils/PersonUtils';
 import { TitleCasePipe } from '@angular/common';
+import { FormUtils } from '../../../shared/utils/form.utils';
+import { PersonUtils } from '../../../shared/utils/person.utils';
 
 @Component({
   selector: 'person-form',
@@ -31,6 +32,7 @@ export class PersonForm {
   isEditMode = false;
 
   personUtils = PersonUtils;
+  formUtils = FormUtils;
 
   ngOnInit(): void {
     const currentPerson = this.person();
@@ -144,33 +146,6 @@ export class PersonForm {
 
   removeFamily(index: number) {
     this.familyMembers.removeAt(index);
-  }
-
-  isValidField(fieldName: string): boolean | null {
-    const control = this.personForm.get(fieldName);
-    return control ? (control.errors && control.touched) : null;
-  }
-
-  getFieldError(fieldName: string): string | null {
-    const control = this.personForm.get(fieldName);
-    if (!control || !control.errors) return null;
-
-    const errors = control.errors;
-    for (const key of Object.keys(errors)) {
-      switch (key) {
-        case 'required':
-          return 'Este campo es requerido';
-        case 'minlength':
-          return `Mínimo de ${errors['minlength'].requiredLength} caracteres`;
-        case 'min':
-          return `Valor mínimo de ${errors['min'].min}`;
-        case 'pattern':
-          if (fieldName === 'dni') return 'El DNI debe tener entre 7 y 8 dígitos';
-          if (fieldName === 'phone') return 'El teléfono debe tener 10 dígitos';
-          return 'El formato es incorrecto';
-      }
-    }
-    return null;
   }
 
 }
