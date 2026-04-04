@@ -1,4 +1,4 @@
-import { Component, effect, inject } from '@angular/core';
+import { Component, effect, inject, signal } from '@angular/core';
 import { ChartConfiguration, ChartData } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
 import { PersonService } from '../../shared/services/person.service';
@@ -11,6 +11,8 @@ import { Person } from '../../shared/interfaces/person';
   templateUrl: './chart-page.html',
 })
 export default class ChartPage {
+
+  view = signal<string>('año');
 
   FOUR_COLORS = [
     '#00A6F4', // Azul Brillante
@@ -36,6 +38,11 @@ export default class ChartPage {
     datasets: [{ data: [], label: 'Personas por Barrio' }]
   };
 
+  barEducationData: ChartData<'bar'> = {
+    labels: [],
+    datasets: [{ data: [], label: 'Personas por Escolaridad' }]
+  };
+
   personService = inject(PersonService);
 
   constructor() {
@@ -54,6 +61,7 @@ export default class ChartPage {
     // Objeto para acumular el conteo: { '2023': 150, '2024': 200 }
     const yearCounts: { [key: string]: number } = {};
     const neighborhoodCounts: { [key: string]: number } = {};
+    const educationCounts: { [key: string]: number } = {};
 
     people.forEach(person => {
       // Usamos el campo correcto: fechaEmpadronamiento (formato YYYY-MM-DD)
@@ -71,6 +79,9 @@ export default class ChartPage {
 
         const neighborhood = person.address.district || 'Sin Especificar';
         neighborhoodCounts[neighborhood] = (neighborhoodCounts[neighborhood] || 0) + 1;
+
+        const education = person.education.educationLevel || 'Sin Especificar';
+        educationCounts[education] = (educationCounts[education] || 0) + 1;
       }
     });
 
@@ -101,6 +112,18 @@ export default class ChartPage {
       datasets: [{
         data: neighborhoodLabels.map(n => neighborhoodCounts[n]),
         label: 'Cantidad por Barrio',
+        backgroundColor: this.FOUR_COLORS,
+        borderColor: this.FOUR_COLORS,
+        borderWidth: 1
+      }]
+    };
+
+    const educationLabels = Object.keys(educationCounts);
+    this.barEducationData = {
+      labels: educationLabels,
+      datasets: [{
+        data: educationLabels.map(n => educationCounts[n]),
+        label: 'Cantidad por Educación',
         backgroundColor: this.FOUR_COLORS,
         borderColor: this.FOUR_COLORS,
         borderWidth: 1
@@ -140,6 +163,15 @@ export default class ChartPage {
     scales: {
       x: { beginAtZero: true }, // Ahora el eje X es el de las cantidades
       y: { title: { display: true, text: 'Barrios' } }
+    }
+  };
+
+  public educationOptions: ChartConfiguration['options'] = {
+    ...this.barChartOptions,
+    indexAxis: 'y', // Esto hace que las barras sean horizontales
+    scales: {
+      x: { beginAtZero: true }, // Ahora el eje X es el de las cantidades
+      y: { title: { display: true, text: 'Educación' } }
     }
   };
 

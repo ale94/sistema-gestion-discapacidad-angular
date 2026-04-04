@@ -1,43 +1,160 @@
-<div class="container mx-auto md:p-8">
-  <h1 class="text-2xl sm:text-3xl md:text-3xl font-bold text-slate-900 mb-8 tracking-tight">
+<div class="container mx-auto">
+  <h1 class="text-2xl sm:text-3xl md:text-3xl font-bold text-slate-900 tracking-tight">
     Análisis Estadístico
   </h1>
 
-  <div class="grid grid-cols-1 gap-8 md:gap-12">
-    <section
-      class="bg-white p-5 sm:p-8 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow"
+  <div class="w-full overflow-x-auto py-2 sm:py-2">
+    <div
+      class="inline-flex min-w-full sm:min-w-0 p-1 bg-slate-100/80 backdrop-blur-md rounded-xl border border-slate-200 shadow-inner"
     >
-      <header class="mb-6 border-b border-slate-100 pb-4">
-        <h2 class="text-lg sm:text-xl md:text-2xl font-bold text-slate-800">
-          Empadronados por Año
-        </h2>
-        <p class="text-sm sm:text-base text-slate-500 mt-1">
-          Evolución histórica de registros en el sistema.
-        </p>
-      </header>
+      <button
+        (click)="view.set('año')"
+        [class]="
+          view() === 'año'
+            ? 'bg-white shadow-md text-blue-600 ring-1 ring-slate-200'
+            : 'text-slate-500 hover:text-slate-800 hover:bg-slate-200/50'
+        "
+        class="flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 sm:px-6 py-2.5 rounded-lg text-xs sm:text-sm font-bold transition-all duration-300"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-4 w-4 shrink-0"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+          />
+        </svg>
+        <span class="whitespace-nowrap">Por Año</span>
+      </button>
 
-      <div class="w-full h-[300px] sm:h-[350px] md:h-[400px]">
-        <canvas baseChart [data]="barChartData" [options]="barChartOptions" [type]="'bar'">
-        </canvas>
-      </div>
-    </section>
+      <button
+        (click)="view.set('barrio')"
+        [class]="
+          view() === 'barrio'
+            ? 'bg-white shadow-md text-blue-600 ring-1 ring-slate-200'
+            : 'text-slate-500 hover:text-slate-800 hover:bg-slate-200/50'
+        "
+        class="flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 sm:px-6 py-2.5 rounded-lg text-xs sm:text-sm font-bold transition-all duration-300"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-4 w-4 shrink-0"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+          />
+        </svg>
+        <span class="whitespace-nowrap">Por Barrio</span>
+      </button>
 
-    <section
-      class="bg-white p-5 sm:p-8 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow"
-    >
-      <header class="mb-6 border-b border-slate-100 pb-4">
-        <h2 class="text-lg sm:text-xl md:text-2xl font-bold text-slate-800">
-          Distribución por Barrio
-        </h2>
-        <p class="text-sm sm:text-base text-slate-500 mt-1">
-          Cantidad de personas con discapacidad según ubicación.
-        </p>
-      </header>
+      <button
+        (click)="view.set('educacion')"
+        [class]="
+          view() === 'educacion'
+            ? 'bg-white shadow-md text-blue-600 ring-1 ring-slate-200'
+            : 'text-slate-500 hover:text-slate-800 hover:bg-slate-200/50'
+        "
+        class="flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 sm:px-6 py-2.5 rounded-lg text-xs sm:text-sm font-bold transition-all duration-300"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-4 w-4 shrink-0"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M12 14l9-5-9-5-9 5 9 5z"
+          />
+        </svg>
+        <span class="whitespace-nowrap">Por Educación</span>
+      </button>
+    </div>
+  </div>
 
-      <div class="w-full h-[300px] sm:h-[350px] md:h-[400px]">
-        <canvas baseChart [data]="barNeighborhoodData" [options]="barChartOptions" [type]="'bar'">
-        </canvas>
-      </div>
-    </section>
+  <div class="grid grid-cols-1">
+    @if (view() === 'año') {
+      <section
+        class="bg-white p-5 sm:p-8 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow"
+      >
+        <header class="mb-6 border-b border-slate-100 pb-4">
+          <h2 class="text-lg sm:text-xl md:text-2xl font-bold text-slate-800">
+            Empadronados por Año
+          </h2>
+          <p class="text-sm sm:text-base text-slate-500 mt-1">
+            Evolución histórica de registros en el sistema.
+          </p>
+        </header>
+        <div class="w-full h-[300px] sm:h-[350px] md:h-[400px]">
+          <canvas
+            baseChart
+            [data]="barChartData"
+            [options]="barChartOptions"
+            [type]="'bar'"
+          ></canvas>
+        </div>
+      </section>
+    }
+
+    @if (view() === 'barrio') {
+      <section
+        class="bg-white p-5 sm:p-8 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow"
+      >
+        <header class="mb-6 border-b border-slate-100 pb-4">
+          <h2 class="text-lg sm:text-xl md:text-2xl font-bold text-slate-800">
+            Distribución por Barrio
+          </h2>
+          <p class="text-sm sm:text-base text-slate-500 mt-1">
+            Cantidad de personas con discapacidad según ubicación.
+          </p>
+        </header>
+        <div class="w-full h-[300px] sm:h-[350px] md:h-[400px]">
+          <canvas
+            baseChart
+            [data]="barNeighborhoodData"
+            [options]="barChartOptions"
+            [type]="'bar'"
+          ></canvas>
+        </div>
+      </section>
+    }
+
+    @if (view() === 'educacion') {
+      <section
+        class="bg-white p-5 sm:p-8 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow"
+      >
+        <header class="mb-6 border-b border-slate-100 pb-4">
+          <h2 class="text-lg sm:text-xl md:text-2xl font-bold text-slate-800">
+            Distribución por Educación
+          </h2>
+          <p class="text-sm sm:text-base text-slate-500 mt-1">
+            Cantidad de personas con discapacidad según nivel de educación.
+          </p>
+        </header>
+        <div class="w-full h-[300px] sm:h-[350px] md:h-[400px]">
+          <canvas
+            baseChart
+            [data]="barEducationData"
+            [options]="barChartOptions"
+            [type]="'bar'"
+          ></canvas>
+        </div>
+      </section>
+    }
   </div>
 </div>
