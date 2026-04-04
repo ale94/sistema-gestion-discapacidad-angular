@@ -1,6 +1,7 @@
 import { Component, inject, input, output } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { LoanEquipment } from '../../../shared/interfaces/loan.equipment.interface';
+import { FormUtils } from '../../../shared/utils/form.utils';
 
 @Component({
   selector: 'app-form',
@@ -17,6 +18,7 @@ export class Form {
   private fb: FormBuilder = inject(FormBuilder);
 
   loanForm!: FormGroup;
+  formUtils = FormUtils;
 
   isEditMode = false;
 
@@ -55,6 +57,7 @@ export class Form {
   }
 
   onSubmit() {
+    this.loanForm.markAllAsTouched();
     if (this.loanForm.valid) {
       const formValue = this.loanForm.value;
       if (this.isEditMode && this.loanEquipment()) {

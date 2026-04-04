@@ -24,6 +24,11 @@
               </option>
             }
           </select>
+          @if (formUtils.isValidField(loanForm, 'type')) {
+            <span class="text-xs text-red-600">
+              {{ formUtils.getFieldError(loanForm, 'type') }}
+            </span>
+          }
         </div>
         <div>
           <input
@@ -32,6 +37,11 @@
             class="form-input"
             placeholder="Número de Equipo"
           />
+          @if (formUtils.isValidField(loanForm, 'equipmentNumber')) {
+            <span class="text-xs text-red-600">
+              {{ formUtils.getFieldError(loanForm, 'equipmentNumber') }}
+            </span>
+          }
         </div>
         <div>
           <input
@@ -40,21 +50,46 @@
             class="form-input"
             placeholder="Solicitante"
           />
+          @if (formUtils.isValidField(loanForm, 'applicant')) {
+            <span class="text-xs text-red-600">
+              {{ formUtils.getFieldError(loanForm, 'applicant') }}
+            </span>
+          }
         </div>
         <div>
           <label for="dni" class="form-label">D.N.I</label>
-          <input formControlName="dni" type="text" class="form-input" placeholder=" Ingresar el D.N.I" />
+          <input formControlName="dni" type="number" class="form-input" placeholder=" Ingresar el D.N.I" />
+          @if (formUtils.isValidField(loanForm, 'dni')) {
+            <span class="text-xs text-red-600">
+              {{ formUtils.getFieldError(loanForm, 'dni') }}
+            </span>
+          }
         </div>
         <div>
           <label for="phone" class="form-label">Teléfono</label>
-          <input formControlName="phone" type="text" class="form-input" placeholder="Ingresar el Teléfono" />
+          <input formControlName="phone" type="number" class="form-input" placeholder="Ingresar el Teléfono" />
+          @if (formUtils.isValidField(loanForm, 'phone')) {
+            <span class="text-xs text-red-600">
+              {{ formUtils.getFieldError(loanForm, 'phone') }}
+            </span>
+          }
         </div>
         <div>
           <label class="form-label">Fecha de Expiración</label>
           <input formControlName="expiration" type="date" class="form-input" placeholder="Fecha de Expiración" />
+          @if (formUtils.isValidField(loanForm, 'expiration')) {
+            <span class="text-xs text-red-600">
+              {{ formUtils.getFieldError(loanForm, 'expiration') }}
+            </span>
+          }
         </div>
         <div class="lg:col-span-2">
           <input formControlName="address" type="text" class="form-input" placeholder="Dirección" />
+          @if (formUtils.isValidField(loanForm, 'address')) {
+            <span class="text-xs text-red-600">
+              {{ formUtils.getFieldError(loanForm, 'address') }}
+            </span>
+          }
         </div>
       </div>
     </fieldset>
@@ -70,7 +105,6 @@
     </button>
     <button
       type="submit"
-      [disabled]="loanForm.invalid"
       class="px-6 py-2 rounded-lg text-white bg-teal-600 hover:bg-teal-700 disabled:bg-slate-400 disabled:cursor-not-allowed transition-colors"
     >
       Guardar
