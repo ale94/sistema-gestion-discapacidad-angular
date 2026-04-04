@@ -43,6 +43,11 @@ export default class ChartPage {
     datasets: [{ data: [], label: 'Personas por Escolaridad' }]
   };
 
+  barSocialWorkData: ChartData<'bar'> = {
+    labels: [],
+    datasets: [{ data: [], label: 'Personas por Obra Social' }]
+  };
+
   personService = inject(PersonService);
 
   constructor() {
@@ -62,6 +67,7 @@ export default class ChartPage {
     const yearCounts: { [key: string]: number } = {};
     const neighborhoodCounts: { [key: string]: number } = {};
     const educationCounts: { [key: string]: number } = {};
+    const socialWorkCounts: { [key: string]: number } = {};
 
     people.forEach(person => {
       // Usamos el campo correcto: fechaEmpadronamiento (formato YYYY-MM-DD)
@@ -82,6 +88,9 @@ export default class ChartPage {
 
         const education = person.education.educationLevel || 'Sin Especificar';
         educationCounts[education] = (educationCounts[education] || 0) + 1;
+
+        const socialWork = person.work.nameSocialWork || 'Sin Especificar';
+        socialWorkCounts[socialWork] = (socialWorkCounts[socialWork] || 0) + 1;
       }
     });
 
@@ -124,6 +133,18 @@ export default class ChartPage {
       datasets: [{
         data: educationLabels.map(n => educationCounts[n]),
         label: 'Cantidad por Educación',
+        backgroundColor: this.FOUR_COLORS,
+        borderColor: this.FOUR_COLORS,
+        borderWidth: 1
+      }]
+    };
+
+    const socialWorkLabels = Object.keys(socialWorkCounts);
+    this.barSocialWorkData = {
+      labels: socialWorkLabels,
+      datasets: [{
+        data: socialWorkLabels.map(n => socialWorkCounts[n]),
+        label: 'Cantidad por Obra Social',
         backgroundColor: this.FOUR_COLORS,
         borderColor: this.FOUR_COLORS,
         borderWidth: 1
@@ -172,6 +193,15 @@ export default class ChartPage {
     scales: {
       x: { beginAtZero: true }, // Ahora el eje X es el de las cantidades
       y: { title: { display: true, text: 'Educación' } }
+    }
+  };
+
+  public socialWorkOptions: ChartConfiguration['options'] = {
+    ...this.barChartOptions,
+    indexAxis: 'y', // Esto hace que las barras sean horizontales
+    scales: {
+      x: { beginAtZero: true }, // Ahora el eje X es el de las cantidades
+      y: { title: { display: true, text: 'Obra Social' } }
     }
   };
 
