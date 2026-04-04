@@ -1,16 +1,43 @@
-<div class="container mx-auto">
-  <h1 class="text-2xl sm:text-3xl md:text-3xl font-bold text-slate-900 mb-6">Análisis Gráfico</h1>
+<div class="container mx-auto md:p-8">
+  <h1 class="text-2xl sm:text-3xl md:text-3xl font-bold text-slate-900 mb-8 tracking-tight">
+    Análisis Estadístico
+  </h1>
 
-  <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-md">
-    <h3 class="text-lg font-semibold text-slate-800 mb-4">PCD Empadronadas por Año</h3>
+  <div class="grid grid-cols-1 gap-8 md:gap-12">
+    <section
+      class="bg-white p-5 sm:p-8 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow"
+    >
+      <header class="mb-6 border-b border-slate-100 pb-4">
+        <h2 class="text-lg sm:text-xl md:text-2xl font-bold text-slate-800">
+          Empadronados por Año
+        </h2>
+        <p class="text-sm sm:text-base text-slate-500 mt-1">
+          Evolución histórica de registros en el sistema.
+        </p>
+      </header>
 
-    <div class="w-full h-[300px]">
-      <canvas
-        baseChart
-        [data]="barChartData"
-        [options]="barChartOptions"
-      >
-      </canvas>
-    </div>
+      <div class="w-full h-[300px] sm:h-[350px] md:h-[400px]">
+        <canvas baseChart [data]="barChartData" [options]="barChartOptions" [type]="'bar'">
+        </canvas>
+      </div>
+    </section>
+
+    <section
+      class="bg-white p-5 sm:p-8 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow"
+    >
+      <header class="mb-6 border-b border-slate-100 pb-4">
+        <h2 class="text-lg sm:text-xl md:text-2xl font-bold text-slate-800">
+          Distribución por Barrio
+        </h2>
+        <p class="text-sm sm:text-base text-slate-500 mt-1">
+          Cantidad de personas con discapacidad según ubicación.
+        </p>
+      </header>
+
+      <div class="w-full h-[300px] sm:h-[350px] md:h-[400px]">
+        <canvas baseChart [data]="barNeighborhoodData" [options]="barChartOptions" [type]="'bar'">
+        </canvas>
+      </div>
+    </section>
   </div>
 </div>

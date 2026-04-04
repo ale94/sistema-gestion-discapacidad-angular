@@ -31,6 +31,11 @@ export default class ChartPage {
     datasets: [{ data: [], label: 'Personas Empadronadas' }]
   };
 
+  barNeighborhoodData: ChartData<'bar'> = {
+    labels: [],
+    datasets: [{ data: [], label: 'Personas por Barrio' }]
+  };
+
   personService = inject(PersonService);
 
   constructor() {
@@ -48,6 +53,7 @@ export default class ChartPage {
   private processData(people: Person[]) {
     // Objeto para acumular el conteo: { '2023': 150, '2024': 200 }
     const yearCounts: { [key: string]: number } = {};
+    const neighborhoodCounts: { [key: string]: number } = {};
 
     people.forEach(person => {
       // Usamos el campo correcto: fechaEmpadronamiento (formato YYYY-MM-DD)
@@ -62,6 +68,9 @@ export default class ChartPage {
 
         // 2. Contar la ocurrencia del año
         yearCounts[year] = (yearCounts[year] || 0) + 1;
+
+        const neighborhood = person.address.district || 'Sin Especificar';
+        neighborhoodCounts[neighborhood] = (neighborhoodCounts[neighborhood] || 0) + 1;
       }
     });
 
@@ -84,6 +93,18 @@ export default class ChartPage {
           hoverBackgroundColor: this.FOUR_HOVER_COLORS
         }
       ]
+    };
+
+    const neighborhoodLabels = Object.keys(neighborhoodCounts);
+    this.barNeighborhoodData = {
+      labels: neighborhoodLabels,
+      datasets: [{
+        data: neighborhoodLabels.map(n => neighborhoodCounts[n]),
+        label: 'Cantidad por Barrio',
+        backgroundColor: this.FOUR_COLORS,
+        borderColor: this.FOUR_COLORS,
+        borderWidth: 1
+      }]
     };
   }
 
@@ -110,6 +131,15 @@ export default class ChartPage {
           text: 'Cantidad de Personas'
         },
       }
+    }
+  };
+
+  public neighborhoodOptions: ChartConfiguration['options'] = {
+    ...this.barChartOptions,
+    indexAxis: 'y', // Esto hace que las barras sean horizontales
+    scales: {
+      x: { beginAtZero: true }, // Ahora el eje X es el de las cantidades
+      y: { title: { display: true, text: 'Barrios' } }
     }
   };
 
