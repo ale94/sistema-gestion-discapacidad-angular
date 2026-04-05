@@ -1,4 +1,8 @@
-<form [formGroup]="eventForm" (ngSubmit)="onSubmit()" class="flex flex-col w-full max-w-5xl max-h-[90vh] rounded-lg overflow-hidden">
+<form
+  [formGroup]="eventForm"
+  (ngSubmit)="onSubmit()"
+  class="flex flex-col w-full max-w-5xl max-h-[90vh] rounded-lg overflow-hidden"
+>
   <div class="p-6 border-b border-slate-200">
     <h2 class="text-xl font-semibold text-slate-900">
       {{ isEditMode ? 'Editar Evento' : 'Agregar Nuevo Evento' }}
@@ -10,25 +14,45 @@
       <div class="md:col-span-2">
         <label for="name" class="form-label">Nombre del Evento</label>
         <input id="name" formControlName="name" type="text" class="form-input" />
+        @if (formUtils.isValidField(eventForm, 'name')) {
+          <span class="text-xs text-red-600">
+            {{ formUtils.getFieldError(eventForm, 'name') }}
+          </span>
+        }
       </div>
 
       <div>
         <label for="type" class="form-label">Tipo de Evento</label>
         <select id="type" formControlName="type" class="form-input">
           @for (type of eventTypes; track type) {
-          <option [value]="type">{{ type }}</option>
+            <option [value]="type">{{ type }}</option>
           }
         </select>
+        @if (formUtils.isValidField(eventForm, 'type')) {
+          <span class="text-xs text-red-600">
+            {{ formUtils.getFieldError(eventForm, 'type') }}
+          </span>
+        }
       </div>
 
       <div>
         <label for="date" class="form-label">Fecha</label>
         <input id="date" formControlName="date" type="date" class="form-input" />
+        @if (formUtils.isValidField(eventForm, 'date')) {
+          <span class="text-xs text-red-600">
+            {{ formUtils.getFieldError(eventForm, 'date') }}
+          </span>
+        }
       </div>
 
       <div class="md:col-span-2">
         <label for="attendees" class="form-label">N° de Asistentes</label>
         <input id="attendees" formControlName="attendees" type="number" class="form-input" />
+        @if (formUtils.isValidField(eventForm, 'attendees')) {
+          <span class="text-xs text-red-600">
+            {{ formUtils.getFieldError(eventForm, 'attendees') }}
+          </span>
+        }
       </div>
 
       <div class="md:col-span-2">
@@ -39,6 +63,11 @@
           rows="4"
           class="form-input"
         ></textarea>
+        @if (formUtils.isValidField(eventForm, 'description')) {
+          <span class="text-xs text-red-600">
+            {{ formUtils.getFieldError(eventForm, 'description') }}
+          </span>
+        }
       </div>
     </div>
   </div>
@@ -53,7 +82,6 @@
     </button>
     <button
       type="submit"
-      [disabled]="eventForm.invalid"
       class="px-6 py-2 rounded-lg text-white bg-teal-600 hover:bg-teal-700 disabled:bg-slate-400 disabled:cursor-not-allowed transition-colors"
     >
       Guardar

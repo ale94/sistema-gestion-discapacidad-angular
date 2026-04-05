@@ -1,6 +1,7 @@
 import { Component, inject, input, output } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Event } from '../../../shared/interfaces/event';
+import { FormUtils } from '../../../shared/utils/form.utils';
 
 @Component({
   selector: 'event-form',
@@ -15,6 +16,7 @@ export class EventForm {
 
   private fb = inject(FormBuilder);
   eventForm!: FormGroup;
+  formUtils = FormUtils;
 
   isEditMode = false;
   eventTypes: Event['type'][] = ['Taller', 'Capacitación', 'Charla', 'Evento Social', 'Otro'];
@@ -24,15 +26,16 @@ export class EventForm {
     this.isEditMode = !!currentEvent;
 
     this.eventForm = this.fb.group({
-      name: [currentEvent?.name || '', Validators.required],
+      name: [currentEvent?.name || '', [Validators.required, Validators.minLength(4)]],
       type: [currentEvent?.type || 'Taller', Validators.required],
       date: [currentEvent?.date || '', Validators.required],
       attendees: [currentEvent?.attendees || 0, [Validators.required, Validators.min(0)]],
-      description: [currentEvent?.description || '', Validators.required],
+      description: [currentEvent?.description || '', [Validators.required, Validators.minLength(4)]],
     });
   }
 
   onSubmit() {
+    this.eventForm.markAllAsTouched();
     if (this.eventForm.valid) {
       const formValue = this.eventForm.value;
       if (this.isEditMode && this.event()) {
