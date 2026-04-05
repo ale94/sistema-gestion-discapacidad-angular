@@ -26,7 +26,7 @@
       type="text"
       [ngModel]="searchTerm()"
       (ngModelChange)="onSearchChange($event)"
-      placeholder="Buscar nombre, apellido, DNI..."
+      placeholder="Buscar por Solicitante, Equipo, DNI..."
       class="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 text-slate-900 shadow-sm"
     />
   </div>
@@ -62,7 +62,7 @@
           </thead>
 
           <tbody class="bg-white divide-y divide-gray-200">
-            @for (loan of loanEquipmentService.loans(); track loan.id) {
+            @for (loan of filteredLoan(); track loan.id) {
               <tr
                 class="hover:bg-gray-50 transition-colors cursor-pointer"
                 (click)="viewProfile(loan)"

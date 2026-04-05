@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Form } from '../form/form';
 import { LoanEquipment } from '../../../shared/interfaces/loan.equipment.interface';
@@ -22,6 +22,19 @@ export default class EquipmentPage {
   loanToReturn = signal<LoanEquipment | null>(null);
   loanToUndo = signal<LoanEquipment | null>(null);
   searchTerm = signal('');
+
+  filteredLoan = computed(() => {
+    const term = this.searchTerm().toLowerCase().trim();
+
+    return this.loanEquipmentService.loans().filter((loan) => {
+      const matchesText =
+        !term ||
+        loan.applicant.toLowerCase().includes(term) ||
+        loan.type.toLowerCase().includes(term) ||
+        loan.dni.toString().includes(term);
+      return matchesText;
+    });
+  });
 
   onSearchChange(term: string) {
     this.searchTerm.set(term);
