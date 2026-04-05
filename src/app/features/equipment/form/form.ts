@@ -46,13 +46,13 @@ export class Form {
       expiration: [currentLoanEquipment?.expiration || '', Validators.required],
       type: [currentLoanEquipment?.type || '', Validators.required],
       equipmentNumber: [currentLoanEquipment?.equipmentNumber || null, Validators.required],
-      applicant: [currentLoanEquipment?.applicant || '', Validators.required],
+      applicant: [currentLoanEquipment?.applicant || '', [Validators.required, Validators.minLength(4)]],
       dni: [
         currentLoanEquipment?.dni || '',
-        [Validators.required, Validators.pattern('^[0-9]{7,8}$')],
+        [Validators.required, Validators.pattern('^[0-9]{7,8}$')]
       ],
-      address: [currentLoanEquipment?.address || '', Validators.required],
-      phone: [currentLoanEquipment?.phone || '', Validators.required],
+      address: [currentLoanEquipment?.address || '', [Validators.required, Validators.minLength(4)]],
+      phone: [currentLoanEquipment?.phone || '', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
     });
   }
 

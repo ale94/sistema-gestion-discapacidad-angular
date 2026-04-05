@@ -41,6 +41,10 @@ export const routes: Routes = [
         loadComponent: () => import('./features/equipment/list/equipment-page'),
       },
       {
+        path: 'prestamos/:id',
+        loadComponent: () => import('./features/equipment/profile/profile'),
+      },
+      {
         path: 'transportes',
         loadComponent: () => import('./features/transport/transport-tracking'),
       },

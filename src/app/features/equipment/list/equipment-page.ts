@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Form } from '../form/form';
 import { LoanEquipment } from '../../../shared/interfaces/loan.equipment.interface';
 import { LoanEquipmentService } from '../../../shared/services/loan.equipment.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'equipment-page',
@@ -13,9 +14,13 @@ import { LoanEquipmentService } from '../../../shared/services/loan.equipment.se
 export default class EquipmentPage {
 
   loanEquipmentService = inject(LoanEquipmentService);
+  private router = inject(Router);
+
   isModalOpen = signal(false);
   editingLoanEquipment = signal<LoanEquipment | null>(null);
   loanEquipmentToDelete = signal<LoanEquipment | null>(null);
+  loanToReturn = signal<LoanEquipment | null>(null);
+  loanToUndo = signal<LoanEquipment | null>(null);
   searchTerm = signal('');
 
   onSearchChange(term: string) {
@@ -61,9 +66,9 @@ export default class EquipmentPage {
     this.editingLoanEquipment.set(null);
   }
 
-  // viewProfile(person: Equipment): void {
-  //   this.router.navigate(['/personas', person.id]);
-  // }
+  viewProfile(loan: LoanEquipment): void {
+    this.router.navigate(['/prestamos', loan.id]);
+  }
 
   getAge(birthDate: string): number {
     const today = new Date();
@@ -74,5 +79,53 @@ export default class EquipmentPage {
       age--;
     }
     return age;
+  }
+
+  markAsReturned(loan: LoanEquipment) {
+    this.loanToReturn.set(loan);
+  }
+
+  cancelReturn() {
+    this.loanToReturn.set(null);
+  }
+
+  confirmReturnAction() {
+    const loan = this.loanToReturn();
+    if (loan) {
+      const today = new Date();
+
+      // Creamos un objeto Date "limpio" (solo año, mes, día)
+      const year = today.getFullYear();
+      const month = today.getMonth();
+      const day = today.getDate();
+
+      // Esto crea un objeto Date real en la medianoche local
+      const dateObject = new Date(year, month, day);
+
+      const updatedData: LoanEquipment = {
+        ...loan,
+        returnDate: dateObject // Ahora sí es tipo Date
+      };
+
+      this.loanEquipmentService.updateLoan(updatedData);
+      this.loanToReturn.set(null);
+    }
+  }
+
+  undoReturn(loan: LoanEquipment) {
+    this.loanToUndo.set(loan);
+  }
+
+  confirmUndoAction() {
+    const loan = this.loanToUndo();
+    if (loan) {
+      const updatedData: LoanEquipment = {
+        ...loan,
+        returnDate: undefined
+      };
+
+      this.loanEquipmentService.updateLoan(updatedData);
+      this.loanToUndo.set(null);
+    }
   }
 }

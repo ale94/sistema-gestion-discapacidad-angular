@@ -1,0 +1,170 @@
+<div class="container mx-auto">
+  @if (loan(); as l) {
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+      <h2 class="text-2xl sm:text-3xl md:text-3xl font-bold text-slate-900">Detalle de Préstamo</h2>
+      <a
+        routerLink="/prestamos"
+        class="flex items-center bg-white hover:bg-slate-100 text-slate-800 font-bold py-2 px-4 rounded-lg transition-colors duration-300 shadow-lg border border-slate-200"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-5 w-5 mr-2"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+            clip-rule="evenodd"
+          />
+        </svg>
+        Volver a la Lista
+      </a>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div class="lg:col-span-1">
+        <div
+          class="bg-white p-6 rounded-xl border border-slate-200 text-center sticky top-8 shadow-md"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            class="bi bi-person-circle w-30 h-30 rounded-full mx-auto mb-4 text-teal-600/70"
+            viewBox="0 0 16 16"
+          >
+            <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
+            <path
+              fill-rule="evenodd"
+              d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"
+            />
+          </svg>
+
+          <h2 class="text-2xl font-bold text-slate-900">
+            {{ l.applicant | titlecase }}
+          </h2>
+          <p class="text-slate-500">DNI: {{ l.dni | number }}</p>
+
+          <div class="mt-4 pt-4 border-t border-slate-200 text-left space-y-3">
+            <div class="flex items-start text-slate-700">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5 mr-3 mt-1 text-teal-500 shrink-0"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
+                />
+              </svg>
+              <span><strong class="text-slate-500 block">Teléfono:</strong>{{ l.phone }}</span>
+            </div>
+
+            <div class="flex items-start text-slate-700">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5 mr-3 mt-1 text-teal-500 shrink-0"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                />
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                />
+              </svg>
+              <span
+                ><strong class="text-slate-500 block">Domicilio:</strong
+                >{{ l.address | titlecase }}</span
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="lg:col-span-2 space-y-8">
+        <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-md">
+          <h3 class="text-lg font-semibold text-slate-900 mb-4">Información del Equipo</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 text-sm">
+            <div>
+              <strong class="text-slate-500 block">Tipo de Equipo:</strong>
+              <span class="text-slate-700 font-medium">{{ l.type | titlecase }}</span>
+            </div>
+            <div>
+              <strong class="text-slate-500 block">Número de Equipo:</strong>
+              <span class="text-slate-700 font-medium">#{{ l.equipmentNumber }}</span>
+            </div>
+            <div>
+              <strong class="text-slate-500 block">Año/Modelo:</strong>
+              <span class="text-slate-700">{{ l.year }}</span>
+            </div>
+            <div>
+              <strong class="text-slate-500 block">ID de Registro:</strong>
+              <span class="text-slate-700">{{ l.id }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-md">
+          <h3 class="text-lg font-semibold text-slate-900 mb-4">Estado y Fechas de Préstamo</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 text-sm">
+            <div>
+              <strong class="text-slate-500 block">Fecha de Solicitud:</strong>
+              <span class="text-slate-700">{{ l.requestDate | date: 'dd/MM/yyyy' }}</span>
+            </div>
+            <div>
+              <strong class="text-slate-500 block">Fecha de Vencimiento:</strong>
+              <span class="text-slate-700 font-bold">{{ l.expiration | date: 'dd/MM/yyyy' }}</span>
+            </div>
+            <div>
+              <strong class="text-slate-500 block">Fecha de Devolución:</strong>
+              <span class="text-slate-700">
+                {{ l.returnDate ? (l.returnDate | date: 'dd/MM/yyyy') : 'Pendiente de entrega' }}
+              </span>
+            </div>
+            <div>
+              <strong class="text-slate-500 block">Estado Actual:</strong>
+              @if (l.returnDate) {
+                <span
+                  class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800"
+                >
+                  Devuelto
+                </span>
+              } @else {
+                <span
+                  class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
+                >
+                  En Préstamo
+                </span>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  } @else {
+    <div class="text-center py-16">
+      <div
+        class="animate-spin inline-block w-8 h-8 border-[3px] border-current border-t-transparent text-teal-600 rounded-full mb-4"
+        role="status"
+      >
+        <span class="sr-only">Cargando...</span>
+      </div>
+      <p class="text-slate-500">Cargando datos del préstamo...</p>
+    </div>
+  }
+</div>
