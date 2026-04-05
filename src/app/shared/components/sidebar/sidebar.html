@@ -14,7 +14,7 @@
       routerLink="/dashboard"
       routerLinkActive="active"
       [routerLinkActiveOptions]="{ exact: true }"
-      class="nav-link flex items-center px-4 py-3 text-slate-600 hover:bg-teal-700 rounded-lg transition-colors duration-200"
+      class="nav-link flex items-center px-4 py-2 text-slate-600 hover:bg-teal-700 rounded-lg transition-colors duration-200"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -36,7 +36,7 @@
       (click)="LinkClicked()"
       routerLink="/personas"
       routerLinkActive="active"
-      class="nav-link flex items-center mt-4 px-4 py-2 text-slate-600 hover:bg-teal-700 rounded-lg transition-colors duration-200"
+      class="nav-link flex items-center mt-2 px-4 py-2 text-slate-600 hover:bg-teal-700 rounded-lg transition-colors duration-200"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -57,7 +57,7 @@
       (click)="LinkClicked()"
       routerLink="/seguimientos"
       routerLinkActive="active"
-      class="nav-link flex items-center mt-4 px-4 py-2 text-slate-600 hover:bg-teal-700 rounded-lg transition-colors duration-200"
+      class="nav-link flex items-center mt-2 px-4 py-2 text-slate-600 hover:bg-teal-700 rounded-lg transition-colors duration-200"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -76,7 +76,7 @@
       (click)="LinkClicked()"
       routerLink="/graficos"
       routerLinkActive="active"
-      class="nav-link flex items-center mt-4 px-4 py-2 text-slate-600 hover:bg-teal-700 rounded-lg transition-colors duration-200"
+      class="nav-link flex items-center mt-2 px-4 py-2 text-slate-600 hover:bg-teal-700 rounded-lg transition-colors duration-200"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -94,7 +94,7 @@
       (click)="LinkClicked()"
       routerLink="/prestamos"
       routerLinkActive="active"
-      class="nav-link flex items-center mt-4 px-4 py-2 text-slate-600 hover:bg-teal-700 rounded-lg transition-colors duration-200"
+      class="nav-link flex items-center mt-2 px-4 py-2 text-slate-600 hover:bg-teal-700 rounded-lg transition-colors duration-200"
     >
       <svg
         fill="none"
@@ -102,7 +102,6 @@
         stroke="currentColor"
         class="h-6 w-6 text-white"
         data-darkreader-inline-stroke=""
-        style="--darkreader-inline-stroke: currentColor"
       >
         <path
           stroke-linecap="round"
@@ -117,7 +116,7 @@
       (click)="LinkClicked()"
       routerLink="/transportes"
       routerLinkActive="active"
-      class="nav-link flex items-center mt-4 px-4 py-2 text-slate-600 hover:bg-teal-700 rounded-lg transition-colors duration-200"
+      class="nav-link flex items-center mt-2 px-4 py-2 text-slate-600 hover:bg-teal-700 rounded-lg transition-colors duration-200"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -140,7 +139,7 @@
       (click)="LinkClicked()"
       routerLink="/eventos"
       routerLinkActive="active"
-      class="nav-link flex items-center mt-4 px-4 py-2 text-slate-600 hover:bg-teal-700 rounded-lg transition-colors duration-200"
+      class="nav-link flex items-center mt-2 px-4 py-2 text-slate-600 hover:bg-teal-700 rounded-lg transition-colors duration-200"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -156,6 +155,28 @@
         />
       </svg>
       <span class="ml-4 font-medium text-white">Eventos</span>
+    </a>
+    <a
+      (click)="LinkClicked()"
+      routerLink="/informacion"
+      routerLinkActive="active"
+      class="nav-link flex items-center mt-2 px-4 py-2 text-slate-600 hover:bg-teal-700 rounded-lg transition-colors duration-200"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-6 w-6 text-white"
+        fill="none"
+        viewBox="0 0 23 23"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+        />
+      </svg>
+      <span class="ml-4 font-medium text-white">Acerca del Sistema</span>
     </a>
   </nav>
 

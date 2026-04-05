@@ -52,6 +52,10 @@ export const routes: Routes = [
         path: 'eventos',
         loadComponent: () => import('./features/event/list/list'),
       },
+      {
+        path: 'informacion',
+        loadComponent: () => import('./shared/components/info-system/info-system'),
+      },
     ],
   },
   {
