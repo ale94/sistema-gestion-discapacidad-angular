@@ -4,6 +4,7 @@ import { RouterLink } from '@angular/router';
 import { DatePipe, DecimalPipe, TitleCasePipe } from '@angular/common';
 import { PersonService } from '../../shared/services/person.service';
 import { PersonTrackingService } from '../../shared/services/person-tracking.service';
+import { LoanEquipmentService } from '../../shared/services/loan.equipment.service';
 
 @Component({
   selector: 'dashboard-page',
@@ -12,8 +13,10 @@ import { PersonTrackingService } from '../../shared/services/person-tracking.ser
   templateUrl: './dashboard-page.html',
 })
 export default class DashboardPage {
+
   private personService = inject(PersonService);
   private personTrackingService = inject(PersonTrackingService);
+  private loanEquipmentService = inject(LoanEquipmentService);
 
   totalPeople = computed(() => this.personService.persons().length);
   withCUD = computed(() => this.personService.persons().filter((p) => p.health?.activeCud).length);
@@ -25,6 +28,9 @@ export default class DashboardPage {
   );
   withIndicators = computed(
     () => this.personTrackingService.personsTracking().filter((p) => p.indicatorType).length,
+  );
+  withTotalLoans = computed(
+    () => this.loanEquipmentService.loans().filter((p) => p.id).length,
   );
 
   latestPeople = computed(() => {
