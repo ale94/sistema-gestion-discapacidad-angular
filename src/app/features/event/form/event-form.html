@@ -13,7 +13,13 @@
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
       <div class="md:col-span-2">
         <label for="name" class="form-label">Nombre del Evento</label>
-        <input id="name" formControlName="name" type="text" class="form-input" />
+        <input
+          id="name"
+          formControlName="name"
+          type="text"
+          class="form-input"
+          placeholder="Ej: Taller de Capacitación, Jornada Recreativa..."
+        />
         @if (formUtils.isValidField(eventForm, 'name')) {
           <span class="text-xs text-red-600">
             {{ formUtils.getFieldError(eventForm, 'name') }}
@@ -47,7 +53,12 @@
 
       <div class="md:col-span-2">
         <label for="attendees" class="form-label">N° de Asistentes</label>
-        <input id="attendees" formControlName="attendees" type="number" class="form-input" />
+        <input
+          id="attendees"
+          formControlName="attendees"
+          type="number"
+          class="form-input"
+        />
         @if (formUtils.isValidField(eventForm, 'attendees')) {
           <span class="text-xs text-red-600">
             {{ formUtils.getFieldError(eventForm, 'attendees') }}
@@ -62,6 +73,7 @@
           formControlName="description"
           rows="4"
           class="form-input"
+          placeholder="Detalles adicionales sobre el evento, objetivos o cronograma..."
         ></textarea>
         @if (formUtils.isValidField(eventForm, 'description')) {
           <span class="text-xs text-red-600">

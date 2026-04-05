@@ -13,7 +13,12 @@
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       <div class="lg:col-span-1">
         <label class="form-label">Apellido</label>
-        <input formControlName="lastName" type="text" class="form-input" />
+        <input
+          formControlName="lastName"
+          type="text"
+          class="form-input"
+          placeholder="Ej: Pérez"
+        />
         @if (formUtils.isValidField(personForm, 'lastName')) {
           <span class="text-xs text-red-600">
             {{ formUtils.getFieldError(personForm, 'lastName') }}
@@ -22,7 +27,12 @@
       </div>
       <div class="lg:col-span-1">
         <label class="form-label">Nombre</label>
-        <input formControlName="firstName" type="text" class="form-input" />
+        <input
+          formControlName="firstName"
+          type="text"
+          class="form-input"
+          placeholder="Ej: Juan Carlos"
+        />
         @if (formUtils.isValidField(personForm, 'firstName')) {
           <span class="text-xs text-red-600">
             {{ formUtils.getFieldError(personForm, 'firstName') }}
@@ -31,7 +41,12 @@
       </div>
       <div class="lg:col-span-1">
         <label class="form-label">D.N.I</label>
-        <input formControlName="dni" type="number" class="form-input" />
+        <input
+          formControlName="dni"
+          type="number"
+          class="form-input"
+          placeholder="Sin puntos ni espacios"
+        />
         @if (formUtils.isValidField(personForm, 'dni')) {
           <span class="text-xs text-red-600">
             {{ formUtils.getFieldError(personForm, 'dni') }}
@@ -40,7 +55,12 @@
       </div>
       <div class="lg:col-span-1">
         <label class="form-label">Telefono</label>
-        <input formControlName="phone" type="number" class="form-input" />
+        <input
+          formControlName="phone"
+          type="number"
+          class="form-input"
+          placeholder="Ej: 3886334455"
+        />
         @if (formUtils.isValidField(personForm, 'phone')) {
           <span class="text-xs text-red-600">
             {{ formUtils.getFieldError(personForm, 'phone') }}
@@ -49,7 +69,12 @@
       </div>
       <div class="lg:col-span-2">
         <label class="form-label">Dirección</label>
-        <input formControlName="address" type="text" class="form-input" />
+        <input
+          formControlName="address"
+          type="text"
+          class="form-input"
+          placeholder="Calle, número y barrio"
+        />
         @if (formUtils.isValidField(personForm, 'address')) {
           <span class="text-xs text-red-600">
             {{ formUtils.getFieldError(personForm, 'address') }}
@@ -60,7 +85,13 @@
       <div class="lg:col-span-3">
         <label class="form-label">Tipo de Indicador</label>
 
-        <textarea formControlName="indicatorType" class="form-input" rows="3" maxlength="200">
+        <textarea
+          formControlName="indicatorType"
+          class="form-input"
+          rows="3"
+          maxlength="200"
+          placeholder="Describa el tipo de indicador observado..."
+        >
         </textarea>
 
         <div

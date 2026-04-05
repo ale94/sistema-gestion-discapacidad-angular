@@ -22,7 +22,7 @@
             formControlName="lastName"
             type="text"
             class="form-input"
-            placeholder="Ingrese su apellido"
+            placeholder="Ej: Pérez"
           />
           @if (formUtils.isValidField(personForm, 'lastName')) {
             <span class="text-xs text-red-600">
@@ -37,7 +37,7 @@
             clear
             type="text"
             class="form-input"
-            placeholder="Ingrese su nombre"
+            placeholder="Ej: Juan Carlos"
           />
           @if (formUtils.isValidField(personForm, 'firstName')) {
             <span class="text-xs text-red-600">
@@ -51,7 +51,7 @@
             formControlName="dni"
             type="number"
             class="form-input"
-            placeholder="Ingrese su dni"
+            placeholder="Sin puntos ni espacios"
           />
           @if (formUtils.isValidField(personForm, 'dni')) {
             <span class="text-xs text-red-600">
@@ -102,7 +102,7 @@
             formControlName="phone"
             type="number"
             class="form-input"
-            placeholder="Ingrese su teléfono"
+            placeholder="Ej: 3886334455"
           />
           @if (formUtils.isValidField(personForm, 'phone')) {
             <span class="text-xs text-red-600">
@@ -116,7 +116,7 @@
             formControlName="tutor"
             type="text"
             class="form-input"
-            placeholder="Nombre del Tutor"
+            placeholder="Ej: Juan Gomez"
           />
           @if (formUtils.isValidField(personForm, 'tutor')) {
             <span class="text-xs text-red-600">
@@ -140,7 +140,7 @@
             formControlName="district"
             type="text"
             class="form-input"
-            placeholder="Ingrese su barrio"
+            placeholder="Ej: San Francisco"
           />
           @if (formUtils.isValidField(personForm, 'address.district')) {
             <span class="text-xs text-red-600">
@@ -154,7 +154,7 @@
             formControlName="street"
             type="text"
             class="form-input"
-            placeholder="Ingrese su calle"
+            placeholder="Ej: Av. 9 de Julio"
           />
           @if (formUtils.isValidField(personForm, 'address.street')) {
             <span class="text-xs text-red-600">
@@ -168,7 +168,7 @@
             formControlName="locality"
             type="text"
             class="form-input"
-            placeholder="Ingrese su localidad"
+            placeholder="Ej: Libertador General San Martín"
           />
           @if (formUtils.isValidField(personForm, 'address.locality')) {
             <span class="text-xs text-red-600">
