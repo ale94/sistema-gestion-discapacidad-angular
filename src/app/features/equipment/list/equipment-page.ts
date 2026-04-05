@@ -43,7 +43,7 @@ export default class EquipmentPage {
 
   confirmDeleteAction(): void {
     if (this.loanEquipmentToDelete()) {
-      this.loanEquipmentService.deleteLoan(this.loanEquipmentToDelete()!.id);
+      this.loanEquipmentService.deleteLoan(this.loanEquipmentToDelete()!.id).subscribe();
       this.cancelDelete();
     }
   }
@@ -54,9 +54,9 @@ export default class EquipmentPage {
 
   handleSave(loanEquipmentData: LoanEquipment) {
     if ('id' in loanEquipmentData) {
-      this.loanEquipmentService.updateLoan(loanEquipmentData);
+      this.loanEquipmentService.updateLoan(loanEquipmentData).subscribe();
     } else {
-      this.loanEquipmentService.addLoan(loanEquipmentData);
+      this.loanEquipmentService.addLoan(loanEquipmentData).subscribe();
     }
     this.closeModal();
   }
@@ -107,7 +107,7 @@ export default class EquipmentPage {
         returnDate: dateObject // Ahora sí es tipo Date
       };
 
-      this.loanEquipmentService.updateLoan(updatedData);
+      this.loanEquipmentService.updateLoan(updatedData).subscribe();
       this.loanToReturn.set(null);
     }
   }
@@ -124,7 +124,7 @@ export default class EquipmentPage {
         returnDate: undefined
       };
 
-      this.loanEquipmentService.updateLoan(updatedData);
+      this.loanEquipmentService.updateLoan(updatedData).subscribe();
       this.loanToUndo.set(null);
     }
   }

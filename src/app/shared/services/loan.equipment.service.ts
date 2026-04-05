@@ -1,6 +1,7 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { LoanEquipment } from '../interfaces/loan.equipment.interface';
 import { HttpClient } from '@angular/common/http';
+import { catchError, Observable, tap, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -20,25 +21,39 @@ export class LoanEquipmentService {
     });
   }
 
-  addLoan(loan: LoanEquipment) {
-    this.http.post<LoanEquipment>(`${this.url}` + '/loans', loan).subscribe((newLoan) => {
-      this.loans.update((loans) => [...loans, newLoan]);
-    });
+  addLoan(loan: LoanEquipment): Observable<LoanEquipment> {
+    return this.http.post<LoanEquipment>(`${this.url}` + '/loans', loan)
+      .pipe(
+        tap((newLoan) => {
+          this.loans.update((loans) => [...loans, newLoan]);
+        }),
+        catchError(() => {
+          return throwError(() => new Error("No se pudo crear un prestamo"))
+        })
+      );
   }
 
-  updateLoan(updatedLoan: LoanEquipment) {
-    this.http
+  updateLoan(updatedLoan: LoanEquipment): Observable<LoanEquipment> {
+    return this.http
       .put<LoanEquipment>(`${this.url}/loans/${updatedLoan.id}`, updatedLoan)
-      .subscribe((loan) => {
-        this.loans.update((loans) =>
-          loans.map((l) => (l.id === loan.id ? loan : l)),
-        );
-      });
+      .pipe(
+        tap((loan) => {
+          this.loans.update((loans) =>
+            loans.map((l) => (l.id === loan.id ? loan : l)),
+          ), catchError(() => {
+            return throwError(() => new Error("No se pudo actualizar un prestamo"))
+          })
+        }));
   }
 
-  deleteLoan(id: number) {
-    this.http.delete(`${this.url}/loans/${id}`).subscribe(() => {
-      this.loans.update((loans) => loans.filter((l) => l.id !== id));
-    });
+  deleteLoan(id: number): Observable<Object> {
+    return this.http.delete(`${this.url}/loans/${id}`)
+      .pipe(
+        tap(() => {
+          this.loans.update((loans) => loans.filter((l) => l.id !== id));
+        }), catchError(() => {
+          return throwError(() => new Error("No se pudo borrar un prestamo"))
+        })
+      );
   }
 }
