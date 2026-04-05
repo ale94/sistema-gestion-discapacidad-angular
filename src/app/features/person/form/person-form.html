@@ -148,7 +148,7 @@
             </span>
           }
         </div>
-        <div class="lg:col-span-2">
+        <div>
           <label class="form-label">Calle</label>
           <input
             formControlName="street"
@@ -176,7 +176,7 @@
             </span>
           }
         </div>
-        <div class="lg:col-span-2">
+        <!-- <div class="lg:col-span-2">
           <label class="form-label">Provincia</label>
           <input
             formControlName="province"
@@ -189,7 +189,7 @@
               {{ formUtils.getFieldError(personForm, 'address.province') }}
             </span>
           }
-        </div>
+        </div> -->
       </div>
     </fieldset>
 
@@ -206,9 +206,7 @@
           <label class="text-sm font-medium text-gray-700">Nombre</label>
           <label class="text-sm font-medium text-gray-700">DNI</label>
           <label class="text-sm font-medium text-gray-700">Edad</label>
-          <label class="text-sm font-medium text-gray-700">Estado Civil</label>
           <label class="text-sm font-medium text-gray-700">Parentesco</label>
-          <label class="text-sm font-medium text-gray-700">Ocupación</label>
           <label class="text-sm font-medium text-gray-700 text-center">Acción</label>
         </div>
       }
@@ -259,31 +257,11 @@
           </div>
 
           <div class="flex flex-col gap-1">
-            <label class="md:hidden text-xs font-semibold text-gray-500">Estado Civil</label>
-            <input
-              formControlName="civilStatus"
-              type="text"
-              placeholder="Estado Civil"
-              class="form-input w-full"
-            />
-          </div>
-
-          <div class="flex flex-col gap-1">
             <label class="md:hidden text-xs font-semibold text-gray-500">Parentesco</label>
             <input
               formControlName="parentage"
               type="text"
               placeholder="Parentesco"
-              class="form-input w-full"
-            />
-          </div>
-
-          <div class="flex flex-col gap-1">
-            <label class="md:hidden text-xs font-semibold text-gray-500">Ocupación</label>
-            <input
-              formControlName="occupation"
-              type="text"
-              placeholder="Ocupación"
               class="form-input w-full"
             />
           </div>
@@ -353,7 +331,7 @@
             formControlName="cudNumber"
             type="text"
             class="form-input"
-            placeholder="Ingrese el CUD"
+            placeholder="N° de CUD"
           />
           @if (formUtils.isValidField(personForm, 'health.cudNumber')) {
             <span class="text-xs text-red-600">
@@ -376,7 +354,7 @@
         </div>
 
         <div>
-          <label class="form-label">¿Realiza tratamiento/rehabilitación?</label>
+          <label class="form-label">¿Realiza tratamiento?</label>
           <select formControlName="rehabilitationTreatment" class="form-input">
             <option [value]="true">Si</option>
             <option [value]="false">No</option>
@@ -412,26 +390,17 @@
             </span>
           }
         </div>
-        <div>
-          <label class="form-label">Nombre</label>
+        <div class="lg:col-span-2">
+          <label class="form-label">Empresa / Empleador</label>
           <input
             formControlName="companyName"
             type="text"
             class="form-input"
-            placeholder="Nombre de la Empresa"
+            placeholder="Nombre de la empresa"
           />
         </div>
         <div>
-          <label class="form-label">Direccion</label>
-          <input
-            formControlName="address"
-            type="text"
-            class="form-input"
-            placeholder="Dirección de la Empresa"
-          />
-        </div>
-        <div>
-          <label class="form-label">Obra Social</label>
+          <label class="form-label">¿Posee Obra Social?</label>
           <select formControlName="socialWork" class="form-input">
             <option [value]="true">Si</option>
             <option [value]="false">No</option>
@@ -443,12 +412,12 @@
           }
         </div>
         <div class="lg:col-span-2">
-          <label class="form-label">Nombre Obra Social</label>
+          <label class="form-label">Nombre de la Obra Social</label>
           <input
             formControlName="nameSocialWork"
             type="text"
             class="form-input"
-            placeholder="Nombre de la Obra Social"
+            placeholder="Ej: ISJ, OSDE, etc."
           />
         </div>
       </div>
@@ -476,22 +445,13 @@
             </span>
           }
         </div>
-        <div>
-          <label class="form-label">Nombre</label>
+        <div class="lg:col-span-2">
+          <label class="form-label">Establecimiento Educativo</label>
           <input
             formControlName="name"
             type="text"
             class="form-input"
-            placeholder="Nombre de la Escuela"
-          />
-        </div>
-        <div>
-          <label class="form-label">Direccion</label>
-          <input
-            formControlName="address"
-            type="text"
-            class="form-input"
-            placeholder="Dirección de la Escuela"
+            placeholder="Nombre de la escuela o institución"
           />
         </div>
       </div>

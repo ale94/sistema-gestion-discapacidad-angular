@@ -46,7 +46,7 @@ export class PersonForm {
       dni: [currentPerson?.dni || '', [Validators.required, Validators.pattern('^[0-9]{7,8}$')]],
       civilStatus: [currentPerson?.civilStatus || '', Validators.required],
       dateBirth: [currentPerson?.dateBirth || '', Validators.required],
-      tutor: [currentPerson?.tutor || '', [Validators.required, Validators.minLength(4)]],
+      tutor: [currentPerson?.tutor || ''],
       phone: [currentPerson?.phone || '', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
       gender: [currentPerson?.gender || '', Validators.required],
 
@@ -55,7 +55,7 @@ export class PersonForm {
         street: [currentPerson?.address?.street || '', [Validators.required, Validators.minLength(4)]],
         district: [currentPerson?.address?.district || '', [Validators.required, Validators.minLength(4)]],
         locality: [currentPerson?.address?.locality || '', [Validators.required, Validators.minLength(4)]],
-        province: [currentPerson?.address?.province || '', [Validators.required, Validators.minLength(4)]]
+        // province: [currentPerson?.address?.province || '', [Validators.required, Validators.minLength(4)]]
       }),
 
       // Health
@@ -98,9 +98,7 @@ export class PersonForm {
           lastName: [family.lastName || '', Validators.required],
           dni: [family.dni || '', Validators.required],
           age: [family.age || '', Validators.required],
-          civilStatus: [family.civilStatus || '', Validators.required],
-          parentage: [family.parentage || '', Validators.required],
-          occupation: [family.occupation || '', Validators.required]
+          parentage: [family.parentage || '', Validators.required]
         })) || [])
     });
   }
