@@ -21,6 +21,10 @@ export const routes: Routes = [
         loadComponent: () => import('./features/dashboard/dashboard-page'),
       },
       {
+        path: 'usuarios',
+        loadComponent: () => import('./features/user-management/list/user-management'),
+      },
+      {
         path: 'personas',
         loadComponent: () => import('./features/person/list/person-list'),
       },
