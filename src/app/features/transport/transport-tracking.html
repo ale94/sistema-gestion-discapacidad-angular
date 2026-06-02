@@ -1,201 +1,218 @@
-<div class="container mx-auto">
-  <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-    <h1 class="text-2xl sm:text-3xl md:text-3xl font-bold text-slate-900">Gestión de Pasajes y Carnets</h1>
-
-    <!-- Year Selector -->
-    <div class="flex items-center gap-2 bg-white p-1 rounded-lg border border-slate-200">
-      <button
-        (click)="transportService.changeYear(-1)"
-        class="p-2 rounded-md text-slate-600 hover:bg-slate-100 transition-colors"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="h-6 w-6"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          stroke-width="2"
-        >
-          <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
-        </svg>
-      </button>
-      <span class="text-xl font-bold text-slate-800 w-24 text-center">{{
-        transportService.selectedYear()
-      }}</span>
-      <button
-        (click)="transportService.changeYear(1)"
-        class="p-2 rounded-md text-slate-600 hover:bg-slate-100 transition-colors"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="h-6 w-6"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          stroke-width="2"
-        >
-          <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
-        </svg>
-      </button>
+<div class="max-w-7xl mx-auto">
+    <!-- Header -->
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+        <h1 class="text-3xl font-bold text-slate-900">Gestión de Pasajes y Carnets</h1>
+        
+        @if (activeTab() === 'TRACKING') {
+        <div class="flex items-center gap-4 bg-white px-4 py-2 rounded-xl border border-slate-200 shadow-sm">
+            <button (click)="transportService.changeYear(-1)" class="text-slate-400 hover:text-teal-600 transition-colors">&larr;</button>
+            <span class="text-xl font-bold text-slate-800">{{ transportService.selectedYear() }}</span>
+            <button (click)="transportService.changeYear(1)" class="text-slate-400 hover:text-teal-600 transition-colors">&rarr;</button>
+        </div>
+        } @else {
+        <button (click)="openRequestModal()" class="flex items-center bg-teal-600 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded-lg transition-all duration-300 shadow-lg">
+            <svg class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+            </svg>
+            Nueva Solicitud
+        </button>
+        }
     </div>
-  </div>
 
-  <!-- Monthly Tracking Table -->
-  <div class="bg-white border border-slate-200 rounded-xl shadow-lg overflow-hidden">
-    <div class="overflow-x-auto">
-      <table class="min-w-full divide-y divide-slate-200">
-        <thead class="bg-slate-50">
-          <tr>
-            <th
-              scope="col"
-              class="sticky left-0 bg-slate-50 px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider z-10"
-            >
-              Mes
-            </th>
-            <th
-              scope="col"
-              colspan="2"
-              class="px-6 py-3 text-center text-xs font-medium text-slate-500 uppercase tracking-wider border-x border-slate-200"
-            >
-              Solicitud de Carnet
-            </th>
-            <th
-              scope="col"
-              colspan="2"
-              class="px-6 py-3 text-center text-xs font-medium text-slate-500 uppercase tracking-wider border-r border-slate-200"
-            >
-              Pasajes Nacionales
-            </th>
-            <th
-              scope="col"
-              class="px-6 py-3 text-center text-xs font-medium text-slate-500 uppercase tracking-wider"
-            >
-              Total Mensual
-            </th>
-          </tr>
-        </thead>
-        <tbody class="bg-white divide-y divide-slate-200">
-          @for (item of transportService.dataForSelectedYear(); track item.month) {
-          <tr class="hover:bg-slate-50">
-            <td
-              class="sticky left-0 bg-white px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-900 z-10"
-            >
-              {{ item.month }}
-            </td>
-
-            <!-- Carnets -->
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600 font-mono text-center">
-              {{ item.carnets }}
-            </td>
-            <td class="px-2 py-2 whitespace-nowrap text-center border-r border-slate-200">
-              <div class="inline-flex items-center space-x-1.5">
-                <button
-                  (click)="transportService.increment(item.month, 'carnets')"
-                  class="flex items-center justify-center bg-teal-50 hover:bg-teal-100 text-teal-600 font-medium h-8 w-8 rounded-full transition duration-200 ease-in-out shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-1"
-                  title="Incrementar Pasajes"
-                >
-                  <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M12 4v16m8-8H4"
-                    />
-                  </svg>
-                </button>
-
-                <button
-                  (click)="transportService.decrement(item.month, 'carnets')"
-                  class="flex items-center justify-center bg-red-50 hover:bg-red-100 text-red-600 font-medium h-8 w-8 rounded-full transition duration-200 ease-in-out shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-1"
-                  title="Decrementar Pasajes"
-                >
-                  <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M20 12H4"
-                    />
-                  </svg>
-                </button>
-              </div>
-            </td>
-
-            <!-- Pasajes -->
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600 font-mono text-center">
-              {{ item.pasajes }}
-            </td>
-            <td class="px-2 py-2 whitespace-nowrap text-center border-r border-slate-200">
-              <div class="inline-flex items-center space-x-1.5">
-                <button
-                  (click)="transportService.increment(item.month, 'pasajes')"
-                  class="flex items-center justify-center bg-teal-50 hover:bg-teal-100 text-teal-600 font-medium h-8 w-8 rounded-full transition duration-200 ease-in-out shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-1"
-                  title="Incrementar Pasajes"
-                >
-                  <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M12 4v16m8-8H4"
-                    />
-                  </svg>
-                </button>
-
-                <button
-                  (click)="transportService.decrement(item.month, 'pasajes')"
-                  class="flex items-center justify-center bg-red-50 hover:bg-red-100 text-red-600 font-medium h-8 w-8 rounded-full transition duration-200 ease-in-out shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-1"
-                  title="Decrementar Pasajes"
-                >
-                  <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M20 12H4"
-                    />
-                  </svg>
-                </button>
-              </div>
-            </td>
-
-            <!-- Monthly Total -->
-            <td
-              class="px-6 py-4 whitespace-nowrap text-sm text-slate-900 font-mono text-center font-bold"
-            >
-              {{ item.carnets + item.pasajes }}
-            </td>
-          </tr>
-          }
-        </tbody>
-        <tfoot class="bg-slate-50 border-t-2 border-teal-500/50">
-          <tr>
-            <th
-              scope="row"
-              class="sticky left-0 bg-slate-50 px-6 py-4 text-left text-sm font-bold text-slate-800 uppercase z-10"
-            >
-              Total Anual
-            </th>
-            <td
-              colspan="2"
-              class="px-6 py-4 whitespace-nowrap text-center text-lg font-bold text-teal-600 font-mono"
-            >
-              {{ transportService.yearlyTotals().totalCarnets }}
-            </td>
-            <td
-              colspan="2"
-              class="px-6 py-4 whitespace-nowrap text-center text-lg font-bold text-teal-600 font-mono border-x border-slate-200"
-            >
-              {{ transportService.yearlyTotals().totalPasajes }}
-            </td>
-            <td
-              class="px-6 py-4 whitespace-nowrap text-center text-lg font-bold text-slate-900 font-mono"
-            >
-              {{ transportService.yearlyTotals().grandTotal }}
-            </td>
-          </tr>
-        </tfoot>
-      </table>
+    <!-- Tabs -->
+    <div class="flex space-x-2 border-b border-slate-200 mb-8">
+        <button 
+            (click)="activeTab.set('TRACKING')"
+            [ngClass]="activeTab() === 'TRACKING' ? 'border-teal-500 text-teal-600' : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300'"
+            class="whitespace-nowrap py-4 px-4 border-b-2 font-medium text-sm transition-colors">
+            Registro Mensual
+        </button>
+        <button 
+            (click)="activeTab.set('REQUESTS')"
+            [ngClass]="activeTab() === 'REQUESTS' ? 'border-teal-500 text-teal-600' : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300'"
+            class="whitespace-nowrap py-4 px-4 border-b-2 font-medium text-sm transition-colors">
+            Solicitudes de Beneficiarios
+        </button>
     </div>
-  </div>
+
+    <!-- Tab Content: TRACKING -->
+    @if (activeTab() === 'TRACKING') {
+    <div class="grid grid-cols-1 xl:grid-cols-3 gap-8 animate-fade-in">
+        <!-- Columna Izquierda: Controles Rápidos -->
+        <div class="xl:col-span-1 space-y-6">
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+                <h2 class="text-lg font-bold text-slate-800 mb-4">Registro Mensual</h2>
+                
+                <div class="mb-6">
+                    <label class="block text-sm font-medium text-slate-600 mb-2">Seleccionar Mes</label>
+                    <select [(ngModel)]="selectedMonthName" class="w-full bg-slate-50 border border-slate-200 text-slate-800 rounded-xl focus:ring-teal-500 focus:border-teal-500 block p-3">
+                        @for (month of months; track month) {
+                            <option [value]="month">{{ month }}</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="space-y-6">
+                    <!-- Carnets -->
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                        <label class="block text-sm font-semibold text-slate-700 mb-3">Solicitudes de Carnet</label>
+                        <div class="flex items-center justify-between">
+                            <button (click)="transportService.decrement(selectedMonthName(), 'carnets')" class="w-12 h-12 rounded-xl bg-white border border-slate-200 shadow-sm text-slate-600 hover:text-red-500 font-bold text-2xl transition-colors">-</button>
+                            <input type="number" [value]="selectedMonthData().carnets" readonly class="w-20 text-center text-2xl font-bold bg-transparent border-none focus:ring-0 p-0 text-slate-900 pointer-events-none">
+                            <button (click)="transportService.increment(selectedMonthName(), 'carnets')" class="w-12 h-12 rounded-xl bg-teal-500 text-white shadow-sm hover:bg-teal-600 font-bold text-2xl transition-colors">+</button>
+                        </div>
+                    </div>
+
+                    <!-- Pasajes -->
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                        <label class="block text-sm font-semibold text-slate-700 mb-3">Pasajes Nacionales</label>
+                        <div class="flex items-center justify-between">
+                            <button (click)="transportService.decrement(selectedMonthName(), 'pasajes')" class="w-12 h-12 rounded-xl bg-white border border-slate-200 shadow-sm text-slate-600 hover:text-red-500 font-bold text-2xl transition-colors">-</button>
+                            <input type="number" [value]="selectedMonthData().pasajes" readonly class="w-20 text-center text-2xl font-bold bg-transparent border-none focus:ring-0 p-0 text-slate-900 pointer-events-none">
+                            <button (click)="transportService.increment(selectedMonthName(), 'pasajes')" class="w-12 h-12 rounded-xl bg-teal-500 text-white shadow-sm hover:bg-teal-600 font-bold text-2xl transition-colors">+</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Columna Derecha: Visualización de Datos -->
+        <div class="xl:col-span-2 space-y-6">
+            <!-- Resumen -->
+            <div class="grid grid-cols-2 gap-6">
+                <div class="bg-teal-500 rounded-2xl p-6 text-white shadow-sm relative overflow-hidden">
+                    <div class="relative z-10">
+                        <p class="text-teal-100 text-sm font-medium mb-1">Total Año</p>
+                        <h3 class="text-4xl font-bold">{{ transportService.yearlyTotals().grandTotal }}</h3>
+                    </div>
+                    <svg class="absolute right-0 bottom-0 text-teal-600 opacity-50 w-24 h-24 transform translate-x-4 translate-y-4" fill="currentColor" viewBox="0 0 20 20"><path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path><path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path></svg>
+                </div>
+                <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
+                    <p class="text-slate-500 text-sm font-medium mb-1">Promedio Mensual</p>
+                    <h3 class="text-4xl font-bold text-slate-800">{{ monthlyAverage() | number:'1.0-0' }}<span class="text-lg text-slate-400 font-normal">/mes</span></h3>
+                </div>
+            </div>
+
+                <!-- Gráfico Mockup -->
+                <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 h-80 flex flex-col">
+                    <h3 class="text-lg font-bold text-slate-800 mb-6">Tendencia Anual</h3>
+                    <div class="flex-1 flex items-end gap-2 sm:gap-4 justify-between h-full px-2">
+                        @for (monthData of transportService.dataForSelectedYear(); track monthData.month) {
+                            <div class="flex-1 flex items-end gap-1 h-full">
+                                <div class="w-1/2 rounded-t-md relative group transition-all duration-300 bg-teal-500"
+                                     [style.height.%]="(monthData.carnets / maxMonthlyTotal()) * 100">
+                                    <div class="absolute -top-10 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-slate-800 text-white text-xs py-1 px-2 rounded whitespace-nowrap z-20">
+                                        {{ monthData.month }} C: {{ monthData.carnets }} / P: {{ monthData.pasajes }}
+                                    </div>
+                                </div>
+                                <div class="w-1/2 rounded-t-md relative group transition-all duration-300 bg-amber-400"
+                                     [style.height.%]="(monthData.pasajes / maxMonthlyTotal()) * 100">
+                                </div>
+                            </div>
+                        }
+                    </div>
+                    <div class="flex justify-center gap-6 mt-4">
+                        <div class="flex items-center gap-2 text-sm text-slate-600">
+                            <span class="w-3 h-3 rounded-sm bg-teal-500"></span>
+                            Carnets
+                        </div>
+                        <div class="flex items-center gap-2 text-sm text-slate-600">
+                            <span class="w-3 h-3 rounded-sm bg-amber-400"></span>
+                            Pasajes Nacionales
+                        </div>
+                    </div>
+                </div>
+        </div>
+    </div>
+    }
+
+    <!-- Tab Content: REQUESTS -->
+    @if (activeTab() === 'REQUESTS') {
+    <div class="bg-white border border-slate-200 rounded-xl shadow-lg overflow-hidden animate-fade-in">
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-slate-200">
+                <thead class="bg-slate-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Fecha</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Solicitante</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">DNI</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Tipo</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Estado</th>
+                        <th class="px-6 py-3 text-center text-xs font-medium text-slate-500 uppercase tracking-wider">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-slate-200">
+                    @for (req of pagedRequests(); track req.id) {
+                    <tr class="hover:bg-slate-50">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600">
+                            {{ req.createdAt | date:'dd/MM/yyyy' }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-900">
+                            <div class="flex items-center gap-2">
+                                <span>{{ req.lastName | titlecase }} {{ req.firstName | titlecase }}</span>
+                                @if (req.isRegisteredBeneficiary) {
+                                    <svg class="h-4 w-4 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" title="Registrado en el Padrón">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                } @else {
+                                    <svg class="h-4 w-4 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" title="No Registrado (Solicitud Manual)">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                    </svg>
+                                }
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600 font-mono">
+                            {{ req.dni }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600">
+                            {{ req.type }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                            <span class="px-2.5 py-1 text-xs font-semibold rounded-full" [ngClass]="getStatusClass(req.status)">
+                                {{ req.status.replace('_', ' ') }}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-4 text-center">
+                            <button (click)="openRequestModal(req)" class="text-teal-600 hover:text-teal-800 transition-colors">Editar</button>
+                            <button (click)="deleteRequest(req.id!)" class="text-red-600 hover:text-red-800 transition-colors">Eliminar</button>
+                        </td>
+                    </tr>
+                    } @empty {
+                    <tr>
+                        <td colspan="6" class="px-6 py-8 text-center text-slate-500">
+                            No hay solicitudes registradas.
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+                @if (pageInfo().hasPages) {
+                <div class="px-6 py-4 border-t border-slate-200 bg-slate-50 flex items-center justify-between">
+                    <span class="text-sm text-slate-600">Mostrando {{ pageInfo().start }} - {{ pageInfo().end }} de {{ pageInfo().total }}</span>
+                <div class="flex items-center gap-2">
+                    <button (click)="setPage(currentPage() - 1)" [disabled]="currentPage() === 1" class="px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed">Anterior</button>
+                    @for (p of pages(); track p) {
+                        @if (p === currentPage()) {
+                            <span class="px-3 py-1.5 rounded-lg bg-teal-600 text-white font-medium">{{ p }}</span>
+                        } @else {
+                            <button (click)="setPage(p)" class="px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-slate-700 hover:bg-slate-50">{{ p }}</button>
+                        }
+                    }
+                    <button (click)="setPage(currentPage() + 1)" [disabled]="currentPage() === totalPages()" class="px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed">Siguiente</button>
+                </div>
+            </div>
+            }
+        </div>
+    </div>
+    }
 </div>
+
+@if (showRequestModal()) {
+    <div class="fixed inset-0 bg-gray-800/30 backdrop-blur-md flex items-center justify-center z-50 p-4">
+        <transport-request-form 
+            [request]="selectedRequest()"
+            (save)="saveRequest($event)"
+            (cancel)="closeRequestModal()">
+        </transport-request-form>
+    </div>
+}
