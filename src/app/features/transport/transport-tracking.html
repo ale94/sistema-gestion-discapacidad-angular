@@ -3,13 +3,7 @@
     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
         <h1 class="text-3xl font-bold text-slate-900">Gestión de Pasajes y Carnets</h1>
         
-        @if (activeTab() === 'TRACKING') {
-        <div class="flex items-center gap-4 bg-white px-4 py-2 rounded-xl border border-slate-200 shadow-sm">
-            <button (click)="transportService.changeYear(-1)" class="text-slate-400 hover:text-teal-600 transition-colors">&larr;</button>
-            <span class="text-xl font-bold text-slate-800">{{ transportService.selectedYear() }}</span>
-            <button (click)="transportService.changeYear(1)" class="text-slate-400 hover:text-teal-600 transition-colors">&rarr;</button>
-        </div>
-        } @else {
+        @if (activeTab() !== 'TRACKING') {
         <button (click)="openRequestModal()" class="flex items-center bg-teal-600 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded-lg transition-all duration-300 shadow-lg">
             <svg class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
@@ -43,7 +37,7 @@
             <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
                 <h2 class="text-lg font-bold text-slate-800 mb-4">Registro Mensual</h2>
                 
-                <div class="mb-6">
+                <div class="mb-4">
                     <label class="block text-sm font-medium text-slate-600 mb-2">Seleccionar Mes</label>
                     <select [(ngModel)]="selectedMonthName" class="w-full bg-slate-50 border border-slate-200 text-slate-800 rounded-xl focus:ring-teal-500 focus:border-teal-500 block p-3">
                         @for (month of months; track month) {
@@ -52,25 +46,26 @@
                     </select>
                 </div>
 
-                <div class="space-y-6">
+                <div class="mb-6">
+                    <label class="block text-sm font-medium text-slate-600 mb-2">Seleccionar Año</label>
+                    <div class="flex items-center gap-3 bg-slate-50 border border-slate-200 rounded-xl p-1">
+                        <button (click)="transportService.changeYear(transportService.selectedYear() - 1)" class="flex-1 py-2 px-3 rounded-lg text-slate-500 hover:bg-white hover:text-teal-600 hover:shadow-sm transition-all">&larr;</button>
+                        <span class="flex-1 text-center text-lg font-bold text-slate-800">{{ transportService.selectedYear() }}</span>
+                        <button (click)="transportService.changeYear(transportService.selectedYear() + 1)" class="flex-1 py-2 px-3 rounded-lg text-slate-500 hover:bg-white hover:text-teal-600 hover:shadow-sm transition-all">&rarr;</button>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
                     <!-- Carnets -->
                     <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
-                        <label class="block text-sm font-semibold text-slate-700 mb-3">Solicitudes de Carnet</label>
-                        <div class="flex items-center justify-between">
-                            <button (click)="transportService.decrement(selectedMonthName(), 'carnets')" class="w-12 h-12 rounded-xl bg-white border border-slate-200 shadow-sm text-slate-600 hover:text-red-500 font-bold text-2xl transition-colors">-</button>
-                            <input type="number" [value]="selectedMonthData().carnets" readonly class="w-20 text-center text-2xl font-bold bg-transparent border-none focus:ring-0 p-0 text-slate-900 pointer-events-none">
-                            <button (click)="transportService.increment(selectedMonthName(), 'carnets')" class="w-12 h-12 rounded-xl bg-teal-500 text-white shadow-sm hover:bg-teal-600 font-bold text-2xl transition-colors">+</button>
-                        </div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">Solicitudes de Carnet</label>
+                        <p class="text-3xl font-bold text-slate-900">{{ selectedMonthData().carnets }}</p>
                     </div>
 
                     <!-- Pasajes -->
                     <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
-                        <label class="block text-sm font-semibold text-slate-700 mb-3">Pasajes Nacionales</label>
-                        <div class="flex items-center justify-between">
-                            <button (click)="transportService.decrement(selectedMonthName(), 'pasajes')" class="w-12 h-12 rounded-xl bg-white border border-slate-200 shadow-sm text-slate-600 hover:text-red-500 font-bold text-2xl transition-colors">-</button>
-                            <input type="number" [value]="selectedMonthData().pasajes" readonly class="w-20 text-center text-2xl font-bold bg-transparent border-none focus:ring-0 p-0 text-slate-900 pointer-events-none">
-                            <button (click)="transportService.increment(selectedMonthName(), 'pasajes')" class="w-12 h-12 rounded-xl bg-teal-500 text-white shadow-sm hover:bg-teal-600 font-bold text-2xl transition-colors">+</button>
-                        </div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">Pasajes Nacionales</label>
+                        <p class="text-3xl font-bold text-slate-900">{{ selectedMonthData().pasajes }}</p>
                     </div>
                 </div>
             </div>
@@ -98,7 +93,8 @@
                     <h3 class="text-lg font-bold text-slate-800 mb-6">Tendencia Anual</h3>
                     <div class="flex-1 flex items-end gap-2 sm:gap-4 justify-between h-full px-2">
                         @for (monthData of transportService.dataForSelectedYear(); track monthData.month) {
-                            <div class="flex-1 flex items-end gap-1 h-full">
+                            <div class="flex-1 flex items-end gap-1 h-full rounded-t-lg p-0.5 transition-all duration-300"
+                                 [ngClass]="monthData.month === selectedMonthName() ? 'bg-teal-100/70 ring-2 ring-teal-400' : ''">
                                 <div class="w-1/2 rounded-t-md relative group transition-all duration-300 bg-teal-500"
                                      [style.height.%]="(monthData.carnets / maxMonthlyTotal()) * 100">
                                     <div class="absolute -top-10 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-slate-800 text-white text-xs py-1 px-2 rounded whitespace-nowrap z-20">
@@ -148,18 +144,7 @@
                             {{ req.createdAt | date:'dd/MM/yyyy' }}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-900">
-                            <div class="flex items-center gap-2">
-                                <span>{{ req.lastName | titlecase }} {{ req.firstName | titlecase }}</span>
-                                @if (req.isRegisteredBeneficiary) {
-                                    <svg class="h-4 w-4 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" title="Registrado en el Padrón">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                    </svg>
-                                } @else {
-                                    <svg class="h-4 w-4 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" title="No Registrado (Solicitud Manual)">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                                    </svg>
-                                }
-                            </div>
+                            <span>{{ req.lastName | titlecase }} {{ req.firstName | titlecase }}</span>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600 font-mono">
                             {{ req.dni }}

@@ -116,11 +116,6 @@ export class TransportRequestForm implements OnInit {
       isRegisteredBeneficiary: this.isRegistered(),
     };
 
-    if (payload.id) {
-      this.requestService.updateRequest(payload.id, payload);
-    } else {
-      this.requestService.addRequest(payload);
-    }
     this.save.emit(payload);
   }
 
