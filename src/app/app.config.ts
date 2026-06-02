@@ -5,7 +5,8 @@ import { routes } from './app.routes';
 import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 import { HashLocationStrategy, LocationStrategy, registerLocaleData } from '@angular/common';
 import localeEs from '@angular/common/locales/es-AR';
-import { provideHttpClient, withFetch } from '@angular/common/http';
+import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
+import { authInterceptor } from './shared/services/auth.interceptor';
 
 registerLocaleData(localeEs, 'es');
 
@@ -14,7 +15,7 @@ export const appConfig: ApplicationConfig = {
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes),
     provideCharts(withDefaultRegisterables()),
-    provideHttpClient(withFetch()),
+    provideHttpClient(withFetch(), withInterceptors([authInterceptor])),
     {
       provide: LOCALE_ID,
       useValue: 'es',
