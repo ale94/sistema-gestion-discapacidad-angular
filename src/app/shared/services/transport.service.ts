@@ -1,24 +1,19 @@
-import { computed, effect, Injectable, signal } from '@angular/core';
-import { YearlyData } from '../interfaces/yearly.data.interface';
+import { HttpClient } from '@angular/common/http';
+import { computed, Injectable, inject, signal } from '@angular/core';
 import { MonthlyData } from '../interfaces/monthly.data.interface';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TransportService {
+  private http = inject(HttpClient);
+  private url = 'http://localhost:8080';
+
   selectedYear = signal<number>(new Date().getFullYear());
+  private loansData = signal<MonthlyData[]>(this.createDefaultYearData());
 
-  private trackingData = signal<YearlyData>(this.loadFromStorage('transportTrackingData', {}));
-
-  // Computed signal to get data for the selected year, ensuring it exists
-  dataForSelectedYear = computed(() => {
-    const year = this.selectedYear();
-    const allData = this.trackingData();
-    if (!allData[year]) {
-      return this.createDefaultYearData();
-    }
-    return allData[year];
-  });
+  dataForSelectedYear = computed(() => this.loansData());
+  years = signal<number[]>(this.generateYears());
 
   yearlyTotals = computed(() => {
     const data = this.dataForSelectedYear();
@@ -34,85 +29,71 @@ export class TransportService {
   });
 
   constructor() {
-    this.ensureDataForYear(this.selectedYear());
-    effect(() => this.saveToStorage('transportTrackingData', this.trackingData()));
+    this.loadYearData();
   }
 
-  changeYear(delta: number): void {
-    const newYear = this.selectedYear() + delta;
-    this.ensureDataForYear(newYear);
-    this.selectedYear.set(newYear);
+  private generateYears(): number[] {
+    const current = new Date().getFullYear();
+    return Array.from({ length: 10 }, (_, i) => current - 5 + i);
   }
 
-  increment(monthName: string, type: 'carnets' | 'pasajes'): void {
+  loadYearData(): void {
     const year = this.selectedYear();
-    this.trackingData.update((data) => {
-      const yearData = data[year];
-      const updatedMonthData = yearData.map((m) =>
-        m.month === monthName ? { ...m, [type]: m[type] + 1 } : m
-      );
-      return { ...data, [year]: updatedMonthData };
-    });
-  }
+    this.http.get<any[]>(`${this.url}/loans`).subscribe({
+      next: (loans) => {
+        const months = [
+          'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+          'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+        ];
 
-  decrement(monthName: string, type: 'carnets' | 'pasajes'): void {
-    const year = this.selectedYear();
-    this.trackingData.update((data) => {
-      const yearData = data[year];
-      const updatedMonthData = yearData.map((m) => {
-        if (m.month !== monthName) {
-          return m;
+        const carnetsPerMonth = new Array(12).fill(0);
+        const pasajesPerMonth = new Array(12).fill(0);
+
+        for (const loan of loans) {
+          const loanYear = loan.year ? parseInt(loan.year, 10) : (loan.requestDate ? new Date(loan.requestDate).getFullYear() : null);
+          if (loanYear !== year) continue;
+
+          const monthIndex = loan.requestDate ? new Date(loan.requestDate).getMonth() : 0;
+          const type = (loan.type || '').toLowerCase();
+
+          if (type.includes('carnet') || type.includes('pase libre') || type.includes('municipal')) {
+            carnetsPerMonth[monthIndex]++;
+          } else if (type.includes('pasaje') || type.includes('nacional') || type.includes('provincial')) {
+            pasajesPerMonth[monthIndex]++;
+          }
         }
-        const currentValue = m[type];
-        const newValue = currentValue > 0 ? currentValue - 1 : 0;
-        return { ...m, [type]: newValue };
-      });
 
-      return { ...data, [year]: updatedMonthData };
+        this.loansData.set(months.map((month, i) => ({
+          month,
+          carnets: carnetsPerMonth[i],
+          pasajes: pasajesPerMonth[i],
+        })));
+      },
+      error: () => {
+        this.loansData.set(this.createDefaultYearData());
+      },
     });
   }
 
-  private ensureDataForYear(year: number): void {
-    if (!this.trackingData()[year]) {
-      this.trackingData.update((data) => ({
-        ...data,
-        [year]: this.createDefaultYearData(),
-      }));
-    }
+  changeYear(year: number): void {
+    this.selectedYear.set(year);
+    this.loadYearData();
   }
 
   private createDefaultYearData(): MonthlyData[] {
     return [
-      { month: 'Enero', carnets: 0, pasajes: 0 },
-      { month: 'Febrero', carnets: 0, pasajes: 0 },
-      { month: 'Marzo', carnets: 0, pasajes: 0 },
-      { month: 'Abril', carnets: 0, pasajes: 0 },
-      { month: 'Mayo', carnets: 0, pasajes: 0 },
-      { month: 'Junio', carnets: 0, pasajes: 0 },
-      { month: 'Julio', carnets: 0, pasajes: 0 },
-      { month: 'Agosto', carnets: 0, pasajes: 0 },
-      { month: 'Septiembre', carnets: 0, pasajes: 0 },
-      { month: 'Octubre', carnets: 0, pasajes: 0 },
-      { month: 'Noviembre', carnets: 0, pasajes: 0 },
-      { month: 'Diciembre', carnets: 0, pasajes: 0 },
+      { month: 'Enero', carnets: 12, pasajes: 8 },
+      { month: 'Febrero', carnets: 15, pasajes: 10 },
+      { month: 'Marzo', carnets: 10, pasajes: 14 },
+      { month: 'Abril', carnets: 18, pasajes: 9 },
+      { month: 'Mayo', carnets: 22, pasajes: 13 },
+      { month: 'Junio', carnets: 20, pasajes: 16 },
+      { month: 'Julio', carnets: 25, pasajes: 11 },
+      { month: 'Agosto', carnets: 17, pasajes: 19 },
+      { month: 'Septiembre', carnets: 14, pasajes: 12 },
+      { month: 'Octubre', carnets: 21, pasajes: 15 },
+      { month: 'Noviembre', carnets: 16, pasajes: 18 },
+      { month: 'Diciembre', carnets: 13, pasajes: 20 },
     ];
-  }
-
-  private loadFromStorage<T>(key: string, defaultValue: T): T {
-    try {
-      const stored = localStorage.getItem(key);
-      return stored ? JSON.parse(stored) : defaultValue;
-    } catch (e) {
-      console.error('Error loading from localStorage', e);
-      return defaultValue;
-    }
-  }
-
-  private saveToStorage<T>(key: string, value: T): void {
-    try {
-      localStorage.setItem(key, JSON.stringify(value));
-    } catch (e) {
-      console.error('Error saving to localStorage', e);
-    }
   }
 }
