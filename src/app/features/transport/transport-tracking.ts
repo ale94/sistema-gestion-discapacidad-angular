@@ -5,11 +5,12 @@ import { TransportService } from '../../shared/services/transport.service';
 import { TransportRequestService } from '../../shared/services/transport-request.service';
 import { TransportRequest, TransportRequestStatus } from '../../shared/interfaces/transport-request.interface';
 import { TransportRequestForm } from './requests/form/transport-request-form';
+import { TransportRequestRenew } from './requests/renew/transport-request-renew';
 
 @Component({
   selector: 'transport-tracking',
   standalone: true,
-  imports: [CommonModule, FormsModule, TransportRequestForm],
+  imports: [CommonModule, FormsModule, TransportRequestForm, TransportRequestRenew],
   templateUrl: './transport-tracking.html',
 })
 export default class TransportTracking {
@@ -48,6 +49,7 @@ export default class TransportTracking {
   // Requests Logic
   showRequestModal = signal<boolean>(false);
   selectedRequest = signal<TransportRequest | null>(null);
+  showRenewModal = signal<boolean>(false);
 
   pageSize = 5;
   currentPage = signal<number>(1);
@@ -97,6 +99,19 @@ export default class TransportTracking {
   closeRequestModal() {
     this.showRequestModal.set(false);
     this.selectedRequest.set(null);
+  }
+
+  openRenewModal() {
+    this.showRenewModal.set(true);
+  }
+
+  closeRenewModal() {
+    this.showRenewModal.set(false);
+  }
+
+  handleRenew(req: TransportRequest) {
+    this.requestService.addRequest(req);
+    this.closeRenewModal();
   }
 
   saveRequest(req: TransportRequest) {

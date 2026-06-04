@@ -98,7 +98,9 @@ export class PersonForm {
           lastName: [family.lastName || '', Validators.required],
           dni: [family.dni || '', Validators.required],
           age: [family.age || '', Validators.required],
-          parentage: [family.parentage || '', Validators.required]
+          civilStatus: [family.civilStatus || ''],
+          parentage: [family.parentage || '', Validators.required],
+          occupation: [family.occupation || '']
         })) || [])
     });
   }
@@ -108,7 +110,16 @@ export class PersonForm {
     if (this.personForm.valid) {
       const formValue = this.personForm.value;
       if (this.isEditMode && this.person()) {
-        this.save.emit({ ...this.person(), ...formValue });
+        const original = this.person()!;
+        this.save.emit({
+          ...original,
+          ...formValue,
+          address: { ...original.address, ...formValue.address },
+          health: { ...original.health, ...formValue.health },
+          work: { ...original.work, ...formValue.work },
+          education: { ...original.education, ...formValue.education },
+          benefit: { ...original.benefit, ...formValue.benefit },
+        });
       } else {
         this.save.emit(formValue);
       }
@@ -125,12 +136,12 @@ export class PersonForm {
 
   createFamily(): FormGroup {
     return this.fb.group({
-      firstName: [''],
-      lastName: [''],
-      dni: [''],
-      age: [''],
+      firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
+      dni: ['', Validators.required],
+      age: ['', Validators.required],
       civilStatus: [''],
-      parentage: [''],
+      parentage: ['', Validators.required],
       occupation: ['']
     });
   }

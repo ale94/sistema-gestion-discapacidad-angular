@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
-import { catchError, Observable, tap, throwError } from 'rxjs';
+import { catchError, Observable, of, tap, throwError } from 'rxjs';
 import { Person } from '../interfaces/person';
 
 @Injectable({
@@ -20,12 +20,14 @@ export class PersonService {
     this.http.get<Person[]>(`${this.url}/persons`)
       .pipe(
         catchError(() => {
-          const mock = this.getMockData();
-          this.persons.set(mock);
-          return [];
+          this.persons.set(this.getMockData());
+          return of(null);
         }),
         tap((data) => {
-          const normalized = (data ?? []).map(p => ({ ...p, dni: Number(p.dni) }));
+          if (data === null) {
+            return;
+          }
+          const normalized = data.map(p => ({ ...p, dni: Number(p.dni) }));
           this.persons.set(normalized.length ? normalized : this.getMockData());
         })
       )
@@ -55,7 +57,11 @@ export class PersonService {
           this.persons.update((persons) =>
             persons.map((p) => (p.id === person.id ? person : p)))
         ),
-        catchError(() => {
+        catchError((err) => {
+          console.error('HTTP error en updatePerson:', err.status, err.statusText, err.error);
+          this.persons.update((persons) =>
+            persons.map((p) => (p.id === updatedPerson.id ? updatedPerson : p))
+          );
           return throwError(() => new Error("No se pudo actualizar una persona"))
         })
       )

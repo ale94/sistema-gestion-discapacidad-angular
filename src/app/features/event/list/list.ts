@@ -76,12 +76,14 @@ export default class List {
   }
 
   handleSave(eventData: Event) {
-    if ('id' in eventData) {
-      this.eventService.updateEvent(eventData).subscribe();
-    } else {
-      this.eventService.addEvent(eventData).subscribe();
-    }
-    this.closeModal();
+    const request$ = 'id' in eventData
+      ? this.eventService.updateEvent(eventData)
+      : this.eventService.addEvent(eventData);
+
+    request$.subscribe({
+      next: () => this.closeModal(),
+      error: () => alert('Error al guardar el evento. Intente nuevamente.')
+    });
   }
 
   requestDelete(event: Event): void {
@@ -90,8 +92,10 @@ export default class List {
 
   confirmDeleteAction(): void {
     if (this.eventToDelete()) {
-      this.eventService.deleteEvent(this.eventToDelete()!.id).subscribe();
-      this.cancelDelete();
+      this.eventService.deleteEvent(this.eventToDelete()!.id).subscribe({
+        next: () => this.cancelDelete(),
+        error: () => alert('Error al eliminar el evento. Intente nuevamente.')
+      });
     }
   }
 

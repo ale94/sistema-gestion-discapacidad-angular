@@ -41,6 +41,11 @@ export class TransportService {
     const year = this.selectedYear();
     this.http.get<any[]>(`${this.url}/loans`).subscribe({
       next: (loans) => {
+        if (!loans || loans.length === 0) {
+          this.loansData.set(this.createDefaultYearData());
+          return;
+        }
+
         const months = [
           'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
           'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
