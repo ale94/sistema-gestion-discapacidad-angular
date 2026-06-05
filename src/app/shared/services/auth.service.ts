@@ -1,44 +1,102 @@
+import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
+import { Observable, tap } from 'rxjs';
 
-function simpleHash(text: string): string {
-  return btoa(text).substring(0, 15);
+interface LoginRequest {
+  username: string;
+  password: string;
+}
+
+interface LoginResponse {
+  token: string;
 }
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  HASHED_USERS = [
-    { username: 'eugenia', position: 'directora', passwordHash: simpleHash('admin') },
-    { username: 'maria', position: 'administrativa', passwordHash: simpleHash('1234') },
-  ];
-  isAuthenticated = signal<boolean>(sessionStorage.getItem('is_authenticated') === 'true');
-  username = signal<string | null>(sessionStorage.getItem('username'));
-  private router: Router = inject(Router);
+  private readonly apiUrl = 'http://localhost:8080';
+  private readonly tokenStorageKey = 'auth_token';
+  private readonly usernameStorageKey = 'username';
 
-  login(username: string, password: string): boolean {
-    const user = this.HASHED_USERS.find((u) => u.username === username);
-    const passwordHash = simpleHash(password);
+  private http = inject(HttpClient);
+  private router = inject(Router);
 
-    if (user && user.passwordHash === passwordHash) {
-      sessionStorage.setItem('is_authenticated', 'true');
-      sessionStorage.setItem('username', username);
+  token = signal<string | null>(sessionStorage.getItem(this.tokenStorageKey));
+  username = signal<string | null>(sessionStorage.getItem(this.usernameStorageKey));
+  isAuthenticated = signal<boolean>(false);
 
-      this.username.set(username);
-      this.isAuthenticated.set(true);
-      return true;
-    }
-    return false;
+  constructor() {
+    this.restoreSession();
+  }
+
+  login(username: string, password: string): Observable<LoginResponse> {
+    const payload: LoginRequest = { username, password };
+
+    return this.http.post<LoginResponse>(`${this.apiUrl}/auth/login`, payload).pipe(
+      tap((response) => {
+        this.saveSession(response.token, username);
+      }),
+    );
   }
 
   logout(): void {
-    sessionStorage.removeItem('is_authenticated');
-    sessionStorage.removeItem('username');
+    this.clearSession();
+    this.router.navigate(['/login']);
+  }
 
+  private restoreSession(): void {
+    const token = sessionStorage.getItem(this.tokenStorageKey);
+    const username = sessionStorage.getItem(this.usernameStorageKey);
+
+    if (token && this.isTokenValid(token)) {
+      this.token.set(token);
+      this.username.set(username);
+      this.isAuthenticated.set(true);
+      return;
+    }
+
+    this.clearSession();
+  }
+
+  private saveSession(token: string, username: string): void {
+    sessionStorage.setItem(this.tokenStorageKey, token);
+    sessionStorage.setItem(this.usernameStorageKey, username);
+
+    this.token.set(token);
+    this.username.set(username);
+    this.isAuthenticated.set(true);
+  }
+
+  private clearSession(): void {
+    sessionStorage.removeItem(this.tokenStorageKey);
+    sessionStorage.removeItem(this.usernameStorageKey);
+
+    this.token.set(null);
     this.username.set(null);
     this.isAuthenticated.set(false);
-    this.router.navigate(['/login']);
+  }
+
+  private isTokenValid(token: string): boolean {
+    try {
+      const payload = token.split('.')[1];
+      if (!payload) {
+        return false;
+      }
+
+      const normalizedPayload = payload.replace(/-/g, '+').replace(/_/g, '/');
+      const jsonPayload = JSON.parse(atob(normalizedPayload));
+      const expiration = jsonPayload.exp;
+
+      if (typeof expiration !== 'number') {
+        return true;
+      }
+
+      return Date.now() < expiration * 1000;
+    } catch {
+      return false;
+    }
   }
 }
 

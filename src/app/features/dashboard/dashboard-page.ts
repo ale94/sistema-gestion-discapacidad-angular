@@ -5,6 +5,8 @@ import { DatePipe, DecimalPipe, TitleCasePipe } from '@angular/common';
 import { PersonService } from '../../shared/services/person.service';
 import { PersonTrackingService } from '../../shared/services/person-tracking.service';
 import { LoanEquipmentService } from '../../shared/services/loan.equipment.service';
+import { AuthService } from '../../shared/services/auth.service';
+import { UserService } from '../../shared/services/user.service';
 
 @Component({
   selector: 'dashboard-page',
@@ -17,6 +19,18 @@ export default class DashboardPage {
   private personService = inject(PersonService);
   private personTrackingService = inject(PersonTrackingService);
   private loanEquipmentService = inject(LoanEquipmentService);
+  private authService = inject(AuthService);
+  private userService = inject(UserService);
+
+  displayName = computed(() => {
+    const username = this.authService.username();
+    if (!username) {
+      return 'Usuario';
+    }
+
+    const user = this.userService.users().find((u) => u.userName === username);
+    return user?.firstName ?? username;
+  });
 
   totalPeople = computed(() => this.personService.persons().length);
   withCUD = computed(() => this.personService.persons().filter((p) => p.health?.activeCud).length);
