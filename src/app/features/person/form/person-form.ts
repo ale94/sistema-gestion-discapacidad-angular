@@ -94,10 +94,10 @@ export class PersonForm {
 
       familyMembers: this.fb.array(currentPerson?.familyMembers?.map(family =>
         this.fb.group({
-          firstName: [family.firstName || '', Validators.required],
-          lastName: [family.lastName || '', Validators.required],
+          fullName: [family.fullName || '', Validators.required],
           dni: [family.dni || '', Validators.required],
-          age: [family.age || '', Validators.required],
+          dateBirth: [family.dateBirth || '', Validators.required],
+          phone: [family.phone || '', Validators.required],
           parentage: [family.parentage || '', Validators.required]
         })) || [])
     });
@@ -125,13 +125,11 @@ export class PersonForm {
 
   createFamily(): FormGroup {
     return this.fb.group({
-      firstName: [''],
-      lastName: [''],
+      fullName: [''],
       dni: [''],
-      age: [''],
-      civilStatus: [''],
-      parentage: [''],
-      occupation: ['']
+      dateBirth: [''],
+      phone: [''],
+      parentage: ['']
     });
   }
 
