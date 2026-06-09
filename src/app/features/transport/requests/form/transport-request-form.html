@@ -15,8 +15,19 @@
   <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col flex-1 overflow-hidden">
     <div class="p-4 sm:p-6 overflow-y-auto custom-scrollbar flex-1 space-y-6">
 
+      <!-- Searching -->
+      @if (searching()) {
+        <div class="flex items-center justify-center gap-3 py-6 text-teal-600">
+          <svg class="animate-spin h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+          </svg>
+          <span class="font-medium">Buscando persona...</span>
+        </div>
+      }
+
       <!-- Validation Badge -->
-      @if (checkDone()) {
+      @if (checkDone() && !searching()) {
         <div class="p-4 rounded-xl flex items-center gap-3 border"
              [ngClass]="isRegistered() ? 'bg-green-50 border-green-200 text-green-800' : 'bg-amber-50 border-amber-200 text-amber-800'">
           @if (isRegistered()) {
@@ -39,7 +50,7 @@
         </div>
       }
 
-      @if (lookupError()) {
+      @if (lookupError() && !searching()) {
         <p class="text-amber-700 text-sm font-medium">{{ lookupError() }}</p>
       }
 

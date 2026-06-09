@@ -18,13 +18,24 @@ export default class LoginPage {
   username = signal('');
   password = signal('');
   errorMessage = signal<string | null>(null);
+  loading = signal(false);
 
   login(): void {
     this.errorMessage.set(null);
-    if (this.authService.login(this.username(), this.password())) {
-      this.router.navigate(['/dashboard']);
-    } else {
-      this.errorMessage.set('Credenciales inválidas. Intente nuevamente.');
-    }
+    this.loading.set(true);
+    this.authService.login(this.username(), this.password()).subscribe({
+      next: (ok) => {
+        this.loading.set(false);
+        if (ok) {
+          this.router.navigate(['/dashboard']);
+        } else {
+          this.errorMessage.set('Credenciales inválidas. Intente nuevamente.');
+        }
+      },
+      error: () => {
+        this.loading.set(false);
+        this.errorMessage.set('Error de conexión con el servidor.');
+      }
+    });
   }
 }

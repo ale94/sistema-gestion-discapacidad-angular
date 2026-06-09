@@ -1,41 +1,40 @@
 import { inject, Injectable, signal } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-
-function simpleHash(text: string): string {
-  return btoa(text).substring(0, 15);
-}
+import { catchError, map, Observable, of, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  HASHED_USERS = [
-    { username: 'eugenia', position: 'directora', passwordHash: simpleHash('admin') },
-    { username: 'maria', position: 'administrativa', passwordHash: simpleHash('1234') },
-  ];
-  isAuthenticated = signal<boolean>(sessionStorage.getItem('is_authenticated') === 'true');
-  username = signal<string | null>(sessionStorage.getItem('username'));
+  private http = inject(HttpClient);
   private router: Router = inject(Router);
+  private url = 'http://localhost:8080';
 
-  login(username: string, password: string): boolean {
-    const user = this.HASHED_USERS.find((u) => u.username === username);
-    const passwordHash = simpleHash(password);
+  token = signal<string | null>(sessionStorage.getItem('jwt_token'));
+  isAuthenticated = signal<boolean>(!!this.token());
+  username = signal<string | null>(sessionStorage.getItem('username'));
 
-    if (user && user.passwordHash === passwordHash) {
-      sessionStorage.setItem('is_authenticated', 'true');
-      sessionStorage.setItem('username', username);
-
-      this.username.set(username);
-      this.isAuthenticated.set(true);
-      return true;
-    }
-    return false;
+  login(username: string, password: string): Observable<boolean> {
+    return this.http.post<{ token: string }>(`${this.url}/auth/login`, { username, password }).pipe(
+      tap((res) => {
+        sessionStorage.setItem('jwt_token', res.token);
+        sessionStorage.setItem('username', username);
+        this.token.set(res.token);
+        this.username.set(username);
+        this.isAuthenticated.set(true);
+      }),
+      map(() => true),
+      catchError(() => {
+        return of(false);
+      })
+    );
   }
 
   logout(): void {
-    sessionStorage.removeItem('is_authenticated');
+    sessionStorage.removeItem('jwt_token');
     sessionStorage.removeItem('username');
-
+    this.token.set(null);
     this.username.set(null);
     this.isAuthenticated.set(false);
     this.router.navigate(['/login']);

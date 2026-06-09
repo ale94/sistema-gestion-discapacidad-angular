@@ -18,6 +18,12 @@ export default class DashboardPage {
   private personTrackingService = inject(PersonTrackingService);
   private loanEquipmentService = inject(LoanEquipmentService);
 
+  constructor() {
+    this.personService.loadPersons();
+    this.personTrackingService.loadPersons();
+    this.loanEquipmentService.loadLoans();
+  }
+
   totalPeople = computed(() => this.personService.persons().length);
   withCUD = computed(() => this.personService.persons().filter((p) => p.health?.activeCud).length);
   withPaseLibre = computed(

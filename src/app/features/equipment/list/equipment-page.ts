@@ -22,6 +22,8 @@ export default class EquipmentPage {
   loanToReturn = signal<LoanEquipment | null>(null);
   loanToUndo = signal<LoanEquipment | null>(null);
   searchTerm = signal('');
+  searchInput = signal('');
+  searching = signal(false);
 
   filteredLoan = computed(() => {
     const term = this.searchTerm().toLowerCase().trim();
@@ -29,15 +31,26 @@ export default class EquipmentPage {
     return this.loanEquipmentService.loans().filter((loan) => {
       const matchesText =
         !term ||
-        loan.applicant.toLowerCase().includes(term) ||
-        loan.type.toLowerCase().includes(term) ||
-        loan.dni.toString().includes(term);
+        (loan.applicant ?? '').toLowerCase().includes(term) ||
+        (loan.type ?? '').toLowerCase().includes(term) ||
+        (loan.dni ?? '').toString().includes(term);
       return matchesText;
     });
   });
 
-  onSearchChange(term: string) {
-    this.searchTerm.set(term);
+  onSearchInput(term: string) {
+    this.searchInput.set(term);
+    if (!term.trim()) {
+      this.searchTerm.set('');
+    }
+  }
+
+  doSearch() {
+    this.searching.set(true);
+    setTimeout(() => {
+      this.searchTerm.set(this.searchInput());
+      this.searching.set(false);
+    }, 2000);
   }
 
   openAddModal() {

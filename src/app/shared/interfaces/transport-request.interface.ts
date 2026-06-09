@@ -28,4 +28,5 @@ export interface TransportRequest {
   observations: string;
   createdAt: string;
   isRegisteredBeneficiary?: boolean;
+  freePassExpiration?: string;
 }

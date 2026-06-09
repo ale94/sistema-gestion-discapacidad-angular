@@ -5,4 +5,5 @@ export interface Benefit {
   auh: boolean;
   merchandise: boolean;
   freePass: boolean;
+  freePassExpiration?: string;
 }

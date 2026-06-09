@@ -2,7 +2,6 @@ import { Component, EventEmitter, Output, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { PersonService } from '../../../../shared/services/person.service';
-import { TransportRequestService } from '../../../../shared/services/transport-request.service';
 import { TransportRequest, TransportRequestType, TransportRequestStatus } from '../../../../shared/interfaces/transport-request.interface';
 import { Person } from '../../../../shared/interfaces/person';
 
@@ -18,7 +17,6 @@ export class TransportRequestRenew {
 
   private fb = inject(FormBuilder);
   private personService = inject(PersonService);
-  private requestService = inject(TransportRequestService);
 
   form: FormGroup;
   foundPerson = signal<Person | null>(null);
@@ -33,6 +31,7 @@ export class TransportRequestRenew {
       lastName: [{ value: '', disabled: true }, Validators.required],
       address: [{ value: '', disabled: true }, Validators.required],
       phone: [{ value: '', disabled: true }, Validators.required],
+      freePassExpiration: [''],
     });
   }
 
@@ -55,6 +54,7 @@ export class TransportRequestRenew {
           lastName: person.lastName,
           address: `${person.address?.street ?? ''} ${person.address?.district ?? ''}, ${person.address?.locality ?? ''}`,
           phone: String(person.phone ?? ''),
+          freePassExpiration: person.benefit?.freePassExpiration ?? '',
         }, { emitEvent: false });
         this.foundPerson.set(person);
         this.checkDone.set(true);
@@ -65,7 +65,7 @@ export class TransportRequestRenew {
         this.lookupError.set('No se encontró el DNI en el padrón.');
       }
       this.searching.set(false);
-    }, 150);
+    }, 2000);
   }
 
   onSubmit() {
@@ -88,6 +88,7 @@ export class TransportRequestRenew {
       observations: 'Solicitud de renovación',
       createdAt: new Date().toISOString(),
       isRegisteredBeneficiary: !!this.foundPerson(),
+      freePassExpiration: raw.freePassExpiration || undefined,
     };
 
     this.renew.emit(payload);

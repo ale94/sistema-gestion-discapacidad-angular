@@ -2,7 +2,6 @@ import { Component, EventEmitter, Input, Output, inject, signal, effect, OnInit 
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TransportRequest, TransportRequestStatus, TransportRequestType } from '../../../../shared/interfaces/transport-request.interface';
-import { TransportRequestService } from '../../../../shared/services/transport-request.service';
 import { PersonService } from '../../../../shared/services/person.service';
 import { Person } from '../../../../shared/interfaces/person';
 
@@ -18,7 +17,6 @@ export class TransportRequestForm implements OnInit {
   @Output() cancel = new EventEmitter<void>();
 
   private fb = inject(FormBuilder);
-  private requestService = inject(TransportRequestService);
   private personService = inject(PersonService);
 
   form: FormGroup;
@@ -88,7 +86,7 @@ export class TransportRequestForm implements OnInit {
         this.lookupError.set('No se encontró el DNI en el padrón. Se guardará como solicitud manual.');
       }
       this.searching.set(false);
-    }, 150);
+    }, 2000);
   }
 
   onSubmit() {

@@ -90,6 +90,7 @@ export class PersonForm {
         auh: [currentPerson?.benefit?.auh ?? false],
         merchandise: [currentPerson?.benefit?.merchandise ?? false],
         freePass: [currentPerson?.benefit?.freePass ?? false],
+        freePassExpiration: [currentPerson?.benefit?.freePassExpiration ?? ''],
       }),
 
       familyMembers: this.fb.array(currentPerson?.familyMembers?.map(family =>

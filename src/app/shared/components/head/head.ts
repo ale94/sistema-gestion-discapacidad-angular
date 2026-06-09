@@ -1,4 +1,4 @@
-import { Component, computed, inject, output } from '@angular/core';
+import { Component, inject, output } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
@@ -10,6 +10,4 @@ import { AuthService } from '../../services/auth.service';
 export class Head {
   toggleMobileSidebar = output<void>();
   authService = inject(AuthService);
-  username = computed(() => this.authService.username());
-  user = this.authService.HASHED_USERS.find((u) => u.username === this.username());
 }
