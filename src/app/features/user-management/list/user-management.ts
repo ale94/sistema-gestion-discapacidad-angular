@@ -3,11 +3,11 @@ import { UserService } from '../../../shared/services/user.service';
 import { User } from '../../../shared/interfaces/user';
 import { FormsModule } from '@angular/forms';
 import { UserForm } from "../user-form/user-form";
-import { TitleCasePipe } from '@angular/common';
+import { DecimalPipe, TitleCasePipe } from '@angular/common';
 
 @Component({
   selector: 'user-management',
-  imports: [FormsModule, UserForm, TitleCasePipe],
+  imports: [FormsModule, UserForm, TitleCasePipe, DecimalPipe],
   templateUrl: './user-management.html',
 })
 export default class UserManagement {

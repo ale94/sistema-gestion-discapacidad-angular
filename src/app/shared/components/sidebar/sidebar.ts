@@ -2,6 +2,8 @@ import { Component, inject, output } from '@angular/core';
 
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { UserService } from '../../services/user.service';
+import { catchError, map, of, pipe } from 'rxjs';
 
 @Component({
   selector: 'sidebar',
@@ -22,6 +24,7 @@ import { AuthService } from '../../services/auth.service';
 })
 export class Sidebar {
   authService = inject(AuthService);
+  userService = inject(UserService);
   linkClicked = output<void>();
 
   LinkClicked(): void {
@@ -34,5 +37,22 @@ export class Sidebar {
   logout(): void {
     this.authService.logout();
     this.LinkClicked(); // Also close sidebar on logout
+  }
+
+  isCurrentUserAdmin(): boolean {
+    const currentUsername = this.authService.username();
+    if (!currentUsername) {
+      return false;
+    }
+
+    const users = this.userService.users();
+
+    if (!users || users.length === 0) {
+      return false
+    }
+
+    const userFound = users.find((u) => u.userName === currentUsername);
+
+    return !!userFound && userFound.role?.toUpperCase() === 'ADMIN';
   }
 }
