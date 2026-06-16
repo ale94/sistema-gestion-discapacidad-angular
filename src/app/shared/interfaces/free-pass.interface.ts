@@ -7,6 +7,7 @@ export interface FreePassRequest {
 export interface FreePassResponse {
   id: number;
   personId: number;
+  dni: number;
   fullName: string;
   reason: string;
   active: boolean;
@@ -41,6 +42,7 @@ export interface NationalFreePassRequest {
 export interface NationalFreePassResponse {
   id: number;
   personId: number;
+  dni: number;
   fullName: string;
   tripDate: string;
   ticketQuantity: number;

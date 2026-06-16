@@ -35,6 +35,12 @@ export class PersonService {
     return this.persons().find(p => String(p.dni) === normalized);
   }
 
+  findByDniHttp(dni: string): Observable<Person> {
+    return this.http.get<Person>(`${this.url}/persons/dni/${dni}`).pipe(
+      catchError(err => throwError(() => err))
+    );
+  }
+
   addPerson(person: Person): Observable<Person> {
     return this.http.post<Person>(`${this.url}/persons`, person)
       .pipe(

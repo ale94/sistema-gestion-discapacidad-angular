@@ -1,3 +1,16 @@
+@if (!systemReady()) {
+  <div class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-gradient-to-br from-teal-600 to-teal-800">
+    <div class="flex flex-col items-center gap-6">
+      <svg class="animate-spin h-16 w-16 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+      </svg>
+      <h1 class="text-3xl sm:text-4xl font-bold text-white tracking-wider">BIENVENIDA</h1>
+      <p class="text-xl text-teal-200 font-medium animate-pulse">INICIANDO SISTEMA...</p>
+    </div>
+  </div>
+}
+
 <div class="container mx-auto">
   <div class="mb-8">
     <h1 class="text-2xl sm:text-3xl md:text-3xl font-bold text-slate-900">

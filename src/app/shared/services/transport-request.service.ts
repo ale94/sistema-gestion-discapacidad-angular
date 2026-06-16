@@ -58,7 +58,7 @@ export class TransportRequestService {
     const names = this.splitFullName(fp.fullName);
     return {
       id: `fp-${fp.id}`,
-      dni: '',
+      dni: String(fp.dni ?? ''),
       firstName: names.first,
       lastName: names.last,
       dateBirth: '',
@@ -77,7 +77,7 @@ export class TransportRequestService {
     const names = this.splitFullName(np.fullName);
     return {
       id: `np-${np.id}`,
-      dni: '',
+      dni: String(np.dni ?? ''),
       firstName: names.first,
       lastName: names.last,
       dateBirth: '',

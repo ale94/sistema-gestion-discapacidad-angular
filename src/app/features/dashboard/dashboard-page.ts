@@ -1,4 +1,4 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 import { DatePipe, DecimalPipe, TitleCasePipe } from '@angular/common';
@@ -22,6 +22,8 @@ export default class DashboardPage {
   private authService = inject(AuthService);
   private userService = inject(UserService);
 
+  systemReady = signal(false);
+
   displayName = computed(() => {
     const username = this.authService.username();
     if (!username) {
@@ -36,6 +38,18 @@ export default class DashboardPage {
     this.personService.loadPersons();
     this.personTrackingService.loadPersons();
     this.loanEquipmentService.loadLoans();
+
+    Promise.all([
+      new Promise<void>(resolve => {
+        const interval = setInterval(() => {
+          if (!this.personService.loading()) {
+            clearInterval(interval);
+            resolve();
+          }
+        }, 100);
+      }),
+      new Promise<void>(resolve => setTimeout(resolve, 2000)),
+    ]).then(() => this.systemReady.set(true));
   }
 
   totalPeople = computed(() => this.personService.persons().length);
