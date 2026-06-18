@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { catchError, Observable, of, tap, throwError } from 'rxjs';
 import { Person } from '../interfaces/person';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -9,7 +10,7 @@ import { Person } from '../interfaces/person';
 export class PersonService {
 
   private http = inject(HttpClient);
-  private url = 'http://localhost:8080';
+  private url = environment.apiUrl;
   persons = signal<Person[]>([]);
   loading = signal(false);
 

@@ -2,6 +2,7 @@ import { effect, inject, Injectable, signal } from '@angular/core';
 import { Event } from '../interfaces/event';
 import { HttpClient } from '@angular/common/http';
 import { catchError, tap, throwError } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -9,7 +10,7 @@ import { catchError, tap, throwError } from 'rxjs';
 export class EventService {
 
   private http = inject(HttpClient);
-  private url = "http://localhost:8080";
+  private url = environment.apiUrl;
   events = signal<Event[]>(this.loadFromStorage<Event[]>('appEvents', []));
 
   constructor() {

@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { catchError, Observable, of, tap, throwError } from 'rxjs';
 import { FreePassRenewalRequest, FreePassRenewalResponse, FreePassRequest, FreePassResponse, FreePassStatusRequest, NationalFreePassRequest, NationalFreePassResponse } from '../interfaces/free-pass.interface';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +10,7 @@ import { FreePassRenewalRequest, FreePassRenewalResponse, FreePassRequest, FreeP
 export class FreePassService {
 
   private http = inject(HttpClient);
-  private url = 'http://localhost:8080';
+  private url = environment.apiUrl;
 
   freePasses = signal<FreePassResponse[]>([]);
   nationalFreePasses = signal<NationalFreePassResponse[]>([]);
