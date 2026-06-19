@@ -28,6 +28,8 @@ export class AuthService {
   token = signal<string | null>(sessionStorage.getItem(this.tokenStorageKey));
   username = signal<string | null>(sessionStorage.getItem(this.usernameStorageKey));
   isAuthenticated = signal<boolean>(false);
+  systemReady = signal(false);
+  hasVisitedDashboard = signal(false);
 
   constructor() {
     this.restoreSession();
@@ -69,6 +71,8 @@ export class AuthService {
     this.token.set(token);
     this.username.set(username);
     this.isAuthenticated.set(true);
+    this.hasVisitedDashboard.set(false);
+    this.systemReady.set(false);
   }
 
   private clearSession(): void {
@@ -78,6 +82,8 @@ export class AuthService {
     this.token.set(null);
     this.username.set(null);
     this.isAuthenticated.set(false);
+    this.hasVisitedDashboard.set(false);
+    this.systemReady.set(false);
   }
 
   private isTokenValid(token: string): boolean {
