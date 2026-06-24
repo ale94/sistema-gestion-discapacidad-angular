@@ -1,20 +1,35 @@
-import { Component, inject, signal, computed } from '@angular/core';
+import { Component, effect, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TransportService } from '../../shared/services/transport.service';
 import { TransportRequestService } from '../../shared/services/transport-request.service';
+import { FreePassService } from '../../shared/services/free-pass.service';
 import { TransportRequest, TransportRequestStatus } from '../../shared/interfaces/transport-request.interface';
 import { TransportRequestForm } from './requests/form/transport-request-form';
+import { TransportRequestRenew } from './requests/renew/transport-request-renew';
 
 @Component({
   selector: 'transport-tracking',
   standalone: true,
-  imports: [CommonModule, FormsModule, TransportRequestForm],
+  imports: [CommonModule, FormsModule, TransportRequestForm, TransportRequestRenew],
   templateUrl: './transport-tracking.html',
 })
 export default class TransportTracking {
   transportService = inject(TransportService);
   requestService = inject(TransportRequestService);
+  freePassService = inject(FreePassService);
+
+  constructor() {
+    this.freePassService.loadAll();
+    effect(() => {
+      const data = this.freePassService.freePasses();
+      const national = this.freePassService.nationalFreePasses();
+      if (data.length > 0 || national.length > 0) {
+        this.requestService.syncFromBackend();
+        this.transportService.refresh();
+      }
+    });
+  }
 
   // Tabs
   activeTab = signal<'TRACKING' | 'REQUESTS'>('TRACKING');
@@ -48,17 +63,30 @@ export default class TransportTracking {
   // Requests Logic
   showRequestModal = signal<boolean>(false);
   selectedRequest = signal<TransportRequest | null>(null);
+  showRenewModal = signal<boolean>(false);
+
+  searchTerm = signal('');
+  searchInput = signal('');
+  searching = signal(false);
 
   pageSize = 5;
   currentPage = signal<number>(1);
 
+  filteredRequests = computed(() => {
+    const term = this.searchTerm().toLowerCase().trim();
+    return this.requestService.requests().filter(req => {
+      const name = `${req.lastName ?? ''} ${req.firstName ?? ''}`.toLowerCase();
+      return !term || name.includes(term) || (req.dni ?? '').toString().includes(term);
+    });
+  });
+
   pagedRequests = computed(() => {
     const start = (this.currentPage() - 1) * this.pageSize;
-    return this.requestService.requests().slice(start, start + this.pageSize);
+    return this.filteredRequests().slice(start, start + this.pageSize);
   });
 
   totalPages = computed(() => {
-    return Math.max(1, Math.ceil(this.requestService.requests().length / this.pageSize));
+    return Math.max(1, Math.ceil(this.filteredRequests().length / this.pageSize));
   });
 
   pages = computed(() => {
@@ -83,11 +111,28 @@ export default class TransportTracking {
   }
 
   pageInfo = computed(() => {
-    const total = this.requestService.requests().length;
+    const total = this.filteredRequests().length;
     const start = (this.currentPage() - 1) * this.pageSize + 1;
     const end = Math.min(this.currentPage() * this.pageSize, total);
     return { start, end, total, hasPages: total > this.pageSize };
   });
+
+  onSearchInput(term: string) {
+    this.searchInput.set(term);
+    if (!term.trim()) {
+      this.searchTerm.set('');
+      this.currentPage.set(1);
+    }
+  }
+
+  doSearch() {
+    this.searching.set(true);
+    setTimeout(() => {
+      this.searchTerm.set(this.searchInput());
+      this.currentPage.set(1);
+      this.searching.set(false);
+    }, 2000);
+  }
 
   openRequestModal(req?: TransportRequest) {
     this.selectedRequest.set(req || null);
@@ -97,6 +142,62 @@ export default class TransportTracking {
   closeRequestModal() {
     this.showRequestModal.set(false);
     this.selectedRequest.set(null);
+  }
+
+  openRenewModal() {
+    this.showRenewModal.set(true);
+  }
+
+  closeRenewModal() {
+    this.showRenewModal.set(false);
+  }
+
+  handleRenew(req: TransportRequest) {
+    const person = this.freePassService.freePasses().find(fp =>
+      fp.fullName.toLowerCase().includes(req.lastName.toLowerCase()) &&
+      fp.fullName.toLowerCase().includes(req.firstName.toLowerCase())
+    );
+
+    if (person) {
+      this.freePassService.createRenewal({
+        freePassId: person.id,
+        year: new Date().getFullYear(),
+      }).subscribe({
+        next: () => {
+          this.freePassService.loadAll();
+          this.closeRenewModal();
+        },
+        error: (err) => {
+          console.error('Error creating renewal:', err);
+          alert('Error al crear la renovación. Es posible que ya exista una para este año.');
+        }
+      });
+    } else {
+      const persons = this.freePassService.freePasses();
+      const matched = persons.find(p => {
+        const name = `${req.lastName} ${req.firstName}`.toLowerCase();
+        return p.fullName.toLowerCase().includes(name) ||
+               name.includes(p.fullName.toLowerCase().replace(',', ''));
+      });
+      if (matched) {
+        this.freePassService.createRenewal({
+          freePassId: matched.id,
+          year: new Date().getFullYear(),
+        }).subscribe({
+          next: () => {
+            this.freePassService.loadAll();
+            this.closeRenewModal();
+          },
+          error: (err) => {
+            console.error('Error creating renewal:', err);
+            alert('Error al crear la renovación.');
+          }
+        });
+      } else {
+        alert('No se encontró un pase libre activo para esta persona.');
+        this.closeRenewModal();
+      }
+    }
   }
 
   saveRequest(req: TransportRequest) {

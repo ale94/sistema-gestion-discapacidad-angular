@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { User } from '../interfaces/user';
 import { catchError, Observable, tap, throwError } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +10,7 @@ import { catchError, Observable, tap, throwError } from 'rxjs';
 export class UserService {
 
   private http = inject(HttpClient);
-  private url = "http://localhost:8080";
+  private url = environment.apiUrl;
 
   users = signal<User[]>([]);
 

@@ -2,13 +2,14 @@ import { inject, Injectable, signal } from '@angular/core';
 import { LoanEquipment } from '../interfaces/loan.equipment.interface';
 import { HttpClient } from '@angular/common/http';
 import { catchError, Observable, tap, throwError } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class LoanEquipmentService {
   private http = inject(HttpClient);
-  private url = 'http://localhost:8080';
+  private url = environment.apiUrl;
   loans = signal<LoanEquipment[]>([]);
 
   constructor() {

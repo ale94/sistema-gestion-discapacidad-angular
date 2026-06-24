@@ -1,107 +1,143 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable, signal, computed, effect, inject } from '@angular/core';
-import { catchError, throwError, tap } from 'rxjs';
+import { inject, Injectable, signal, computed } from '@angular/core';
 import { TransportRequest, TransportRequestStatus, TransportRequestType } from '../interfaces/transport-request.interface';
-import { Person } from '../interfaces/person';
+import { FreePassService } from './free-pass.service';
+import { FreePassResponse, NationalFreePassResponse } from '../interfaces/free-pass.interface';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TransportRequestService {
-  private http = inject(HttpClient);
-  private url = 'http://localhost:8080';
+  private freePassService = inject(FreePassService);
 
-  private requestsSignal = signal<TransportRequest[]>(this.loadFromStorage());
+  private requestsSignal = signal<TransportRequest[]>([]);
   requests = computed(() => this.requestsSignal());
 
-  private personsSignal = signal<Person[]>([]);
-  persons = computed(() => this.personsSignal());
+  syncFromBackend() {
+    const all: TransportRequest[] = [];
 
-  constructor() {
-    this.loadPersons();
-    effect(() => {
-      localStorage.setItem('transportRequestsData', JSON.stringify(this.requestsSignal()));
-    });
+    for (const fp of this.freePassService.freePasses()) {
+      all.push(this.fpToTransportRequest(fp));
+    }
+
+    for (const np of this.freePassService.nationalFreePasses()) {
+      all.push(this.npToTransportRequest(np));
+    }
+
+    for (const r of this.freePassService.renewals()) {
+      const parent = this.freePassService.freePasses().find(fp => fp.id === r.freePassId);
+      const names = parent
+        ? this.splitFullName(parent.fullName)
+        : { first: '', last: '' };
+      all.push({
+        id: `renewal-${r.id}`,
+        dni: '',
+        firstName: names.first,
+        lastName: names.last,
+        dateBirth: '',
+        phone: '',
+        email: '',
+        address: '',
+        type: TransportRequestType.RENOVACION,
+        status: TransportRequestStatus.APROBADA,
+        observations: `Renovación año ${r.year}`,
+        createdAt: r.createdAt,
+        isRegisteredBeneficiary: true,
+      });
+    }
+
+    all.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+    this.requestsSignal.set(all);
   }
 
-  loadPersons() {
-    this.http
-      .get<Person[]>(`${this.url}/persons`)
-      .pipe(
-        catchError(() => {
-          this.personsSignal.set([]);
-          return [];
-        })
-      )
-      .subscribe((data) => this.personsSignal.set(data ?? []));
+  private splitFullName(fullName: string): { first: string; last: string } {
+    const parts = fullName ? fullName.split(', ') : ['', ''];
+    return { last: parts[0] || '', first: parts[1] || '' };
   }
 
-  checkIfRegistered(dni: string): boolean {
-    return this.persons().some((p: Person) => p.dni.toString() === dni);
+  private fpToTransportRequest(fp: FreePassResponse): TransportRequest {
+    const names = this.splitFullName(fp.fullName);
+    return {
+      id: `fp-${fp.id}`,
+      dni: String(fp.dni ?? ''),
+      firstName: names.first,
+      lastName: names.last,
+      dateBirth: '',
+      phone: '',
+      email: '',
+      address: '',
+      type: TransportRequestType.PASE_PROVINCIAL,
+      status: this.mapStatus(fp.status),
+      observations: fp.reason || '',
+      createdAt: fp.createdAt,
+      isRegisteredBeneficiary: true,
+    };
+  }
+
+  private npToTransportRequest(np: NationalFreePassResponse): TransportRequest {
+    const names = this.splitFullName(np.fullName);
+    return {
+      id: `np-${np.id}`,
+      dni: String(np.dni ?? ''),
+      firstName: names.first,
+      lastName: names.last,
+      dateBirth: '',
+      phone: '',
+      email: '',
+      address: '',
+      type: TransportRequestType.PASAJE_NACIONAL,
+      status: this.mapStatus(np.status),
+      observations: `${np.origin || ''} → ${np.destination || ''} | ${np.reason || ''}`,
+      createdAt: np.createdAt,
+      isRegisteredBeneficiary: true,
+    };
+  }
+
+  private mapStatus(backendStatus: string): TransportRequestStatus {
+    switch (backendStatus) {
+      case 'APROBADO': return TransportRequestStatus.APROBADA;
+      case 'RECHAZADO': return TransportRequestStatus.RECHAZADA;
+      case 'DOCUMENTACIÓN_INCOMPLETA': return TransportRequestStatus.DOCUMENTACION_INCOMPLETA;
+      case 'PENDIENTE': return TransportRequestStatus.PENDIENTE;
+      default: return TransportRequestStatus.PENDIENTE;
+    }
   }
 
   addRequest(req: TransportRequest): void {
-    const newReq = {
-      ...req,
-      id: crypto.randomUUID(),
-      createdAt: new Date().toISOString(),
-      isRegisteredBeneficiary: this.checkIfRegistered(req.dni),
-    };
-    this.requestsSignal.update(reqs => [newReq, ...reqs]);
+    const fpList = this.freePassService.freePasses();
+    const person = fpList.find(fp => {
+      const name = fp.fullName.toLowerCase();
+      return name.includes(req.firstName.toLowerCase()) && name.includes(req.lastName.toLowerCase());
+    });
+
+    if ((req.type === TransportRequestType.PASE_PROVINCIAL || req.type === TransportRequestType.AMBOS) && person) {
+      const exists = fpList.find(fp => fp.personId === person.personId);
+      if (!exists) {
+        this.freePassService.createFreePass({ personId: person.personId, reason: req.observations })
+          .subscribe({ next: () => this.syncFromBackend() });
+      }
+    }
+
+    if ((req.type === TransportRequestType.PASAJE_NACIONAL || req.type === TransportRequestType.AMBOS) && person) {
+      this.freePassService.createNationalFreePass({ personId: person.personId, reason: req.observations })
+        .subscribe({ next: () => this.syncFromBackend() });
+    }
   }
 
   updateRequest(id: string, updatedData: Partial<TransportRequest>): void {
-    const dni = updatedData.dni ?? '';
     this.requestsSignal.update(reqs =>
-      reqs.map(req => (req.id === id ? { ...req, ...updatedData, isRegisteredBeneficiary: this.checkIfRegistered(dni || req.dni) } : req))
+      reqs.map(req => (req.id === id ? { ...req, ...updatedData } : req))
     );
   }
 
   deleteRequest(id: string): void {
-    this.requestsSignal.update(reqs => reqs.filter(req => req.id !== id));
-  }
-
-  private loadFromStorage(): TransportRequest[] {
-    try {
-      const stored = localStorage.getItem('transportRequestsData');
-      return stored ? JSON.parse(stored) : this.getMockData();
-    } catch {
-      return this.getMockData();
+    if (id.startsWith('fp-')) {
+      this.freePassService.deleteFreePass(Number(id.replace('fp-', '')))
+        .subscribe({ next: () => this.syncFromBackend() });
+    } else if (id.startsWith('np-')) {
+      this.freePassService.deleteNationalFreePass(Number(id.replace('np-', '')))
+        .subscribe({ next: () => this.syncFromBackend() });
+    } else {
+      this.requestsSignal.update(reqs => reqs.filter(req => req.id !== id));
     }
-  }
-
-  private getMockData(): TransportRequest[] {
-    const base = {
-      phone: '3814445555',
-      email: 'juan@example.com',
-      address: 'San Martín 123',
-      observations: 'Presentó certificado médico.',
-    };
-    const list: TransportRequest[] = [];
-    const names = [
-      { firstName: 'Juan', lastName: 'Pérez', dni: '12345678' },
-      { firstName: 'María', lastName: 'Gómez', dni: '87654321' },
-      { firstName: 'Carlos', lastName: 'López', dni: '11223344' },
-      { firstName: 'Ana', lastName: 'Martínez', dni: '44332211' },
-      { firstName: 'Luis', lastName: 'Fernández', dni: '55667788' },
-      { firstName: 'Sofía', lastName: 'Díaz', dni: '99887766' },
-      { firstName: 'Pedro', lastName: 'Ruiz', dni: '12121212' },
-      { firstName: 'Laura', lastName: 'Sánchez', dni: '34343434' },
-      { firstName: 'Diego', lastName: 'Acosta', dni: '56565656' },
-      { firstName: 'Valentina', lastName: 'Medina', dni: '78787878' },
-    ];
-    names.forEach((n, i) => {
-      list.push({
-        id: `${i + 1}`,
-        ...base,
-        ...n,
-        dateBirth: '1980-05-12',
-        type: i % 3 === 0 ? TransportRequestType.PASE_PROVINCIAL : i % 3 === 1 ? TransportRequestType.PASAJE_NACIONAL : TransportRequestType.AMBOS,
-        status: i < 3 ? TransportRequestStatus.APROBADA : i < 6 ? TransportRequestStatus.PENDIENTE : i < 8 ? TransportRequestStatus.EN_REVISION : i < 9 ? TransportRequestStatus.DOCUMENTACION_INCOMPLETA : TransportRequestStatus.RECHAZADA,
-        createdAt: new Date(Date.now() - i * 86400000).toISOString(),
-        isRegisteredBeneficiary: i % 2 === 0,
-      });
-    });
-    return list;
   }
 }

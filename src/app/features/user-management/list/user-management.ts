@@ -63,12 +63,14 @@ export default class UserManagement {
   }
 
   handleSave(userData: User) {
-    if ('id' in userData) {
-      this.userService.update(userData).subscribe();
-    } else {
-      this.userService.create(userData).subscribe();
-    }
-    this.closeModal();
+    const request$ = 'id' in userData
+      ? this.userService.update(userData)
+      : this.userService.create(userData);
+
+    request$.subscribe({
+      next: () => this.closeModal(),
+      error: () => alert('Error al guardar el usuario. Intente nuevamente.')
+    });
   }
 
   requestDelete(user: User) {
@@ -81,8 +83,10 @@ export default class UserManagement {
 
   confirmDeleteAction() {
     if (this.userToDelete()) {
-      this.userService.delete(this.userToDelete()!.id!).subscribe();
-      this.cancelDelete();
+      this.userService.delete(this.userToDelete()!.id!).subscribe({
+        next: () => this.cancelDelete(),
+        error: () => alert('Error al eliminar el usuario. Intente nuevamente.')
+      });
     }
   }
 

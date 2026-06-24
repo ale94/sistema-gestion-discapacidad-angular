@@ -51,8 +51,10 @@ export default class PersonIndicator {
 
   confirmDeleteAction(): void {
     if (this.personToDelete()) {
-      this.personService.deletePerson(this.personToDelete()!.id).subscribe();
-      this.cancelDelete();
+      this.personService.deletePerson(this.personToDelete()!.id).subscribe({
+        next: () => this.cancelDelete(),
+        error: () => alert('Error al eliminar el indicador. Intente nuevamente.')
+      });
     }
   }
 
@@ -61,12 +63,14 @@ export default class PersonIndicator {
   }
 
   handleSave(personData: PersonTracking) {
-    if ('id' in personData) {
-      this.personService.updatePerson(personData).subscribe();
-    } else {
-      this.personService.addPerson(personData).subscribe();
-    }
-    this.closeModal();
+    const request$ = 'id' in personData
+      ? this.personService.updatePerson(personData)
+      : this.personService.addPerson(personData);
+
+    request$.subscribe({
+      next: () => this.closeModal(),
+      error: () => alert('Error al guardar el indicador. Intente nuevamente.')
+    });
   }
 
   closeModal() {

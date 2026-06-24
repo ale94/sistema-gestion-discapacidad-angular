@@ -90,6 +90,7 @@ export class PersonForm {
         auh: [currentPerson?.benefit?.auh ?? false],
         merchandise: [currentPerson?.benefit?.merchandise ?? false],
         freePass: [currentPerson?.benefit?.freePass ?? false],
+        freePassExpiration: [currentPerson?.benefit?.freePassExpiration ?? ''],
       }),
 
       familyMembers: this.fb.array(currentPerson?.familyMembers?.map(family =>
@@ -108,7 +109,16 @@ export class PersonForm {
     if (this.personForm.valid) {
       const formValue = this.personForm.value;
       if (this.isEditMode && this.person()) {
-        this.save.emit({ ...this.person(), ...formValue });
+        const original = this.person()!;
+        this.save.emit({
+          ...original,
+          ...formValue,
+          address: { ...original.address, ...formValue.address },
+          health: { ...original.health, ...formValue.health },
+          work: { ...original.work, ...formValue.work },
+          education: { ...original.education, ...formValue.education },
+          benefit: { ...original.benefit, ...formValue.benefit },
+        });
       } else {
         this.save.emit(formValue);
       }

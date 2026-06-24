@@ -22,6 +22,8 @@ export default class EquipmentPage {
   loanToReturn = signal<LoanEquipment | null>(null);
   loanToUndo = signal<LoanEquipment | null>(null);
   searchTerm = signal('');
+  searchInput = signal('');
+  searching = signal(false);
 
   filteredLoan = computed(() => {
     const term = this.searchTerm().toLowerCase().trim();
@@ -29,15 +31,26 @@ export default class EquipmentPage {
     return this.loanEquipmentService.loans().filter((loan) => {
       const matchesText =
         !term ||
-        loan.applicant.toLowerCase().includes(term) ||
-        loan.type.toLowerCase().includes(term) ||
-        loan.dni.toString().includes(term);
+        (loan.applicant ?? '').toLowerCase().includes(term) ||
+        (loan.type ?? '').toLowerCase().includes(term) ||
+        (loan.dni ?? '').toString().includes(term);
       return matchesText;
     });
   });
 
-  onSearchChange(term: string) {
-    this.searchTerm.set(term);
+  onSearchInput(term: string) {
+    this.searchInput.set(term);
+    if (!term.trim()) {
+      this.searchTerm.set('');
+    }
+  }
+
+  doSearch() {
+    this.searching.set(true);
+    setTimeout(() => {
+      this.searchTerm.set(this.searchInput());
+      this.searching.set(false);
+    }, 2000);
   }
 
   openAddModal() {
@@ -56,8 +69,10 @@ export default class EquipmentPage {
 
   confirmDeleteAction(): void {
     if (this.loanEquipmentToDelete()) {
-      this.loanEquipmentService.deleteLoan(this.loanEquipmentToDelete()!.id).subscribe();
-      this.cancelDelete();
+      this.loanEquipmentService.deleteLoan(this.loanEquipmentToDelete()!.id).subscribe({
+        next: () => this.cancelDelete(),
+        error: () => alert('Error al eliminar el préstamo. Intente nuevamente.')
+      });
     }
   }
 
@@ -66,12 +81,14 @@ export default class EquipmentPage {
   }
 
   handleSave(loanEquipmentData: LoanEquipment) {
-    if ('id' in loanEquipmentData) {
-      this.loanEquipmentService.updateLoan(loanEquipmentData).subscribe();
-    } else {
-      this.loanEquipmentService.addLoan(loanEquipmentData).subscribe();
-    }
-    this.closeModal();
+    const request$ = 'id' in loanEquipmentData
+      ? this.loanEquipmentService.updateLoan(loanEquipmentData)
+      : this.loanEquipmentService.addLoan(loanEquipmentData);
+
+    request$.subscribe({
+      next: () => this.closeModal(),
+      error: () => alert('Error al guardar el préstamo. Intente nuevamente.')
+    });
   }
 
   closeModal() {
@@ -106,22 +123,20 @@ export default class EquipmentPage {
     const loan = this.loanToReturn();
     if (loan) {
       const today = new Date();
-
-      // Creamos un objeto Date "limpio" (solo año, mes, día)
       const year = today.getFullYear();
       const month = today.getMonth();
       const day = today.getDate();
-
-      // Esto crea un objeto Date real en la medianoche local
       const dateObject = new Date(year, month, day);
 
       const updatedData: LoanEquipment = {
         ...loan,
-        returnDate: dateObject // Ahora sí es tipo Date
+        returnDate: dateObject
       };
 
-      this.loanEquipmentService.updateLoan(updatedData).subscribe();
-      this.loanToReturn.set(null);
+      this.loanEquipmentService.updateLoan(updatedData).subscribe({
+        next: () => this.loanToReturn.set(null),
+        error: () => alert('Error al registrar la devolución. Intente nuevamente.')
+      });
     }
   }
 
@@ -137,8 +152,10 @@ export default class EquipmentPage {
         returnDate: undefined
       };
 
-      this.loanEquipmentService.updateLoan(updatedData).subscribe();
-      this.loanToUndo.set(null);
+      this.loanEquipmentService.updateLoan(updatedData).subscribe({
+        next: () => this.loanToUndo.set(null),
+        error: () => alert('Error al deshacer la devolución. Intente nuevamente.')
+      });
     }
   }
 }

@@ -1,16 +1,16 @@
-import { HttpClient } from '@angular/common/http';
 import { computed, Injectable, inject, signal } from '@angular/core';
 import { MonthlyData } from '../interfaces/monthly.data.interface';
+import { FreePassService } from './free-pass.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TransportService {
-  private http = inject(HttpClient);
-  private url = 'http://localhost:8080';
+  private freePassService = inject(FreePassService);
 
   selectedYear = signal<number>(new Date().getFullYear());
-  private loansData = signal<MonthlyData[]>(this.createDefaultYearData());
+
+  private loansData = signal<MonthlyData[]>(this.buildFromBackend());
 
   dataForSelectedYear = computed(() => this.loansData());
   years = signal<number[]>(this.generateYears());
@@ -28,72 +28,48 @@ export class TransportService {
     );
   });
 
-  constructor() {
-    this.loadYearData();
-  }
-
   private generateYears(): number[] {
     const current = new Date().getFullYear();
     return Array.from({ length: 10 }, (_, i) => current - 5 + i);
   }
 
-  loadYearData(): void {
+  refresh(): void {
+    this.loansData.set(this.buildFromBackend());
+  }
+
+  private buildFromBackend(): MonthlyData[] {
+    const months = [
+      'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+      'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+    ];
+
+    const carnetsPerMonth = new Array(12).fill(0);
+    const pasajesPerMonth = new Array(12).fill(0);
     const year = this.selectedYear();
-    this.http.get<any[]>(`${this.url}/loans`).subscribe({
-      next: (loans) => {
-        const months = [
-          'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
-          'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
-        ];
 
-        const carnetsPerMonth = new Array(12).fill(0);
-        const pasajesPerMonth = new Array(12).fill(0);
+    for (const fp of this.freePassService.freePasses()) {
+      const d = new Date(fp.createdAt);
+      if (d.getFullYear() === year) {
+        carnetsPerMonth[d.getMonth()]++;
+      }
+    }
 
-        for (const loan of loans) {
-          const loanYear = loan.year ? parseInt(loan.year, 10) : (loan.requestDate ? new Date(loan.requestDate).getFullYear() : null);
-          if (loanYear !== year) continue;
+    for (const np of this.freePassService.nationalFreePasses()) {
+      const d = new Date(np.createdAt);
+      if (d.getFullYear() === year) {
+        pasajesPerMonth[d.getMonth()]++;
+      }
+    }
 
-          const monthIndex = loan.requestDate ? new Date(loan.requestDate).getMonth() : 0;
-          const type = (loan.type || '').toLowerCase();
-
-          if (type.includes('carnet') || type.includes('pase libre') || type.includes('municipal')) {
-            carnetsPerMonth[monthIndex]++;
-          } else if (type.includes('pasaje') || type.includes('nacional') || type.includes('provincial')) {
-            pasajesPerMonth[monthIndex]++;
-          }
-        }
-
-        this.loansData.set(months.map((month, i) => ({
-          month,
-          carnets: carnetsPerMonth[i],
-          pasajes: pasajesPerMonth[i],
-        })));
-      },
-      error: () => {
-        this.loansData.set(this.createDefaultYearData());
-      },
-    });
+    return months.map((month, i) => ({
+      month,
+      carnets: carnetsPerMonth[i],
+      pasajes: pasajesPerMonth[i],
+    }));
   }
 
   changeYear(year: number): void {
     this.selectedYear.set(year);
-    this.loadYearData();
-  }
-
-  private createDefaultYearData(): MonthlyData[] {
-    return [
-      { month: 'Enero', carnets: 12, pasajes: 8 },
-      { month: 'Febrero', carnets: 15, pasajes: 10 },
-      { month: 'Marzo', carnets: 10, pasajes: 14 },
-      { month: 'Abril', carnets: 18, pasajes: 9 },
-      { month: 'Mayo', carnets: 22, pasajes: 13 },
-      { month: 'Junio', carnets: 20, pasajes: 16 },
-      { month: 'Julio', carnets: 25, pasajes: 11 },
-      { month: 'Agosto', carnets: 17, pasajes: 19 },
-      { month: 'Septiembre', carnets: 14, pasajes: 12 },
-      { month: 'Octubre', carnets: 21, pasajes: 15 },
-      { month: 'Noviembre', carnets: 16, pasajes: 18 },
-      { month: 'Diciembre', carnets: 13, pasajes: 20 },
-    ];
+    this.refresh();
   }
 }

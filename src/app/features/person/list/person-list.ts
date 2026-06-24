@@ -17,12 +17,22 @@ export default class PersonList {
   personService = inject(PersonService);
   private router = inject(Router);
 
+  constructor() {
+    this.personService.loadPersons();
+  }
+
   isModalOpen = signal(false);
   editingPerson = signal<Person | null>(null);
   personToDelete = signal<Person | null>(null);
   activeFilter = signal<'ALL' | 'CUD' | 'PENSION' | 'PASE_LIBRE'>('ALL');
 
   searchTerm = signal('');
+  searchInput = signal('');
+  searching = signal(false);
+  currentPage = signal(1);
+  pageSize = 5;
+  maxVisiblePages = 5;
+  Math = Math;
 
   filteredPeople = computed(() => {
     const term = this.searchTerm().toLowerCase().trim();
@@ -30,32 +40,76 @@ export default class PersonList {
 
     const filtersMap: Record<string, (p: Person) => boolean> = {
       ALL: (p) => true,
-
       CUD: (p) => p.health?.activeCud ?? false,
-
       PENSION: (p) => p.benefit?.pension ?? false,
-
       PASE_LIBRE: (p) => p.benefit?.freePass ?? false,
     };
 
     return this.personService.persons().filter((person) => {
-      // Búsqueda por texto
       const matchesText =
         !term ||
-        person.firstName.toLowerCase().includes(term) ||
-        person.lastName.toLowerCase().includes(term) ||
-        person.dni.toString().includes(term);
+        (person.firstName ?? '').toLowerCase().includes(term) ||
+        (person.lastName ?? '').toLowerCase().includes(term) ||
+        (person.dni ?? '').toString().includes(term);
 
-      // Filtro por estado
       const matchesFilter = (filtersMap[filter] ?? (() => true))(person);
 
       return matchesText && matchesFilter;
     });
   });
 
+  totalPages = computed(() => Math.max(1, Math.ceil(this.filteredPeople().length / this.pageSize)));
 
-  onSearchChange(term: string) {
-    this.searchTerm.set(term);
+  pages = computed(() => Array.from({ length: this.totalPages() }, (_, i) => i + 1));
+
+  currentPageGroup = computed(() => Math.floor((this.currentPage() - 1) / this.maxVisiblePages));
+
+  visiblePages = computed(() => {
+    const start = this.currentPageGroup() * this.maxVisiblePages;
+    return this.pages().slice(start, start + this.maxVisiblePages);
+  });
+
+  paginatedPeople = computed(() => {
+    const start = (this.currentPage() - 1) * this.pageSize;
+    return this.filteredPeople().slice(start, start + this.pageSize);
+  });
+
+  onSearchInput(term: string) {
+    this.searchInput.set(term);
+    if (!term.trim()) {
+      this.searchTerm.set('');
+      this.currentPage.set(1);
+    }
+  }
+
+  doSearch() {
+    this.searching.set(true);
+    setTimeout(() => {
+      this.searchTerm.set(this.searchInput());
+      this.currentPage.set(1);
+      this.searching.set(false);
+    }, 2000);
+  }
+
+  goToPage(page: number) {
+    if (page >= 1 && page <= this.totalPages()) {
+      this.currentPage.set(page);
+    }
+  }
+
+  prevGroup() {
+    const firstInGroup = this.currentPageGroup() * this.maxVisiblePages + 1;
+    this.goToPage(firstInGroup - 1);
+  }
+
+  nextGroup() {
+    const firstInNext = (this.currentPageGroup() + 1) * this.maxVisiblePages + 1;
+    this.goToPage(firstInNext);
+  }
+
+  setFilter(filter: 'ALL' | 'CUD' | 'PENSION' | 'PASE_LIBRE') {
+    this.activeFilter.set(filter);
+    this.currentPage.set(1);
   }
 
   openAddModal() {
@@ -74,8 +128,10 @@ export default class PersonList {
 
   confirmDeleteAction(): void {
     if (this.personToDelete()) {
-      this.personService.deletePerson(this.personToDelete()!.id).subscribe();
-      this.cancelDelete();
+      this.personService.deletePerson(this.personToDelete()!.id).subscribe({
+        next: () => this.cancelDelete(),
+        error: () => alert('Error al eliminar la persona. Intente nuevamente.')
+      });
     }
   }
 
@@ -84,12 +140,17 @@ export default class PersonList {
   }
 
   handleSave(personData: Person) {
-    if ('id' in personData) {
-      this.personService.updatePerson(personData).subscribe();
-    } else {
-      this.personService.addPerson(personData).subscribe();
-    }
-    this.closeModal();
+    const request$ = 'id' in personData
+      ? this.personService.updatePerson(personData)
+      : this.personService.addPerson(personData);
+
+    request$.subscribe({
+      next: () => this.closeModal(),
+      error: (err) => {
+        console.error('Error al guardar la persona:', err.message);
+        alert('Error al guardar la persona. Intente nuevamente.');
+      }
+    });
   }
 
   closeModal() {

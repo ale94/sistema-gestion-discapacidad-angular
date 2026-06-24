@@ -19,7 +19,7 @@ export default class DashboardPage {
   private personService = inject(PersonService);
   private personTrackingService = inject(PersonTrackingService);
   private loanEquipmentService = inject(LoanEquipmentService);
-  private authService = inject(AuthService);
+  authService = inject(AuthService);
   private userService = inject(UserService);
 
   displayName = computed(() => {
@@ -31,6 +31,32 @@ export default class DashboardPage {
     const user = this.userService.users().find((u) => u.userName === username);
     return user?.firstName ?? username;
   });
+
+  constructor() {
+    if (this.authService.hasVisitedDashboard()) {
+      this.authService.systemReady.set(true);
+      return;
+    }
+
+    this.personService.loadPersons();
+    this.personTrackingService.loadPersons();
+    this.loanEquipmentService.loadLoans();
+
+    Promise.all([
+      new Promise<void>(resolve => {
+        const interval = setInterval(() => {
+          if (!this.personService.loading()) {
+            clearInterval(interval);
+            resolve();
+          }
+        }, 100);
+      }),
+      new Promise<void>(resolve => setTimeout(resolve, 2000)),
+    ]).then(() => {
+      this.authService.systemReady.set(true);
+      this.authService.hasVisitedDashboard.set(true);
+    });
+  }
 
   totalPeople = computed(() => this.personService.persons().length);
   withCUD = computed(() => this.personService.persons().filter((p) => p.health?.activeCud).length);

@@ -1,10 +1,10 @@
-import { Component, EventEmitter, Input, Output, inject, signal, effect, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, Output, inject, signal, effect, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TransportRequest, TransportRequestStatus, TransportRequestType } from '../../../../shared/interfaces/transport-request.interface';
-import { TransportRequestService } from '../../../../shared/services/transport-request.service';
 import { PersonService } from '../../../../shared/services/person.service';
 import { Person } from '../../../../shared/interfaces/person';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'transport-request-form',
@@ -12,13 +12,12 @@ import { Person } from '../../../../shared/interfaces/person';
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './transport-request-form.html',
 })
-export class TransportRequestForm implements OnInit {
+export class TransportRequestForm implements OnInit, OnDestroy {
   @Input() request: TransportRequest | null = null;
   @Output() save = new EventEmitter<TransportRequest>();
   @Output() cancel = new EventEmitter<void>();
 
   private fb = inject(FormBuilder);
-  private requestService = inject(TransportRequestService);
   private personService = inject(PersonService);
 
   form: FormGroup;
@@ -30,6 +29,7 @@ export class TransportRequestForm implements OnInit {
 
   statusOptions = Object.values(TransportRequestStatus);
   typeOptions = Object.values(TransportRequestType);
+  private lookupSubscription: Subscription | null = null;
 
   constructor() {
     this.form = this.fb.group({
@@ -55,6 +55,10 @@ export class TransportRequestForm implements OnInit {
     }
   }
 
+  ngOnDestroy() {
+    this.lookupSubscription?.unsubscribe();
+  }
+
   lookupDni() {
     const dni = this.form.get('dni')?.value;
     if (!dni || String(dni).length < 7) {
@@ -65,10 +69,10 @@ export class TransportRequestForm implements OnInit {
     }
     this.searching.set(true);
     this.lookupError.set(null);
+    this.lookupSubscription?.unsubscribe();
 
-    setTimeout(() => {
-      const person = this.personService.findByDni(String(dni));
-      if (person) {
+    this.lookupSubscription = this.personService.findByDniHttp(String(dni)).subscribe({
+      next: (person) => {
         this.isRegistered.set(true);
         this.form.patchValue({
           firstName: person.firstName,
@@ -78,17 +82,19 @@ export class TransportRequestForm implements OnInit {
           email: '',
           address: `${person.address?.street ?? ''} ${person.address?.district ?? ''}, ${person.address?.locality ?? ''}, ${person.address?.province ?? ''}`,
         }, { emitEvent: false });
-        this.foundPerson.set(person as any);
+        this.foundPerson.set(person);
         this.checkDone.set(true);
         this.lookupError.set(null);
-      } else {
+        this.searching.set(false);
+      },
+      error: () => {
         this.isRegistered.set(false);
         this.foundPerson.set(null);
         this.checkDone.set(true);
         this.lookupError.set('No se encontró el DNI en el padrón. Se guardará como solicitud manual.');
+        this.searching.set(false);
       }
-      this.searching.set(false);
-    }, 150);
+    });
   }
 
   onSubmit() {
