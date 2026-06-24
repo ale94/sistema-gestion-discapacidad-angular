@@ -1,10 +1,8 @@
 export interface FamilyMember {
   id: number;
-  firstName: string;
-  lastName: string;
+  fullName: string;
   dni: number;
-  age: number;
-  civilStatus: string;
+  dateBirth: Date;
+  phone: number;
   parentage: string;
-  occupation: string;
 }

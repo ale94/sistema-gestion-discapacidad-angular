@@ -1,9 +1,5 @@
-<form
-  [formGroup]="personForm"
-  (ngSubmit)="onSubmit()"
-  class="flex flex-col w-full max-w-5xl max-h-[90vh] rounded-lg overflow-hidden"
-  autocomplete="off"
->
+<form [formGroup]="personForm" (ngSubmit)="onSubmit()"
+  class="flex flex-col w-full max-w-5xl max-h-[90vh] rounded-lg overflow-hidden" autocomplete="off">
   <div class="p-6 border-b border-slate-200">
     <h2 class="text-xl font-semibold text-slate-900">
       {{ isEditMode ? 'Editar Persona' : 'Agregar Nueva Persona' }}
@@ -18,54 +14,38 @@
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-2">
         <div>
           <label class="form-label">Apellido</label>
-          <input
-            formControlName="lastName"
-            type="text"
-            class="form-input"
-            placeholder="Ej: Pérez"
-          />
+          <input formControlName="lastName" type="text" class="form-input" placeholder="Ej: Pérez" />
           @if (formUtils.isValidField(personForm, 'lastName')) {
-            <span class="text-xs text-red-600">
-              {{ formUtils.getFieldError(personForm, 'lastName') }}
-            </span>
+          <span class="text-xs text-red-600">
+            {{ formUtils.getFieldError(personForm, 'lastName') }}
+          </span>
           }
         </div>
         <div>
           <label class="form-label">Nombre</label>
-          <input
-            formControlName="firstName"
-            clear
-            type="text"
-            class="form-input"
-            placeholder="Ej: Juan Carlos"
-          />
+          <input formControlName="firstName" clear type="text" class="form-input" placeholder="Ej: Juan Carlos" />
           @if (formUtils.isValidField(personForm, 'firstName')) {
-            <span class="text-xs text-red-600">
-              {{ formUtils.getFieldError(personForm, 'firstName') }}
-            </span>
+          <span class="text-xs text-red-600">
+            {{ formUtils.getFieldError(personForm, 'firstName') }}
+          </span>
           }
         </div>
         <div>
           <label class="form-label">D.N.I</label>
-          <input
-            formControlName="dni"
-            type="number"
-            class="form-input"
-            placeholder="Sin puntos ni espacios"
-          />
+          <input formControlName="dni" type="number" class="form-input" placeholder="Sin puntos ni espacios" />
           @if (formUtils.isValidField(personForm, 'dni')) {
-            <span class="text-xs text-red-600">
-              {{ formUtils.getFieldError(personForm, 'dni') }}
-            </span>
+          <span class="text-xs text-red-600">
+            {{ formUtils.getFieldError(personForm, 'dni') }}
+          </span>
           }
         </div>
         <div>
           <label class="form-label">Fecha de Nacimiento</label>
           <input formControlName="dateBirth" type="date" class="form-input" />
           @if (formUtils.isValidField(personForm, 'dateBirth')) {
-            <span class="text-xs text-red-600">
-              {{ formUtils.getFieldError(personForm, 'dateBirth') }}
-            </span>
+          <span class="text-xs text-red-600">
+            {{ formUtils.getFieldError(personForm, 'dateBirth') }}
+          </span>
           }
         </div>
         <div>
@@ -73,13 +53,13 @@
           <select formControlName="gender" class="form-input">
             <option value="" disabled selected>Seleccione una opción</option>
             @for (gender of personUtils.gender(); track gender) {
-              <option [value]="gender">{{ gender | titlecase }}</option>
+            <option [value]="gender">{{ gender | titlecase }}</option>
             }
           </select>
           @if (formUtils.isValidField(personForm, 'gender')) {
-            <span class="text-xs text-red-600">
-              {{ formUtils.getFieldError(personForm, 'gender') }}
-            </span>
+          <span class="text-xs text-red-600">
+            {{ formUtils.getFieldError(personForm, 'gender') }}
+          </span>
           }
         </div>
         <div>
@@ -87,93 +67,66 @@
           <select formControlName="civilStatus" class="form-input">
             <option value="" disabled selected>Seleccione una opción</option>
             @for (type of personUtils.civilStatuses(); track type) {
-              <option [value]="type">{{ type | titlecase }}</option>
+            <option [value]="type">{{ type | titlecase }}</option>
             }
           </select>
           @if (formUtils.isValidField(personForm, 'civilStatus')) {
-            <span class="text-xs text-red-600">
-              {{ formUtils.getFieldError(personForm, 'civilStatus') }}
-            </span>
+          <span class="text-xs text-red-600">
+            {{ formUtils.getFieldError(personForm, 'civilStatus') }}
+          </span>
           }
         </div>
         <div>
           <label class="form-label">Teléfono</label>
-          <input
-            formControlName="phone"
-            type="number"
-            class="form-input"
-            placeholder="Ej: 3886334455"
-          />
+          <input formControlName="phone" type="number" class="form-input" placeholder="Ej: 3886334455" />
           @if (formUtils.isValidField(personForm, 'phone')) {
-            <span class="text-xs text-red-600">
-              {{ formUtils.getFieldError(personForm, 'phone') }}
-            </span>
+          <span class="text-xs text-red-600">
+            {{ formUtils.getFieldError(personForm, 'phone') }}
+          </span>
           }
         </div>
         <div class="lg:col-span-2">
           <label class="form-label">Tutor</label>
-          <input
-            formControlName="tutor"
-            type="text"
-            class="form-input"
-            placeholder="Ej: Juan Gomez"
-          />
+          <input formControlName="tutor" type="text" class="form-input" placeholder="Ej: Juan Gomez" />
           @if (formUtils.isValidField(personForm, 'tutor')) {
-            <span class="text-xs text-red-600">
-              {{ formUtils.getFieldError(personForm, 'tutor') }}
-            </span>
+          <span class="text-xs text-red-600">
+            {{ formUtils.getFieldError(personForm, 'tutor') }}
+          </span>
           }
         </div>
       </div>
     </fieldset>
 
     <!-- DIRECCION -->
-    <fieldset
-      formGroupName="address"
-      class="lg:col-span-3 border border-slate-300 rounded-lg p-4 mb-4 bg-white"
-    >
+    <fieldset formGroupName="address" class="lg:col-span-3 border border-slate-300 rounded-lg p-4 mb-4 bg-white">
       <legend class="px-2 text-md font-semibold text-teal-600">Dirección</legend>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-2">
         <div>
           <label class="form-label">Barrio</label>
-          <input
-            formControlName="district"
-            type="text"
-            class="form-input"
-            placeholder="Ej: San Francisco"
-          />
+          <input formControlName="district" type="text" class="form-input" placeholder="Ej: San Francisco" />
           @if (formUtils.isValidField(personForm, 'address.district')) {
-            <span class="text-xs text-red-600">
-              {{ formUtils.getFieldError(personForm, 'address.district') }}
-            </span>
+          <span class="text-xs text-red-600">
+            {{ formUtils.getFieldError(personForm, 'address.district') }}
+          </span>
           }
         </div>
         <div>
           <label class="form-label">Calle</label>
-          <input
-            formControlName="street"
-            type="text"
-            class="form-input"
-            placeholder="Ej: Av. 9 de Julio"
-          />
+          <input formControlName="street" type="text" class="form-input" placeholder="Ej: Av. 9 de Julio" />
           @if (formUtils.isValidField(personForm, 'address.street')) {
-            <span class="text-xs text-red-600">
-              {{ formUtils.getFieldError(personForm, 'address.street') }}
-            </span>
+          <span class="text-xs text-red-600">
+            {{ formUtils.getFieldError(personForm, 'address.street') }}
+          </span>
           }
         </div>
         <div>
           <label class="form-label">Localidad</label>
-          <input
-            formControlName="locality"
-            type="text"
-            class="form-input"
-            placeholder="Ej: Libertador General San Martín"
-          />
+          <input formControlName="locality" type="text" class="form-input"
+            placeholder="Ej: Libertador General San Martín" />
           @if (formUtils.isValidField(personForm, 'address.locality')) {
-            <span class="text-xs text-red-600">
-              {{ formUtils.getFieldError(personForm, 'address.locality') }}
-            </span>
+          <span class="text-xs text-red-600">
+            {{ formUtils.getFieldError(personForm, 'address.locality') }}
+          </span>
           }
         </div>
         <!-- <div class="lg:col-span-2">
@@ -194,119 +147,93 @@
     </fieldset>
 
     <!-- GRUPO FAMILIAR -->
-    <fieldset
-      formArrayName="familyMembers"
-      class="lg:col-span-3 border border-slate-300 rounded-lg p-4 mb-4 bg-white"
-    >
-      <legend class="px-2 text-md font-semibold text-teal-600">2. Grupo Familiar</legend>
+    <fieldset [formArrayName]="'familyMembers'"
+      class="lg:col-span-3 border border-slate-200 rounded-xl p-5 mb-6 bg-white shadow-sm">
+      <legend class="px-2 text-md font-semibold text-teal-600">
+        2. Grupo Familiar
+      </legend>
 
       @if (familyMembers.controls.length !== 0) {
-        <div class="hidden md:grid grid-cols-8 gap-4 py-2 border-b mb-2 items-center">
-          <label class="text-sm font-medium text-gray-700">Apellido</label>
-          <label class="text-sm font-medium text-gray-700">Nombre</label>
-          <label class="text-sm font-medium text-gray-700">DNI</label>
-          <label class="text-sm font-medium text-gray-700">Edad</label>
-          <label class="text-sm font-medium text-gray-700">Parentesco</label>
-          <label class="text-sm font-medium text-gray-700 text-center">Acción</label>
-        </div>
+      <div class="hidden md:grid grid-cols-12 gap-3 pb-2 border-b border-slate-200 mb-3 items-center px-2">
+        <label class="col-span-2 text-xs font-semibold text-slate-500 uppercase tracking-wider">Apellido y Nombre</label>
+        <label class="col-span-2 text-xs font-semibold text-slate-500 uppercase tracking-wider">DNI</label>
+        <label class="col-span-2 text-xs font-semibold text-slate-500 uppercase tracking-wider">F. Nacimiento</label>
+        <label class="col-span-2 text-xs font-semibold text-slate-500 uppercase tracking-wider">Teléfono</label>
+        <label class="col-span-1 text-xs font-semibold text-slate-500 uppercase tracking-wider">Parentesco</label>
+      </div>
       }
 
-      @for (family of familyMembers.controls; track $index; let i = $index) {
-        <div
-          [formGroupName]="i"
-          class="grid grid-cols-1 md:grid-cols-8 gap-4 py-2 items-center border-b md:border-none"
-        >
-          <div class="flex flex-col gap-1">
-            <label class="md:hidden text-xs font-semibold text-gray-500">Apellido</label>
-            <input
-              formControlName="lastName"
-              type="text"
-              placeholder="Apellido"
-              class="form-input w-full"
-            />
+      <div class="space-y-4 md:space-y-2 mb-4">
+        @for (family of familyMembers.controls; track $index; let i = $index) {
+        <div [formGroupName]="i"
+          class="grid grid-cols-1 md:grid-cols-12 gap-3 p-4 md:p-2 items-center bg-slate-50 md:bg-transparent rounded-lg border border-slate-200 md:border-none relative">
+          <div class="flex flex-col gap-1 col-span-1 md:col-span-2">
+            <label class="md:hidden text-xs font-bold text-slate-600">Apellido y Nombre</label>
+            <input formControlName="fullName" type="text" placeholder="Ej. Pérez"
+              class="form-input w-full rounded-md border-slate-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 text-sm" />
           </div>
 
-          <div class="flex flex-col gap-1">
-            <label class="md:hidden text-xs font-semibold text-gray-500">Nombre</label>
-            <input
-              formControlName="firstName"
-              type="text"
-              placeholder="Nombre"
-              class="form-input w-full"
-            />
+          <div class="flex flex-col gap-1 col-span-1 md:col-span-2">
+            <label class="md:hidden text-xs font-bold text-slate-600">DNI</label>
+            <input formControlName="dni" type="number" placeholder="Solo números"
+              class="form-input w-full rounded-md border-slate-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 text-sm" />
           </div>
 
-          <div class="flex flex-col gap-1">
-            <label class="md:hidden text-xs font-semibold text-gray-500">DNI</label>
-            <input
-              formControlName="dni"
-              type="number"
-              placeholder="DNI"
-              class="form-input w-full"
-            />
+          <div class="flex flex-col gap-1 col-span-1 md:col-span-2">
+            <label class="md:hidden text-xs font-bold text-slate-600">Fecha de Nacimiento</label>
+            <input formControlName="dateBirth" type="date"
+              class="form-input w-full rounded-md border-slate-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 text-sm" />
           </div>
 
-          <div class="flex flex-col gap-1">
-            <label class="md:hidden text-xs font-semibold text-gray-500">Edad</label>
-            <input
-              formControlName="age"
-              type="number"
-              placeholder="Edad"
-              class="form-input w-full"
-            />
+          <div class="flex flex-col gap-1 col-span-1 md:col-span-2">
+            <label class="md:hidden text-xs font-bold text-slate-600">Teléfono</label>
+            <input formControlName="phone" type="number" placeholder="Cod. área + número"
+              class="form-input w-full rounded-md border-slate-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 text-sm" />
           </div>
 
-          <div class="flex flex-col gap-1">
-            <label class="md:hidden text-xs font-semibold text-gray-500">Parentesco</label>
-            <input
-              formControlName="parentage"
-              type="text"
-              placeholder="Parentesco"
-              class="form-input w-full"
-            />
+          <div class="flex flex-col gap-1 col-span-1 md:col-span-1">
+            <label class="md:hidden text-xs font-bold text-slate-600">Parentesco</label>
+            <input formControlName="parentage" type="text" placeholder="Ej: Hijo/a"
+              class="form-input w-full rounded-md border-slate-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 text-sm" />
           </div>
 
-          <div class="flex items-center justify-center pt-4 md:pt-0">
-            <button
-              type="button"
-              (click)="removeFamily(i)"
-              class="bg-red-500 text-white rounded-full h-8 w-8 flex items-center justify-center hover:bg-red-700 transition-colors shadow-sm"
-            >
-              ✕
+          <div class="flex items-center justify-end md:justify-center col-span-1 md:col-span-1 pt-2 md:pt-0">
+            <button type="button" (click)="removeFamily(i)"
+              class="text-red-500 hover:text-red-700 hover:bg-red-50 p-2 md:p-1.5 rounded-lg md:rounded-full transition-all duration-200 flex items-center justify-center gap-2 md:gap-0 w-full md:w-auto border border-red-200 md:border-none text-sm font-medium md:font-normal"
+              title="Eliminar familiar">
+              <span class="md:hidden">Eliminar Familiar</span>
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              </svg>
             </button>
           </div>
         </div>
-      }
+        }
+      </div>
 
-      <button
-        type="button"
-        (click)="addFamily()"
-        class="bg-teal-600 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded"
-      >
-        + Agregar Familiar
+      <button type="button" (click)="addFamily()"
+        class="inline-flex items-center gap-2 bg-teal-600 hover:bg-teal-700 text-white text-sm font-semibold py-2 px-4 rounded-lg shadow-sm transition-colors focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+        </svg>
+        Agregar Familiar
       </button>
     </fieldset>
 
     <!-- SITUACION DE SALUD -->
-    <fieldset
-      formGroupName="health"
-      class="lg:col-span-3 border border-slate-300 rounded-lg p-4 mb-4 bg-white"
-    >
+    <fieldset formGroupName="health" class="lg:col-span-3 border border-slate-300 rounded-lg p-4 mb-4 bg-white">
       <legend class="px-2 text-md font-semibold text-teal-600">3. Situación de Salud</legend>
 
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-2">
         <div class="lg:col-span-2">
           <label class="form-label">Diagnóstico</label>
-          <input
-            formControlName="diagnostic"
-            type="text"
-            class="form-input"
-            placeholder="Ingrese el diagnóstico"
-          />
+          <input formControlName="diagnostic" type="text" class="form-input" placeholder="Ingrese el diagnóstico" />
           @if (formUtils.isValidField(personForm, 'health.diagnostic')) {
-            <span class="text-xs text-red-600">
-              {{ formUtils.getFieldError(personForm, 'health.diagnostic') }}
-            </span>
+          <span class="text-xs text-red-600">
+            {{ formUtils.getFieldError(personForm, 'health.diagnostic') }}
+          </span>
           }
         </div>
 
@@ -315,28 +242,23 @@
           <select formControlName="disabilityType" class="form-input">
             <option value="" disabled selected>Seleccione una opción</option>
             @for (type of personUtils.disabilityTypes(); track type) {
-              <option [value]="type">{{ type | titlecase }}</option>
+            <option [value]="type">{{ type | titlecase }}</option>
             }
           </select>
           @if (formUtils.isValidField(personForm, 'health.disabilityType')) {
-            <span class="text-xs text-red-600">
-              {{ formUtils.getFieldError(personForm, 'health.disabilityType') }}
-            </span>
+          <span class="text-xs text-red-600">
+            {{ formUtils.getFieldError(personForm, 'health.disabilityType') }}
+          </span>
           }
         </div>
 
         <div>
           <label class="form-label">Número CUD</label>
-          <input
-            formControlName="cudNumber"
-            type="text"
-            class="form-input"
-            placeholder="N° de CUD"
-          />
+          <input formControlName="cudNumber" type="text" class="form-input" placeholder="N° de CUD" />
           @if (formUtils.isValidField(personForm, 'health.cudNumber')) {
-            <span class="text-xs text-red-600">
-              {{ formUtils.getFieldError(personForm, 'health.cudNumber') }}
-            </span>
+          <span class="text-xs text-red-600">
+            {{ formUtils.getFieldError(personForm, 'health.cudNumber') }}
+          </span>
           }
         </div>
 
@@ -347,9 +269,9 @@
             <option [value]="false">No</option>
           </select>
           @if (formUtils.isValidField(personForm, 'health.activeCud')) {
-            <span class="text-xs text-red-600">
-              {{ formUtils.getFieldError(personForm, 'health.activeCud') }}
-            </span>
+          <span class="text-xs text-red-600">
+            {{ formUtils.getFieldError(personForm, 'health.activeCud') }}
+          </span>
           }
         </div>
 
@@ -360,19 +282,16 @@
             <option [value]="false">No</option>
           </select>
           @if (formUtils.isValidField(personForm, 'health.rehabilitationTreatment')) {
-            <span class="text-xs text-red-600">
-              {{ formUtils.getFieldError(personForm, 'health.rehabilitationTreatment') }}
-            </span>
+          <span class="text-xs text-red-600">
+            {{ formUtils.getFieldError(personForm, 'health.rehabilitationTreatment') }}
+          </span>
           }
         </div>
       </div>
     </fieldset>
 
     <!-- SITUACION LABORAL -->
-    <fieldset
-      formGroupName="work"
-      class="lg:col-span-3 border border-slate-300 rounded-lg p-4 mb-4 bg-white"
-    >
+    <fieldset formGroupName="work" class="lg:col-span-3 border border-slate-300 rounded-lg p-4 mb-4 bg-white">
       <legend class="px-2 text-md font-semibold text-teal-600">4. Situación Laboral</legend>
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-2">
@@ -381,23 +300,18 @@
           <select formControlName="status" class="form-input">
             <option value="" disabled selected>Seleccione una opción</option>
             @for (status of personUtils.jobStatuses(); track status) {
-              <option [value]="status">{{ status | titlecase }}</option>
+            <option [value]="status">{{ status | titlecase }}</option>
             }
           </select>
           @if (formUtils.isValidField(personForm, 'work.status')) {
-            <span class="text-xs text-red-600">
-              {{ formUtils.getFieldError(personForm, 'work.status') }}
-            </span>
+          <span class="text-xs text-red-600">
+            {{ formUtils.getFieldError(personForm, 'work.status') }}
+          </span>
           }
         </div>
         <div class="lg:col-span-2">
           <label class="form-label">Empresa / Empleador</label>
-          <input
-            formControlName="companyName"
-            type="text"
-            class="form-input"
-            placeholder="Nombre de la empresa"
-          />
+          <input formControlName="companyName" type="text" class="form-input" placeholder="Nombre de la empresa" />
         </div>
         <div>
           <label class="form-label">¿Posee Obra Social?</label>
@@ -406,28 +320,20 @@
             <option [value]="false">No</option>
           </select>
           @if (formUtils.isValidField(personForm, 'work.socialWork')) {
-            <span class="text-xs text-red-600">
-              {{ formUtils.getFieldError(personForm, 'work.socialWork') }}
-            </span>
+          <span class="text-xs text-red-600">
+            {{ formUtils.getFieldError(personForm, 'work.socialWork') }}
+          </span>
           }
         </div>
         <div class="lg:col-span-2">
           <label class="form-label">Nombre de la Obra Social</label>
-          <input
-            formControlName="nameSocialWork"
-            type="text"
-            class="form-input"
-            placeholder="Ej: ISJ, OSDE, etc."
-          />
+          <input formControlName="nameSocialWork" type="text" class="form-input" placeholder="Ej: ISJ, OSDE, etc." />
         </div>
       </div>
     </fieldset>
 
     <!-- SITUACION DE EDUCACION -->
-    <fieldset
-      formGroupName="education"
-      class="lg:col-span-3 border border-slate-300 rounded-lg p-4 mb-4 bg-white"
-    >
+    <fieldset formGroupName="education" class="lg:col-span-3 border border-slate-300 rounded-lg p-4 mb-4 bg-white">
       <legend class="px-2 text-md font-semibold text-teal-600">5. Situación de Educación</legend>
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-2">
@@ -436,32 +342,25 @@
           <select formControlName="educationLevel" class="form-input">
             <option value="" disabled selected>Seleccione una opción</option>
             @for (level of personUtils.educationLevels(); track level) {
-              <option [value]="level">{{ level | titlecase }}</option>
+            <option [value]="level">{{ level | titlecase }}</option>
             }
           </select>
           @if (formUtils.isValidField(personForm, 'education.educationLevel')) {
-            <span class="text-xs text-red-600">
-              {{ formUtils.getFieldError(personForm, 'education.educationLevel') }}
-            </span>
+          <span class="text-xs text-red-600">
+            {{ formUtils.getFieldError(personForm, 'education.educationLevel') }}
+          </span>
           }
         </div>
         <div class="lg:col-span-2">
           <label class="form-label">Establecimiento Educativo</label>
-          <input
-            formControlName="name"
-            type="text"
-            class="form-input"
-            placeholder="Nombre de la escuela o institución"
-          />
+          <input formControlName="name" type="text" class="form-input"
+            placeholder="Nombre de la escuela o institución" />
         </div>
       </div>
     </fieldset>
 
     <!-- BENEFICIOS -->
-    <fieldset
-      formGroupName="benefit"
-      class="lg:col-span-3 border border-slate-300 rounded-lg p-4 mb-4 bg-white"
-    >
+    <fieldset formGroupName="benefit" class="lg:col-span-3 border border-slate-300 rounded-lg p-4 mb-4 bg-white">
       <legend class="px-2 text-md font-semibold text-teal-600">6. Beneficios</legend>
 
       <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-2">
@@ -499,17 +398,12 @@
   </div>
 
   <div class="p-4 bg-white border-t border-slate-200 flex justify-end space-x-4">
-    <button
-      type="button"
-      (click)="onCancel()"
-      class="px-6 py-2 rounded-lg text-slate-700 bg-white hover:bg-slate-100 transition-colors border border-slate-300"
-    >
+    <button type="button" (click)="onCancel()"
+      class="px-6 py-2 rounded-lg text-slate-700 bg-white hover:bg-slate-100 transition-colors border border-slate-300">
       Cancelar
     </button>
-    <button
-      type="submit"
-      class="px-6 py-2 rounded-lg text-white bg-teal-600 hover:bg-teal-700 disabled:bg-slate-400 disabled:cursor-not-allowed transition-colors"
-    >
+    <button type="submit"
+      class="px-6 py-2 rounded-lg text-white bg-teal-600 hover:bg-teal-700 disabled:bg-slate-400 disabled:cursor-not-allowed transition-colors">
       Guardar
     </button>
   </div>
