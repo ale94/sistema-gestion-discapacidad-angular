@@ -20,7 +20,6 @@ export default class EquipmentPage {
   editingLoanEquipment = signal<LoanEquipment | null>(null);
   loanEquipmentToDelete = signal<LoanEquipment | null>(null);
   loanToReturn = signal<LoanEquipment | null>(null);
-  loanToUndo = signal<LoanEquipment | null>(null);
   searchTerm = signal('');
   searchInput = signal('');
   searching = signal(false);
@@ -122,15 +121,11 @@ export default class EquipmentPage {
   confirmReturnAction() {
     const loan = this.loanToReturn();
     if (loan) {
-      const today = new Date();
-      const year = today.getFullYear();
-      const month = today.getMonth();
-      const day = today.getDate();
-      const dateObject = new Date(year, month, day);
+      const dateStr = new Date().toISOString().split('T')[0];
 
       const updatedData: LoanEquipment = {
         ...loan,
-        returnDate: dateObject
+        returnDate: dateStr
       };
 
       this.loanEquipmentService.updateLoan(updatedData).subscribe({
@@ -140,8 +135,10 @@ export default class EquipmentPage {
     }
   }
 
+  loanToUndo = signal<LoanEquipment & { newExpiration?: string } | null>(null);
+
   undoReturn(loan: LoanEquipment) {
-    this.loanToUndo.set(loan);
+    this.loanToUndo.set({ ...loan, newExpiration: '' });
   }
 
   confirmUndoAction() {
@@ -149,7 +146,8 @@ export default class EquipmentPage {
     if (loan) {
       const updatedData: LoanEquipment = {
         ...loan,
-        returnDate: undefined
+        returnDate: undefined,
+        expiration: loan.newExpiration || loan.expiration
       };
 
       this.loanEquipmentService.updateLoan(updatedData).subscribe({
@@ -157,5 +155,9 @@ export default class EquipmentPage {
         error: () => alert('Error al deshacer la devolución. Intente nuevamente.')
       });
     }
+  }
+
+  onNewExpirationChange(value: string) {
+    this.loanToUndo.update(loan => loan ? { ...loan, newExpiration: value } : null);
   }
 }

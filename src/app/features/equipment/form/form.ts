@@ -63,7 +63,11 @@ export class Form {
       if (this.isEditMode && this.loanEquipment()) {
         this.save.emit({ ...this.loanEquipment(), ...formValue });
       } else {
-        this.save.emit(formValue);
+        this.save.emit({
+          ...formValue,
+          requestDate: new Date().toISOString().split('T')[0],
+          year: String(new Date().getFullYear()),
+        } as LoanEquipment);
       }
     }
   }

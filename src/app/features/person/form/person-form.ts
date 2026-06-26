@@ -55,7 +55,7 @@ export class PersonForm {
         street: [currentPerson?.address?.street || '', [Validators.required, Validators.minLength(4)]],
         district: [currentPerson?.address?.district || '', [Validators.required, Validators.minLength(4)]],
         locality: [currentPerson?.address?.locality || '', [Validators.required, Validators.minLength(4)]],
-        // province: [currentPerson?.address?.province || '', [Validators.required, Validators.minLength(4)]]
+        province: [currentPerson?.address?.province || '', [Validators.required, Validators.minLength(4)]]
       }),
 
       // Health

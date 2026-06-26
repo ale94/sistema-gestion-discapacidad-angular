@@ -112,14 +112,26 @@ export class TransportRequestService {
     if ((req.type === TransportRequestType.PASE_PROVINCIAL || req.type === TransportRequestType.AMBOS) && person) {
       const exists = fpList.find(fp => fp.personId === person.personId);
       if (!exists) {
-        this.freePassService.createFreePass({ personId: person.personId, reason: req.observations })
-          .subscribe({ next: () => this.syncFromBackend() });
+        this.freePassService.createFreePass({
+          personId: person.personId,
+          reason: req.observations,
+          freePassExpiration: req.freePassExpiration
+        }).subscribe({
+          next: () => this.syncFromBackend(),
+          error: (err) => console.error('Error al crear pase libre:', err)
+        });
       }
     }
 
     if ((req.type === TransportRequestType.PASAJE_NACIONAL || req.type === TransportRequestType.AMBOS) && person) {
-      this.freePassService.createNationalFreePass({ personId: person.personId, reason: req.observations })
-        .subscribe({ next: () => this.syncFromBackend() });
+      this.freePassService.createNationalFreePass({
+        personId: person.personId,
+        reason: req.observations,
+        freePassExpiration: req.freePassExpiration
+      }).subscribe({
+        next: () => this.syncFromBackend(),
+        error: (err) => console.error('Error al crear pase nacional:', err)
+      });
     }
   }
 
@@ -132,10 +144,16 @@ export class TransportRequestService {
   deleteRequest(id: string): void {
     if (id.startsWith('fp-')) {
       this.freePassService.deleteFreePass(Number(id.replace('fp-', '')))
-        .subscribe({ next: () => this.syncFromBackend() });
+        .subscribe({
+          next: () => this.syncFromBackend(),
+          error: (err) => console.error('Error al eliminar pase libre:', err)
+        });
     } else if (id.startsWith('np-')) {
       this.freePassService.deleteNationalFreePass(Number(id.replace('np-', '')))
-        .subscribe({ next: () => this.syncFromBackend() });
+        .subscribe({
+          next: () => this.syncFromBackend(),
+          error: (err) => console.error('Error al eliminar pase nacional:', err)
+        });
     } else {
       this.requestsSignal.update(reqs => reqs.filter(req => req.id !== id));
     }

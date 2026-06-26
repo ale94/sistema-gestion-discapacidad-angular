@@ -51,11 +51,8 @@ export default class ChartPage {
   personService = inject(PersonService);
 
   constructor() {
-    const personService = this.personService.persons();
-
-    // EFFECT: Reacciona a los cambios en la señal de personas
     effect(() => {
-      this.processData(personService);
+      this.processData(this.personService.persons());
     });
   }
 

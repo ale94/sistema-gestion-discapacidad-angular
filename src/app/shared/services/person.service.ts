@@ -62,9 +62,6 @@ export class PersonService {
         ),
         catchError((err) => {
           console.error('HTTP error en updatePerson:', err.status, err.statusText, err.error);
-          this.persons.update((persons) =>
-            persons.map((p) => (p.id === updatedPerson.id ? updatedPerson : p))
-          );
           return throwError(() => new Error("No se pudo actualizar una persona"))
         })
       )

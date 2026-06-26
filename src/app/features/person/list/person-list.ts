@@ -24,7 +24,7 @@ export default class PersonList {
   isModalOpen = signal(false);
   editingPerson = signal<Person | null>(null);
   personToDelete = signal<Person | null>(null);
-  activeFilter = signal<'ALL' | 'CUD' | 'PENSION' | 'PASE_LIBRE'>('ALL');
+  activeFilter = signal<'ALL' | 'CUD' | 'PENSION' | 'PASE_LIBRE' | 'AUH' | 'FEDERAL_PROGRAM' | 'MERCHANDISE'>('ALL');
 
   searchTerm = signal('');
   searchInput = signal('');
@@ -43,6 +43,9 @@ export default class PersonList {
       CUD: (p) => p.health?.activeCud ?? false,
       PENSION: (p) => p.benefit?.pension ?? false,
       PASE_LIBRE: (p) => p.benefit?.freePass ?? false,
+      AUH: (p) => p.benefit?.auh ?? false,
+      FEDERAL_PROGRAM: (p) => p.benefit?.federalProgram ?? false,
+      MERCHANDISE: (p) => p.benefit?.merchandise ?? false,
     };
 
     return this.personService.persons().filter((person) => {
@@ -107,7 +110,7 @@ export default class PersonList {
     this.goToPage(firstInNext);
   }
 
-  setFilter(filter: 'ALL' | 'CUD' | 'PENSION' | 'PASE_LIBRE') {
+  setFilter(filter: 'ALL' | 'CUD' | 'PENSION' | 'PASE_LIBRE' | 'AUH' | 'FEDERAL_PROGRAM' | 'MERCHANDISE') {
     this.activeFilter.set(filter);
     this.currentPage.set(1);
   }

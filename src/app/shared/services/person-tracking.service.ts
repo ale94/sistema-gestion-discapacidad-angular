@@ -19,9 +19,10 @@ export class PersonTrackingService {
 
   loadPersons() {
     this.http.get<PersonTracking[]>(`${this.url}` + "/persons-tracking")
-      .subscribe((data) => {
-        this.personsTracking.set(data);
-      })
+      .subscribe({
+        next: (data) => this.personsTracking.set(data),
+        error: (err) => console.error('Error al cargar seguimientos:', err)
+      });
   }
 
   addPerson(person: PersonTracking): Observable<PersonTracking> {

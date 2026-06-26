@@ -17,8 +17,9 @@ export class LoanEquipmentService {
   }
 
   loadLoans() {
-    this.http.get<LoanEquipment[]>(`${this.url}` + '/loans').subscribe((data) => {
-      this.loans.set(data);
+    this.http.get<LoanEquipment[]>(`${this.url}` + '/loans').subscribe({
+      next: (data) => this.loans.set(data),
+      error: (err) => console.error('Error al cargar préstamos:', err)
     });
   }
 
@@ -41,14 +42,15 @@ export class LoanEquipmentService {
         tap((loan) => {
           this.loans.update((loans) =>
             loans.map((l) => (l.id === loan.id ? loan : l)),
-          ), catchError(() => {
-            return throwError(() => new Error("No se pudo actualizar un prestamo"))
-          })
+          );
+        }),
+        catchError(() => {
+          return throwError(() => new Error("No se pudo actualizar un prestamo"))
         }));
   }
 
-  deleteLoan(id: number): Observable<Object> {
-    return this.http.delete(`${this.url}/loans/${id}`)
+  deleteLoan(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.url}/loans/${id}`)
       .pipe(
         tap(() => {
           this.loans.update((loans) => loans.filter((l) => l.id !== id));

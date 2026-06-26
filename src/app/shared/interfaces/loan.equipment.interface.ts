@@ -3,8 +3,8 @@ export interface LoanEquipment {
   requestDate: Date;
   expiration: Date;
   type: string;
-  equipmentNumber: number;
-  year: number;
+  equipmentNumber: string;
+  year: string;
   applicant: string;
   dni: number;
   address: string;

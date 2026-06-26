@@ -98,6 +98,42 @@
         >
           <span>Pase Libre</span>
         </button>
+
+        <!-- AUH -->
+        <button
+          [ngClass]="{
+            'bg-teal-600 text-white shadow-md': activeFilter() === 'AUH',
+            'bg-gray-100 text-gray-700': activeFilter() !== 'AUH',
+          }"
+          class="flex items-center gap-2 px-4 py-2 rounded-full bg-gray-100 text-gray-700 text-sm font-medium hover:bg-teal-600 hover:text-white transition"
+          (click)="setFilter('AUH')"
+        >
+          <span>AUH</span>
+        </button>
+
+        <!-- Programa Federal -->
+        <button
+          [ngClass]="{
+            'bg-teal-600 text-white shadow-md': activeFilter() === 'FEDERAL_PROGRAM',
+            'bg-gray-100 text-gray-700': activeFilter() !== 'FEDERAL_PROGRAM',
+          }"
+          class="flex items-center gap-2 px-4 py-2 rounded-full bg-gray-100 text-gray-700 text-sm font-medium hover:bg-teal-600 hover:text-white transition"
+          (click)="setFilter('FEDERAL_PROGRAM')"
+        >
+          <span>Programa Federal</span>
+        </button>
+
+        <!-- Bolsón de Mercadería -->
+        <button
+          [ngClass]="{
+            'bg-teal-600 text-white shadow-md': activeFilter() === 'MERCHANDISE',
+            'bg-gray-100 text-gray-700': activeFilter() !== 'MERCHANDISE',
+          }"
+          class="flex items-center gap-2 px-4 py-2 rounded-full bg-gray-100 text-gray-700 text-sm font-medium hover:bg-teal-600 hover:text-white transition"
+          (click)="setFilter('MERCHANDISE')"
+        >
+          <span>Bolsón de Mercadería</span>
+        </button>
       </div>
     </div>
   </div>
