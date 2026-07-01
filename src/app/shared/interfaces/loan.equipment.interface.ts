@@ -1,7 +1,7 @@
 export interface LoanEquipment {
   id: number;
-  requestDate: Date;
-  expiration: Date;
+  requestDate: string;
+  expiration: string;
   type: string;
   equipmentNumber: string;
   year: string;
@@ -9,5 +9,5 @@ export interface LoanEquipment {
   dni: number;
   address: string;
   phone: number;
-  returnDate?: Date;
+  returnDate?: string;
 }

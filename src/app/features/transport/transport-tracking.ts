@@ -206,6 +206,7 @@ export default class TransportTracking {
     } else {
       this.requestService.addRequest(req);
     }
+    this.transportService.refresh();
     this.closeRequestModal();
   }
 

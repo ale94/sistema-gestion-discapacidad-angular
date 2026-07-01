@@ -29,4 +29,9 @@ export interface TransportRequest {
   createdAt: string;
   isRegisteredBeneficiary?: boolean;
   freePassExpiration?: string;
+  personId?: number;
+  tripDate?: string;
+  ticketQuantity?: number;
+  origin?: string;
+  destination?: string;
 }

@@ -1,7 +1,8 @@
-import { Component, EventEmitter, Input, Output, inject, signal, effect, OnInit, OnDestroy } from '@angular/core';
+import { Component, EventEmitter, Input, Output, inject, signal, effect, OnInit, OnDestroy, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TransportRequest, TransportRequestStatus, TransportRequestType } from '../../../../shared/interfaces/transport-request.interface';
+import { FreePassService } from '../../../../shared/services/free-pass.service';
 import { PersonService } from '../../../../shared/services/person.service';
 import { Person } from '../../../../shared/interfaces/person';
 import { Subscription } from 'rxjs';
@@ -19,6 +20,7 @@ export class TransportRequestForm implements OnInit, OnDestroy {
 
   private fb = inject(FormBuilder);
   private personService = inject(PersonService);
+  private freePassService = inject(FreePassService);
 
   form: FormGroup;
   isRegistered = signal<boolean>(false);
@@ -29,20 +31,42 @@ export class TransportRequestForm implements OnInit, OnDestroy {
 
   statusOptions = Object.values(TransportRequestStatus);
   typeOptions = Object.values(TransportRequestType);
+  hasProvincialPass = computed(() => {
+    const person = this.foundPerson();
+    if (!person) return false;
+    return this.freePassService.freePasses().some(fp => fp.personId === person.id);
+  });
+  availableTypes = computed(() => {
+    const all = Object.values(TransportRequestType).filter(t => t !== TransportRequestType.RENOVACION);
+    if (this.hasProvincialPass()) {
+      return all.filter(t => t !== TransportRequestType.PASE_PROVINCIAL && t !== TransportRequestType.AMBOS);
+    }
+    return all;
+  });
   private lookupSubscription: Subscription | null = null;
+  private typeSubscription: Subscription | null = null;
+
+  selectedType = signal<TransportRequestType>(TransportRequestType.AMBOS);
+
+  isNational = computed(() => {
+    return this.selectedType() === TransportRequestType.PASAJE_NACIONAL || this.selectedType() === TransportRequestType.AMBOS;
+  });
 
   constructor() {
     this.form = this.fb.group({
-      dni: [{ value: '', disabled: false }, [Validators.required, Validators.pattern('^[0-9]*$')]],
-      firstName: [{ value: '', disabled: true }],
-      lastName: [{ value: '', disabled: true }],
-      dateBirth: [{ value: '', disabled: true }],
-      phone: [{ value: '', disabled: true }],
-      email: [{ value: '', disabled: true }],
-      address: [{ value: '', disabled: true }],
+      dni: ['', [Validators.required, Validators.pattern('^[0-9]*$')]],
+      firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
+      dateBirth: [''],
+      phone: [''],
+      address: [''],
       type: [TransportRequestType.AMBOS, Validators.required],
       status: [TransportRequestStatus.PENDIENTE, Validators.required],
-      observations: ['']
+      observations: [''],
+      tripDate: [''],
+      ticketQuantity: [1],
+      origin: [''],
+      destination: [''],
     });
   }
 
@@ -53,10 +77,15 @@ export class TransportRequestForm implements OnInit, OnDestroy {
       this.checkDone.set(true);
       this.foundPerson.set(null);
     }
+    this.selectedType.set(this.form.get('type')?.value ?? TransportRequestType.AMBOS);
+    this.typeSubscription = this.form.get('type')?.valueChanges.subscribe(val => {
+      this.selectedType.set(val);
+    }) ?? null;
   }
 
   ngOnDestroy() {
     this.lookupSubscription?.unsubscribe();
+    this.typeSubscription?.unsubscribe();
   }
 
   lookupDni() {
@@ -74,24 +103,34 @@ export class TransportRequestForm implements OnInit, OnDestroy {
     this.lookupSubscription = this.personService.findByDniHttp(String(dni)).subscribe({
       next: (person) => {
         this.isRegistered.set(true);
+        this.form.get('firstName')?.disable();
+        this.form.get('lastName')?.disable();
+        this.form.get('dateBirth')?.disable();
+        this.form.get('phone')?.disable();
+        this.form.get('address')?.disable();
         this.form.patchValue({
           firstName: person.firstName,
           lastName: person.lastName,
           dateBirth: this.toDateInput(person.dateBirth as any),
           phone: String(person.phone ?? ''),
-          email: '',
           address: `${person.address?.street ?? ''} ${person.address?.district ?? ''}, ${person.address?.locality ?? ''}, ${person.address?.province ?? ''}`,
         }, { emitEvent: false });
         this.foundPerson.set(person);
         this.checkDone.set(true);
         this.lookupError.set(null);
         this.searching.set(false);
+        const currentType = this.form.get('type')?.value;
+        if (currentType === TransportRequestType.PASE_PROVINCIAL || currentType === TransportRequestType.AMBOS) {
+          if (this.hasProvincialPass()) {
+            this.form.get('type')?.setValue(TransportRequestType.PASAJE_NACIONAL);
+          }
+        }
       },
       error: () => {
         this.isRegistered.set(false);
         this.foundPerson.set(null);
         this.checkDone.set(true);
-        this.lookupError.set('No se encontró el DNI en el padrón. Se guardará como solicitud manual.');
+        this.lookupError.set('No se encontró el DNI en el padrón. Complete los datos manualmente.');
         this.searching.set(false);
       }
     });
@@ -113,13 +152,17 @@ export class TransportRequestForm implements OnInit, OnDestroy {
       lastName: String(raw.lastName ?? ''),
       dateBirth: raw.dateBirth ?? '',
       phone: String(raw.phone ?? ''),
-      email: String(raw.email ?? ''),
       address: String(raw.address ?? ''),
       type: raw.type,
       status: raw.status,
       observations: String(raw.observations ?? ''),
       createdAt,
       isRegisteredBeneficiary: this.isRegistered(),
+      personId: this.foundPerson()?.id,
+      tripDate: raw.tripDate || undefined,
+      ticketQuantity: raw.ticketQuantity ? Number(raw.ticketQuantity) : undefined,
+      origin: raw.origin || undefined,
+      destination: raw.destination || undefined,
     };
 
     this.save.emit(payload);

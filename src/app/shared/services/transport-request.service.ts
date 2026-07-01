@@ -1,6 +1,7 @@
 import { inject, Injectable, signal, computed } from '@angular/core';
 import { TransportRequest, TransportRequestStatus, TransportRequestType } from '../interfaces/transport-request.interface';
 import { FreePassService } from './free-pass.service';
+import { PersonService } from './person.service';
 import { FreePassResponse, NationalFreePassResponse } from '../interfaces/free-pass.interface';
 
 @Injectable({
@@ -8,6 +9,7 @@ import { FreePassResponse, NationalFreePassResponse } from '../interfaces/free-p
 })
 export class TransportRequestService {
   private freePassService = inject(FreePassService);
+  private personService = inject(PersonService);
 
   private requestsSignal = signal<TransportRequest[]>([]);
   requests = computed(() => this.requestsSignal());
@@ -89,6 +91,10 @@ export class TransportRequestService {
       observations: `${np.origin || ''} → ${np.destination || ''} | ${np.reason || ''}`,
       createdAt: np.createdAt,
       isRegisteredBeneficiary: true,
+      tripDate: np.tripDate,
+      ticketQuantity: np.ticketQuantity,
+      origin: np.origin,
+      destination: np.destination,
     };
   }
 
@@ -103,34 +109,49 @@ export class TransportRequestService {
   }
 
   addRequest(req: TransportRequest): void {
-    const fpList = this.freePassService.freePasses();
-    const person = fpList.find(fp => {
-      const name = fp.fullName.toLowerCase();
-      return name.includes(req.firstName.toLowerCase()) && name.includes(req.lastName.toLowerCase());
-    });
+    let personId = req.personId;
 
-    if ((req.type === TransportRequestType.PASE_PROVINCIAL || req.type === TransportRequestType.AMBOS) && person) {
-      const exists = fpList.find(fp => fp.personId === person.personId);
+    if (!personId) {
+      const person = this.personService.findByDni(req.dni);
+      if (person) {
+        personId = person.id;
+      }
+    }
+
+    if (!personId) {
+      const localId = `manual-${Date.now()}`;
+      this.requestsSignal.update(reqs => [{ ...req, id: localId }, ...reqs]);
+      return;
+    }
+
+    if (req.type === TransportRequestType.PASE_PROVINCIAL || req.type === TransportRequestType.AMBOS) {
+      const exists = this.freePassService.freePasses().find(fp => fp.personId === personId);
       if (!exists) {
         this.freePassService.createFreePass({
-          personId: person.personId,
+          personId,
           reason: req.observations,
           freePassExpiration: req.freePassExpiration
         }).subscribe({
           next: () => this.syncFromBackend(),
-          error: (err) => console.error('Error al crear pase libre:', err)
+          error: (err) => alert(err.error?.message || 'Error al crear pase libre. La persona ya podría tener uno.')
         });
+      } else {
+        alert('Esta persona ya posee un Pase Provincial.');
       }
     }
 
-    if ((req.type === TransportRequestType.PASAJE_NACIONAL || req.type === TransportRequestType.AMBOS) && person) {
+    if (req.type === TransportRequestType.PASAJE_NACIONAL || req.type === TransportRequestType.AMBOS) {
       this.freePassService.createNationalFreePass({
-        personId: person.personId,
+        personId,
         reason: req.observations,
-        freePassExpiration: req.freePassExpiration
+        freePassExpiration: req.freePassExpiration,
+        tripDate: req.tripDate,
+        ticketQuantity: req.ticketQuantity,
+        origin: req.origin,
+        destination: req.destination,
       }).subscribe({
         next: () => this.syncFromBackend(),
-        error: (err) => console.error('Error al crear pase nacional:', err)
+        error: (err) => alert(err.error?.message || 'Error al crear pasaje nacional.')
       });
     }
   }

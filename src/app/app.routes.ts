@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { authGuard } from './shared/services/auth.service';
+import { adminGuard, authGuard } from './shared/services/auth.service';
 
 export const routes: Routes = [
   {
@@ -22,6 +22,7 @@ export const routes: Routes = [
       },
       {
         path: 'usuarios',
+        canActivate: [adminGuard],
         loadComponent: () => import('./features/user-management/list/user-management'),
       },
       {

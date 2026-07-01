@@ -7,6 +7,16 @@
   </div>
 
   <div class="p-6 grow overflow-y-auto bg-slate-50">
+    @if (formErrors.length > 0) {
+      <div class="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg">
+        <p class="text-sm font-semibold text-red-800 mb-1">Campos obligatorios incompletos:</p>
+        <ul class="text-sm text-red-700 list-disc list-inside">
+          @for (err of formErrors; track err) {
+            <li>{{ err }}</li>
+          }
+        </ul>
+      </div>
+    }
     <!-- DATOS DE LA PERSONA -->
     <fieldset class="lg:col-span-3 border border-slate-300 rounded-lg p-4 mb-4 bg-white">
       <legend class="px-2 text-md font-semibold text-teal-600">1. Datos de la Persona</legend>
@@ -87,7 +97,7 @@
         </div>
         <div class="lg:col-span-2">
           <label class="form-label">Tutor</label>
-          <input formControlName="tutor" type="text" class="form-input" placeholder="Ej: Juan Gomez" />
+          <input formControlName="tutor" type="text" class="form-input" placeholder="Ej: Perez Carlos" />
           @if (formUtils.isValidField(personForm, 'tutor')) {
           <span class="text-xs text-red-600">
             {{ formUtils.getFieldError(personForm, 'tutor') }}

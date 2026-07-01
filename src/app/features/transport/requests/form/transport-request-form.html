@@ -48,6 +48,11 @@
             </div>
           }
         </div>
+        @if (hasProvincialPass()) {
+          <div class="p-3 rounded-xl bg-blue-50 border border-blue-200 text-blue-800 text-sm">
+            <strong>Ya posee un Pase Provincial.</strong> Solo puede solicitar Pasajes Nacionales.
+          </div>
+        }
       }
 
       @if (lookupError() && !searching()) {
@@ -67,33 +72,29 @@
 
         <div>
           <label class="block text-sm font-medium text-slate-700 mb-1">Nombre</label>
-          <input type="text" formControlName="firstName" [disabled]="true" class="w-full px-4 py-2 border border-slate-300 rounded-lg bg-slate-50 text-slate-800">
+          <input type="text" formControlName="firstName" [disabled]="isRegistered()" class="w-full px-4 py-2 border border-slate-300 rounded-lg" [ngClass]="isRegistered() ? 'bg-slate-50' : 'bg-white'">
         </div>
         <div>
           <label class="block text-sm font-medium text-slate-700 mb-1">Apellido</label>
-          <input type="text" formControlName="lastName" [disabled]="true" class="w-full px-4 py-2 border border-slate-300 rounded-lg bg-slate-50 text-slate-800">
+          <input type="text" formControlName="lastName" [disabled]="isRegistered()" class="w-full px-4 py-2 border border-slate-300 rounded-lg" [ngClass]="isRegistered() ? 'bg-slate-50' : 'bg-white'">
         </div>
         <div>
           <label class="block text-sm font-medium text-slate-700 mb-1">Fecha de Nacimiento</label>
-          <input type="date" formControlName="dateBirth" [disabled]="true" class="w-full px-4 py-2 border border-slate-300 rounded-lg bg-slate-50 text-slate-800">
+          <input type="date" formControlName="dateBirth" [disabled]="isRegistered()" class="w-full px-4 py-2 border border-slate-300 rounded-lg" [ngClass]="isRegistered() ? 'bg-slate-50' : 'bg-white'">
         </div>
         <div>
           <label class="block text-sm font-medium text-slate-700 mb-1">Teléfono</label>
-          <input type="tel" formControlName="phone" [disabled]="true" class="w-full px-4 py-2 border border-slate-300 rounded-lg bg-slate-50 text-slate-800">
-        </div>
-        <div>
-          <label class="block text-sm font-medium text-slate-700 mb-1">Correo Electrónico</label>
-          <input type="email" formControlName="email" [disabled]="true" class="w-full px-4 py-2 border border-slate-300 rounded-lg bg-slate-50 text-slate-800">
+          <input type="tel" formControlName="phone" [disabled]="isRegistered()" class="w-full px-4 py-2 border border-slate-300 rounded-lg" [ngClass]="isRegistered() ? 'bg-slate-50' : 'bg-white'">
         </div>
         <div class="md:col-span-2">
           <label class="block text-sm font-medium text-slate-700 mb-1">Domicilio</label>
-          <input type="text" formControlName="address" [disabled]="true" class="w-full px-4 py-2 border border-slate-300 rounded-lg bg-slate-50 text-slate-800">
+          <input type="text" formControlName="address" [disabled]="isRegistered()" class="w-full px-4 py-2 border border-slate-300 rounded-lg" [ngClass]="isRegistered() ? 'bg-slate-50' : 'bg-white'">
         </div>
 
         <div>
           <label class="block text-sm font-medium text-slate-700 mb-1">Tipo de Solicitud</label>
           <select formControlName="type" class="w-full px-4 py-2 border border-slate-300 rounded-lg bg-white">
-            @for (t of typeOptions; track t) {
+            @for (t of availableTypes(); track t) {
               <option [value]="t">{{ t }}</option>
             }
           </select>
@@ -111,6 +112,28 @@
           <label class="block text-sm font-medium text-slate-700 mb-1">Observaciones</label>
           <textarea formControlName="observations" rows="3" class="w-full px-4 py-2 border border-slate-300 rounded-lg bg-white"></textarea>
         </div>
+
+        @if (isNational()) {
+          <div class="md:col-span-2 border-t border-slate-200 pt-4">
+            <h3 class="text-sm font-bold text-slate-700 mb-3">Datos del Pasaje Nacional</h3>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-slate-700 mb-1">Fecha de Viaje</label>
+            <input type="date" formControlName="tripDate" class="w-full px-4 py-2 border border-slate-300 rounded-lg bg-white">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-slate-700 mb-1">Cantidad de Pasajes</label>
+            <input type="number" formControlName="ticketQuantity" min="1" class="w-full px-4 py-2 border border-slate-300 rounded-lg bg-white">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-slate-700 mb-1">Origen</label>
+            <input type="text" formControlName="origin" class="w-full px-4 py-2 border border-slate-300 rounded-lg bg-white" placeholder="Ciudad de origen">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-slate-700 mb-1">Destino</label>
+            <input type="text" formControlName="destination" class="w-full px-4 py-2 border border-slate-300 rounded-lg bg-white" placeholder="Ciudad de destino">
+          </div>
+        }
       </div>
     </div>
 
