@@ -31,6 +31,9 @@ export class TransportRequestForm implements OnInit, OnDestroy {
 
   statusOptions = Object.values(TransportRequestStatus);
   typeOptions = Object.values(TransportRequestType);
+  isEditingFreePass = computed(() => {
+    return !!this.request && this.request.type === TransportRequestType.PASE_PROVINCIAL;
+  });
   hasProvincialPass = computed(() => {
     const person = this.foundPerson();
     if (!person) return false;
@@ -59,7 +62,10 @@ export class TransportRequestForm implements OnInit, OnDestroy {
       lastName: ['', Validators.required],
       dateBirth: [''],
       phone: [''],
-      address: [''],
+      street: [''],
+      district: [''],
+      locality: [''],
+      province: [''],
       type: [TransportRequestType.AMBOS, Validators.required],
       status: [TransportRequestStatus.PENDIENTE, Validators.required],
       observations: [''],
@@ -76,6 +82,12 @@ export class TransportRequestForm implements OnInit, OnDestroy {
       this.isRegistered.set(!!this.request.isRegisteredBeneficiary);
       this.checkDone.set(true);
       this.foundPerson.set(null);
+      this.form.get('dni')?.clearValidators();
+      this.form.get('dni')?.updateValueAndValidity();
+      this.loadPersonForEdit();
+      if (this.request.type === TransportRequestType.PASE_PROVINCIAL) {
+        this.disableAllExceptStatusAndObs();
+      }
     }
     this.selectedType.set(this.form.get('type')?.value ?? TransportRequestType.AMBOS);
     this.typeSubscription = this.form.get('type')?.valueChanges.subscribe(val => {
@@ -103,17 +115,16 @@ export class TransportRequestForm implements OnInit, OnDestroy {
     this.lookupSubscription = this.personService.findByDniHttp(String(dni)).subscribe({
       next: (person) => {
         this.isRegistered.set(true);
-        this.form.get('firstName')?.disable();
-        this.form.get('lastName')?.disable();
-        this.form.get('dateBirth')?.disable();
-        this.form.get('phone')?.disable();
-        this.form.get('address')?.disable();
+        this.disablePersonFields();
         this.form.patchValue({
           firstName: person.firstName,
           lastName: person.lastName,
           dateBirth: this.toDateInput(person.dateBirth as any),
           phone: String(person.phone ?? ''),
-          address: `${person.address?.street ?? ''} ${person.address?.district ?? ''}, ${person.address?.locality ?? ''}, ${person.address?.province ?? ''}`,
+          street: person.address?.street ?? '',
+          district: person.address?.district ?? '',
+          locality: person.address?.locality ?? '',
+          province: person.address?.province ?? '',
         }, { emitEvent: false });
         this.foundPerson.set(person);
         this.checkDone.set(true);
@@ -144,6 +155,7 @@ export class TransportRequestForm implements OnInit, OnDestroy {
 
     const raw = this.form.getRawValue();
     const createdAt = this.request?.createdAt ?? new Date().toISOString();
+    const parts = [raw.street, raw.district, `${raw.locality}, ${raw.province}`].filter(Boolean);
     const payload: TransportRequest = {
       ...(this.request ?? {}),
       ...raw,
@@ -152,13 +164,13 @@ export class TransportRequestForm implements OnInit, OnDestroy {
       lastName: String(raw.lastName ?? ''),
       dateBirth: raw.dateBirth ?? '',
       phone: String(raw.phone ?? ''),
-      address: String(raw.address ?? ''),
+      address: parts.join(' '),
       type: raw.type,
       status: raw.status,
       observations: String(raw.observations ?? ''),
       createdAt,
       isRegisteredBeneficiary: this.isRegistered(),
-      personId: this.foundPerson()?.id,
+      personId: this.foundPerson()?.id ?? this.request?.personId,
       tripDate: raw.tripDate || undefined,
       ticketQuantity: raw.ticketQuantity ? Number(raw.ticketQuantity) : undefined,
       origin: raw.origin || undefined,
@@ -166,6 +178,50 @@ export class TransportRequestForm implements OnInit, OnDestroy {
     };
 
     this.save.emit(payload);
+  }
+
+  private disablePersonFields() {
+    this.form.get('firstName')?.disable();
+    this.form.get('lastName')?.disable();
+    this.form.get('dateBirth')?.disable();
+    this.form.get('phone')?.disable();
+    this.form.get('street')?.disable();
+    this.form.get('district')?.disable();
+    this.form.get('locality')?.disable();
+    this.form.get('province')?.disable();
+  }
+
+  private disableAllExceptStatusAndObs() {
+    const controls = ['dni', 'firstName', 'lastName', 'dateBirth', 'phone',
+      'street', 'district', 'locality', 'province', 'type',
+      'tripDate', 'ticketQuantity', 'origin', 'destination'];
+    controls.forEach(name => {
+      this.form.get(name)?.disable();
+    });
+  }
+
+  private loadPersonForEdit() {
+    const personId = this.request?.personId;
+    if (!personId) return;
+    const local = this.personService.persons().find(p => p.id === personId);
+    if (local) {
+      this.patchAddress(local);
+    } else if (this.request?.dni) {
+      this.personService.findByDniHttp(this.request.dni).subscribe({
+        next: (person) => this.patchAddress(person),
+      });
+    }
+  }
+
+  private patchAddress(person: Person) {
+    this.form.patchValue({
+      street: person.address?.street ?? '',
+      district: person.address?.district ?? '',
+      locality: person.address?.locality ?? '',
+      province: person.address?.province ?? '',
+      dateBirth: this.toDateInput(person.dateBirth as any),
+      phone: String(person.phone ?? ''),
+    }, { emitEvent: false });
   }
 
   private toDateInput(value: any): string {

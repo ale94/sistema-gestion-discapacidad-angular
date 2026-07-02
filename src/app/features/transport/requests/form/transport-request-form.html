@@ -63,8 +63,8 @@
         <div class="md:col-span-2">
           <label class="block text-sm font-medium text-slate-700 mb-1">DNI</label>
           <div class="flex gap-2">
-            <input type="text" formControlName="dni" [readOnly]="!!request" class="w-full px-4 py-2 border border-slate-300 rounded-lg bg-white" placeholder="Ingrese DNI">
-            <button type="button" (click)="lookupDni()" [disabled]="searching() || !!request" class="px-4 py-2 bg-slate-800 text-white rounded-lg hover:bg-slate-900 transition-colors font-medium disabled:opacity-50">
+            <input type="text" formControlName="dni" [readOnly]="!!request" [disabled]="isEditingFreePass()" class="w-full px-4 py-2 border border-slate-300 rounded-lg" [ngClass]="isEditingFreePass() ? 'bg-slate-200 cursor-not-allowed' : 'bg-white'" placeholder="Ingrese DNI">
+            <button type="button" (click)="lookupDni()" [disabled]="searching() || !!request || isEditingFreePass()" class="px-4 py-2 bg-slate-800 text-white rounded-lg hover:bg-slate-900 transition-colors font-medium disabled:opacity-50">
               {{ searching() ? 'Buscando...' : 'Buscar' }}
             </button>
           </div>
@@ -72,28 +72,46 @@
 
         <div>
           <label class="block text-sm font-medium text-slate-700 mb-1">Nombre</label>
-          <input type="text" formControlName="firstName" [disabled]="isRegistered()" class="w-full px-4 py-2 border border-slate-300 rounded-lg" [ngClass]="isRegistered() ? 'bg-slate-50' : 'bg-white'">
+          <input type="text" formControlName="firstName" [disabled]="isEditingFreePass()" class="w-full px-4 py-2 border border-slate-300 rounded-lg" [ngClass]="isEditingFreePass() ? 'bg-slate-200 cursor-not-allowed' : (isRegistered() ? 'bg-slate-50' : 'bg-white')">
         </div>
         <div>
           <label class="block text-sm font-medium text-slate-700 mb-1">Apellido</label>
-          <input type="text" formControlName="lastName" [disabled]="isRegistered()" class="w-full px-4 py-2 border border-slate-300 rounded-lg" [ngClass]="isRegistered() ? 'bg-slate-50' : 'bg-white'">
+          <input type="text" formControlName="lastName" [disabled]="isEditingFreePass()" class="w-full px-4 py-2 border border-slate-300 rounded-lg" [ngClass]="isEditingFreePass() ? 'bg-slate-200 cursor-not-allowed' : (isRegistered() ? 'bg-slate-50' : 'bg-white')">
         </div>
         <div>
           <label class="block text-sm font-medium text-slate-700 mb-1">Fecha de Nacimiento</label>
-          <input type="date" formControlName="dateBirth" [disabled]="isRegistered()" class="w-full px-4 py-2 border border-slate-300 rounded-lg" [ngClass]="isRegistered() ? 'bg-slate-50' : 'bg-white'">
+          <input type="date" formControlName="dateBirth" [disabled]="isEditingFreePass()" class="w-full px-4 py-2 border border-slate-300 rounded-lg" [ngClass]="isEditingFreePass() ? 'bg-slate-200 cursor-not-allowed' : (isRegistered() ? 'bg-slate-50' : 'bg-white')">
         </div>
         <div>
           <label class="block text-sm font-medium text-slate-700 mb-1">Teléfono</label>
-          <input type="tel" formControlName="phone" [disabled]="isRegistered()" class="w-full px-4 py-2 border border-slate-300 rounded-lg" [ngClass]="isRegistered() ? 'bg-slate-50' : 'bg-white'">
+          <input type="tel" formControlName="phone" [disabled]="isEditingFreePass()" class="w-full px-4 py-2 border border-slate-300 rounded-lg" [ngClass]="isEditingFreePass() ? 'bg-slate-200 cursor-not-allowed' : (isRegistered() ? 'bg-slate-50' : 'bg-white')">
         </div>
-        <div class="md:col-span-2">
-          <label class="block text-sm font-medium text-slate-700 mb-1">Domicilio</label>
-          <input type="text" formControlName="address" [disabled]="isRegistered()" class="w-full px-4 py-2 border border-slate-300 rounded-lg" [ngClass]="isRegistered() ? 'bg-slate-50' : 'bg-white'">
-        </div>
+        <!-- DIRECCION -->
+        <fieldset class="md:col-span-2 border border-slate-300 rounded-lg p-4 bg-white">
+          <legend class="px-2 text-sm font-semibold text-teal-600">Dirección</legend>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+            <div>
+              <label class="block text-sm font-medium text-slate-700 mb-1">Barrio</label>
+              <input formControlName="district" type="text" [disabled]="isEditingFreePass()" class="w-full px-4 py-2 border border-slate-300 rounded-lg" [ngClass]="isEditingFreePass() ? 'bg-slate-200 cursor-not-allowed' : (isRegistered() ? 'bg-slate-50' : 'bg-white')" placeholder="Ej: San Francisco">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-slate-700 mb-1">Calle</label>
+              <input formControlName="street" type="text" [disabled]="isEditingFreePass()" class="w-full px-4 py-2 border border-slate-300 rounded-lg" [ngClass]="isEditingFreePass() ? 'bg-slate-200 cursor-not-allowed' : (isRegistered() ? 'bg-slate-50' : 'bg-white')" placeholder="Ej: Av. 9 de Julio">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-slate-700 mb-1">Localidad</label>
+              <input formControlName="locality" type="text" [disabled]="isEditingFreePass()" class="w-full px-4 py-2 border border-slate-300 rounded-lg" [ngClass]="isEditingFreePass() ? 'bg-slate-200 cursor-not-allowed' : (isRegistered() ? 'bg-slate-50' : 'bg-white')" placeholder="Ej: Libertador General San Martín">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-slate-700 mb-1">Provincia</label>
+              <input formControlName="province" type="text" [disabled]="isEditingFreePass()" class="w-full px-4 py-2 border border-slate-300 rounded-lg" [ngClass]="isEditingFreePass() ? 'bg-slate-200 cursor-not-allowed' : (isRegistered() ? 'bg-slate-50' : 'bg-white')" placeholder="Ingrese su provincia">
+            </div>
+          </div>
+        </fieldset>
 
         <div>
           <label class="block text-sm font-medium text-slate-700 mb-1">Tipo de Solicitud</label>
-          <select formControlName="type" class="w-full px-4 py-2 border border-slate-300 rounded-lg bg-white">
+          <select formControlName="type" [disabled]="isEditingFreePass()" class="w-full px-4 py-2 border border-slate-300 rounded-lg" [ngClass]="isEditingFreePass() ? 'bg-slate-200 cursor-not-allowed' : 'bg-white'">
             @for (t of availableTypes(); track t) {
               <option [value]="t">{{ t }}</option>
             }
@@ -119,19 +137,19 @@
           </div>
           <div>
             <label class="block text-sm font-medium text-slate-700 mb-1">Fecha de Viaje</label>
-            <input type="date" formControlName="tripDate" class="w-full px-4 py-2 border border-slate-300 rounded-lg bg-white">
+            <input type="date" formControlName="tripDate" [disabled]="isEditingFreePass()" class="w-full px-4 py-2 border border-slate-300 rounded-lg" [ngClass]="isEditingFreePass() ? 'bg-slate-200 cursor-not-allowed' : 'bg-white'">
           </div>
           <div>
             <label class="block text-sm font-medium text-slate-700 mb-1">Cantidad de Pasajes</label>
-            <input type="number" formControlName="ticketQuantity" min="1" class="w-full px-4 py-2 border border-slate-300 rounded-lg bg-white">
+            <input type="number" formControlName="ticketQuantity" min="1" [disabled]="isEditingFreePass()" class="w-full px-4 py-2 border border-slate-300 rounded-lg" [ngClass]="isEditingFreePass() ? 'bg-slate-200 cursor-not-allowed' : 'bg-white'">
           </div>
           <div>
             <label class="block text-sm font-medium text-slate-700 mb-1">Origen</label>
-            <input type="text" formControlName="origin" class="w-full px-4 py-2 border border-slate-300 rounded-lg bg-white" placeholder="Ciudad de origen">
+            <input type="text" formControlName="origin" [disabled]="isEditingFreePass()" class="w-full px-4 py-2 border border-slate-300 rounded-lg" [ngClass]="isEditingFreePass() ? 'bg-slate-200 cursor-not-allowed' : 'bg-white'" placeholder="Ciudad de origen">
           </div>
           <div>
             <label class="block text-sm font-medium text-slate-700 mb-1">Destino</label>
-            <input type="text" formControlName="destination" class="w-full px-4 py-2 border border-slate-300 rounded-lg bg-white" placeholder="Ciudad de destino">
+            <input type="text" formControlName="destination" [disabled]="isEditingFreePass()" class="w-full px-4 py-2 border border-slate-300 rounded-lg" [ngClass]="isEditingFreePass() ? 'bg-slate-200 cursor-not-allowed' : 'bg-white'" placeholder="Ciudad de destino">
           </div>
         }
       </div>

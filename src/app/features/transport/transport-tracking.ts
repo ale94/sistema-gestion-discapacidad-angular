@@ -1,9 +1,10 @@
-import { Component, effect, inject, signal, computed } from '@angular/core';
+import { Component, effect, inject, signal, computed, untracked } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TransportService } from '../../shared/services/transport.service';
 import { TransportRequestService } from '../../shared/services/transport-request.service';
 import { FreePassService } from '../../shared/services/free-pass.service';
+import { PersonService } from '../../shared/services/person.service';
 import { TransportRequest, TransportRequestStatus } from '../../shared/interfaces/transport-request.interface';
 import { TransportRequestForm } from './requests/form/transport-request-form';
 import { TransportRequestRenew } from './requests/renew/transport-request-renew';
@@ -18,15 +19,19 @@ export default class TransportTracking {
   transportService = inject(TransportService);
   requestService = inject(TransportRequestService);
   freePassService = inject(FreePassService);
+  private personService = inject(PersonService);
 
   constructor() {
     this.freePassService.loadAll();
+    this.personService.loadPersons();
     effect(() => {
       const data = this.freePassService.freePasses();
       const national = this.freePassService.nationalFreePasses();
       if (data.length > 0 || national.length > 0) {
-        this.requestService.syncFromBackend();
-        this.transportService.refresh();
+        untracked(() => {
+          this.requestService.syncFromBackend();
+          this.transportService.refresh();
+        });
       }
     });
   }
@@ -64,6 +69,7 @@ export default class TransportTracking {
   showRequestModal = signal<boolean>(false);
   selectedRequest = signal<TransportRequest | null>(null);
   showRenewModal = signal<boolean>(false);
+  requestToDelete = signal<TransportRequest | null>(null);
 
   searchTerm = signal('');
   searchInput = signal('');
@@ -210,11 +216,21 @@ export default class TransportTracking {
     this.closeRequestModal();
   }
 
-  deleteRequest(id: string) {
-    if (confirm('¿Está seguro de eliminar esta solicitud?')) {
-      this.requestService.deleteRequest(id);
+  requestDelete(req: TransportRequest) {
+    this.requestToDelete.set(req);
+  }
+
+  confirmDeleteAction() {
+    const req = this.requestToDelete();
+    if (req?.id) {
+      this.requestService.deleteRequest(req.id);
       this.currentPage.set(Math.min(this.currentPage(), this.totalPages()));
+      this.requestToDelete.set(null);
     }
+  }
+
+  cancelDelete() {
+    this.requestToDelete.set(null);
   }
 
   getStatusClass(status: TransportRequestStatus): string {

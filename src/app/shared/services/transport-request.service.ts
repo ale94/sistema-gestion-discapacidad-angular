@@ -15,14 +15,18 @@ export class TransportRequestService {
   requests = computed(() => this.requestsSignal());
 
   syncFromBackend() {
+    const existingMap = new Map<string, TransportRequest>();
+    for (const r of this.requestsSignal()) {
+      existingMap.set(r.id!, r);
+    }
     const all: TransportRequest[] = [];
 
     for (const fp of this.freePassService.freePasses()) {
-      all.push(this.fpToTransportRequest(fp));
+      all.push(this.mergeExisting(this.fpToTransportRequest(fp), existingMap));
     }
 
     for (const np of this.freePassService.nationalFreePasses()) {
-      all.push(this.npToTransportRequest(np));
+      all.push(this.mergeExisting(this.npToTransportRequest(np), existingMap));
     }
 
     for (const r of this.freePassService.renewals()) {
@@ -51,6 +55,20 @@ export class TransportRequestService {
     this.requestsSignal.set(all);
   }
 
+  private mergeExisting(req: TransportRequest, existingMap: Map<string, TransportRequest>): TransportRequest {
+    const old = existingMap.get(req.id!);
+    if (!old) return req;
+    return {
+      ...req,
+      firstName: old.firstName || req.firstName,
+      lastName: old.lastName || req.lastName,
+      dateBirth: req.dateBirth || old.dateBirth,
+      phone: req.phone || old.phone,
+      email: req.email || old.email,
+      address: req.address || old.address,
+    };
+  }
+
   private splitFullName(fullName: string): { first: string; last: string } {
     const parts = fullName ? fullName.split(', ') : ['', ''];
     return { last: parts[0] || '', first: parts[1] || '' };
@@ -72,6 +90,7 @@ export class TransportRequestService {
       observations: fp.reason || '',
       createdAt: fp.createdAt,
       isRegisteredBeneficiary: true,
+      personId: fp.personId,
     };
   }
 
@@ -88,9 +107,10 @@ export class TransportRequestService {
       address: '',
       type: TransportRequestType.PASAJE_NACIONAL,
       status: this.mapStatus(np.status),
-      observations: `${np.origin || ''} → ${np.destination || ''} | ${np.reason || ''}`,
+      observations: np.reason || '',
       createdAt: np.createdAt,
       isRegisteredBeneficiary: true,
+      personId: np.personId,
       tripDate: np.tripDate,
       ticketQuantity: np.ticketQuantity,
       origin: np.origin,
@@ -157,9 +177,64 @@ export class TransportRequestService {
   }
 
   updateRequest(id: string, updatedData: Partial<TransportRequest>): void {
+    console.log('[updateRequest] id:', id, 'updatedData:', updatedData);
     this.requestsSignal.update(reqs =>
       reqs.map(req => (req.id === id ? { ...req, ...updatedData } : req))
     );
+
+    if (id.startsWith('fp-')) {
+      const freePassId = Number(id.replace('fp-', ''));
+
+      if (updatedData.status) {
+        const backendStatus = this.toBackendStatus(updatedData.status);
+        if (backendStatus) {
+          this.freePassService.updateFreePassStatus(freePassId, backendStatus).subscribe({
+            error: (err) => console.error('Error al actualizar estado del pase libre:', err)
+          });
+        }
+      }
+
+      this.freePassService.updateFreePass(freePassId, {
+        personId: updatedData.personId || 0,
+        reason: updatedData.observations,
+        freePassExpiration: updatedData.freePassExpiration,
+      }).subscribe({
+        next: () => this.syncFromBackend(),
+        error: (err) => {
+          console.error('Error al actualizar pase libre:', err);
+          alert('Error al actualizar pase libre: ' + (err.error?.message || err.message || JSON.stringify(err)));
+        }
+      });
+    } else if (id.startsWith('np-')) {
+      const nationalId = Number(id.replace('np-', ''));
+      this.freePassService.updateNationalFreePass(nationalId, {
+        personId: updatedData.personId || 0,
+        reason: updatedData.observations,
+        status: this.toBackendStatus(updatedData.status),
+        freePassExpiration: updatedData.freePassExpiration,
+        tripDate: updatedData.tripDate,
+        ticketQuantity: updatedData.ticketQuantity,
+        origin: updatedData.origin,
+        destination: updatedData.destination,
+      }).subscribe({
+        next: () => this.syncFromBackend(),
+        error: (err) => {
+          console.error('Error al actualizar pasaje nacional:', err);
+          alert('Error al actualizar pasaje nacional: ' + (err.error?.message || err.message || JSON.stringify(err)));
+        }
+      });
+    }
+  }
+
+  private toBackendStatus(status?: TransportRequestStatus): string | undefined {
+    if (!status) return undefined;
+    switch (status) {
+      case TransportRequestStatus.APROBADA: return 'APROBADO';
+      case TransportRequestStatus.RECHAZADA: return 'RECHAZADO';
+      case TransportRequestStatus.DOCUMENTACION_INCOMPLETA: return 'DOCUMENTACIÓN_INCOMPLETA';
+      case TransportRequestStatus.PENDIENTE: return 'PENDIENTE';
+      default: return undefined;
+    }
   }
 
   deleteRequest(id: string): void {
