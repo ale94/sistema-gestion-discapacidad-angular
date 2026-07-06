@@ -151,7 +151,7 @@ export class TransportRequestService {
         this.freePassService.createFreePass({
           personId,
           reason: req.observations,
-          freePassExpiration: req.freePassExpiration
+          status: this.toBackendStatus(req.status)
         }).subscribe({
           next: () => this.syncFromBackend(),
           error: (err) => {
