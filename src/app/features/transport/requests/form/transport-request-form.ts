@@ -29,7 +29,9 @@ export class TransportRequestForm implements OnInit, OnDestroy {
   lookupError = signal<string | null>(null);
   searching = signal<boolean>(false);
 
-  statusOptions = Object.values(TransportRequestStatus);
+  statusOptions = Object.values(TransportRequestStatus).filter(
+    s => s !== TransportRequestStatus.FINALIZADA && s !== TransportRequestStatus.EN_REVISION
+  );
   typeOptions = Object.values(TransportRequestType);
   isEditingFreePass = computed(() => {
     return !!this.request && this.request.type === TransportRequestType.PASE_PROVINCIAL;
