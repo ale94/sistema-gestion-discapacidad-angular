@@ -2,6 +2,7 @@ import { inject, Injectable, signal, computed } from '@angular/core';
 import { TransportRequest, TransportRequestStatus, TransportRequestType } from '../interfaces/transport-request.interface';
 import { FreePassService } from './free-pass.service';
 import { PersonService } from './person.service';
+import { NotificationService } from './notification.service';
 import { FreePassResponse, NationalFreePassResponse } from '../interfaces/free-pass.interface';
 
 @Injectable({
@@ -10,6 +11,7 @@ import { FreePassResponse, NationalFreePassResponse } from '../interfaces/free-p
 export class TransportRequestService {
   private freePassService = inject(FreePassService);
   private personService = inject(PersonService);
+  private notification = inject(NotificationService);
 
   private requestsSignal = signal<TransportRequest[]>([]);
   requests = computed(() => this.requestsSignal());
@@ -139,12 +141,11 @@ export class TransportRequestService {
     }
 
     if (!personId) {
-      const localId = `manual-${Date.now()}`;
-      this.requestsSignal.update(reqs => [{ ...req, id: localId }, ...reqs]);
+      this.notification.show('No se encontró la persona. Registre la persona primero.');
       return;
     }
 
-    if (req.type === TransportRequestType.PASE_PROVINCIAL || req.type === TransportRequestType.AMBOS) {
+    if (req.type === TransportRequestType.PASE_PROVINCIAL) {
       const exists = this.freePassService.freePasses().find(fp => fp.personId === personId);
       if (!exists) {
         this.freePassService.createFreePass({
@@ -153,14 +154,17 @@ export class TransportRequestService {
           freePassExpiration: req.freePassExpiration
         }).subscribe({
           next: () => this.syncFromBackend(),
-          error: (err) => alert(err.error?.message || 'Error al crear pase libre. La persona ya podría tener uno.')
+          error: (err) => {
+            console.error('Error al crear pase libre:', err);
+            this.notification.show('Error al guardar en el servidor. Intente nuevamente.');
+          }
         });
       } else {
-        alert('Esta persona ya posee un Pase Provincial.');
+        this.notification.show('Esta persona ya posee un Pase Provincial.');
       }
     }
 
-    if (req.type === TransportRequestType.PASAJE_NACIONAL || req.type === TransportRequestType.AMBOS) {
+    if (req.type === TransportRequestType.PASAJE_NACIONAL) {
       this.freePassService.createNationalFreePass({
         personId,
         reason: req.observations,
@@ -171,7 +175,10 @@ export class TransportRequestService {
         destination: req.destination,
       }).subscribe({
         next: () => this.syncFromBackend(),
-        error: (err) => alert(err.error?.message || 'Error al crear pasaje nacional.')
+        error: (err) => {
+          console.error('Error al crear pasaje nacional:', err);
+          this.notification.show('Error al guardar en el servidor. Intente nuevamente.');
+        }
       });
     }
   }
@@ -202,7 +209,7 @@ export class TransportRequestService {
         next: () => this.syncFromBackend(),
         error: (err) => {
           console.error('Error al actualizar pase libre:', err);
-          alert('Error al actualizar pase libre: ' + (err.error?.message || err.message || JSON.stringify(err)));
+          this.notification.show('Error al actualizar pase libre: ' + (err.error?.message || err.message || JSON.stringify(err)));
         }
       });
     } else if (id.startsWith('np-')) {
@@ -220,7 +227,7 @@ export class TransportRequestService {
         next: () => this.syncFromBackend(),
         error: (err) => {
           console.error('Error al actualizar pasaje nacional:', err);
-          alert('Error al actualizar pasaje nacional: ' + (err.error?.message || err.message || JSON.stringify(err)));
+          this.notification.show('Error al actualizar pasaje nacional: ' + (err.error?.message || err.message || JSON.stringify(err)));
         }
       });
     }

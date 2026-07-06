@@ -42,17 +42,17 @@ export class TransportRequestForm implements OnInit, OnDestroy {
   availableTypes = computed(() => {
     const all = Object.values(TransportRequestType).filter(t => t !== TransportRequestType.RENOVACION);
     if (this.hasProvincialPass()) {
-      return all.filter(t => t !== TransportRequestType.PASE_PROVINCIAL && t !== TransportRequestType.AMBOS);
+      return all.filter(t => t !== TransportRequestType.PASE_PROVINCIAL);
     }
     return all;
   });
   private lookupSubscription: Subscription | null = null;
   private typeSubscription: Subscription | null = null;
 
-  selectedType = signal<TransportRequestType>(TransportRequestType.AMBOS);
+  selectedType = signal<TransportRequestType>(TransportRequestType.PASAJE_NACIONAL);
 
   isNational = computed(() => {
-    return this.selectedType() === TransportRequestType.PASAJE_NACIONAL || this.selectedType() === TransportRequestType.AMBOS;
+    return this.selectedType() === TransportRequestType.PASAJE_NACIONAL;
   });
 
   constructor() {
@@ -66,7 +66,7 @@ export class TransportRequestForm implements OnInit, OnDestroy {
       district: [''],
       locality: [''],
       province: [''],
-      type: [TransportRequestType.AMBOS, Validators.required],
+      type: [TransportRequestType.PASAJE_NACIONAL, Validators.required],
       status: [TransportRequestStatus.PENDIENTE, Validators.required],
       observations: [''],
       tripDate: [''],
@@ -89,7 +89,7 @@ export class TransportRequestForm implements OnInit, OnDestroy {
         this.disableAllExceptStatusAndObs();
       }
     }
-    this.selectedType.set(this.form.get('type')?.value ?? TransportRequestType.AMBOS);
+    this.selectedType.set(this.form.get('type')?.value ?? TransportRequestType.PASAJE_NACIONAL);
     this.typeSubscription = this.form.get('type')?.valueChanges.subscribe(val => {
       this.selectedType.set(val);
     }) ?? null;
@@ -112,31 +112,15 @@ export class TransportRequestForm implements OnInit, OnDestroy {
     this.lookupError.set(null);
     this.lookupSubscription?.unsubscribe();
 
+    const localPerson = this.personService.findByDni(String(dni));
+    if (localPerson) {
+      this.onPersonFound(localPerson);
+      this.searching.set(false);
+      return;
+    }
+
     this.lookupSubscription = this.personService.findByDniHttp(String(dni)).subscribe({
-      next: (person) => {
-        this.isRegistered.set(true);
-        this.disablePersonFields();
-        this.form.patchValue({
-          firstName: person.firstName,
-          lastName: person.lastName,
-          dateBirth: this.toDateInput(person.dateBirth as any),
-          phone: String(person.phone ?? ''),
-          street: person.address?.street ?? '',
-          district: person.address?.district ?? '',
-          locality: person.address?.locality ?? '',
-          province: person.address?.province ?? '',
-        }, { emitEvent: false });
-        this.foundPerson.set(person);
-        this.checkDone.set(true);
-        this.lookupError.set(null);
-        this.searching.set(false);
-        const currentType = this.form.get('type')?.value;
-        if (currentType === TransportRequestType.PASE_PROVINCIAL || currentType === TransportRequestType.AMBOS) {
-          if (this.hasProvincialPass()) {
-            this.form.get('type')?.setValue(TransportRequestType.PASAJE_NACIONAL);
-          }
-        }
-      },
+      next: (person) => this.onPersonFound(person),
       error: () => {
         this.isRegistered.set(false);
         this.foundPerson.set(null);
@@ -145,6 +129,31 @@ export class TransportRequestForm implements OnInit, OnDestroy {
         this.searching.set(false);
       }
     });
+  }
+
+  private onPersonFound(person: Person) {
+    this.isRegistered.set(true);
+    this.disablePersonFields();
+    this.form.patchValue({
+      firstName: person.firstName,
+      lastName: person.lastName,
+      dateBirth: this.toDateInput(person.dateBirth as any),
+      phone: String(person.phone ?? ''),
+      street: person.address?.street ?? '',
+      district: person.address?.district ?? '',
+      locality: person.address?.locality ?? '',
+      province: person.address?.province ?? '',
+    }, { emitEvent: false });
+    this.foundPerson.set(person);
+    this.checkDone.set(true);
+    this.lookupError.set(null);
+    this.searching.set(false);
+    const currentType = this.form.get('type')?.value;
+    if (currentType === TransportRequestType.PASE_PROVINCIAL) {
+      if (this.hasProvincialPass()) {
+        this.form.get('type')?.setValue(TransportRequestType.PASAJE_NACIONAL);
+      }
+    }
   }
 
   onSubmit() {

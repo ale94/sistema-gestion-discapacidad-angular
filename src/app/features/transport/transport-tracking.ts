@@ -5,6 +5,7 @@ import { TransportService } from '../../shared/services/transport.service';
 import { TransportRequestService } from '../../shared/services/transport-request.service';
 import { FreePassService } from '../../shared/services/free-pass.service';
 import { PersonService } from '../../shared/services/person.service';
+import { NotificationService } from '../../shared/services/notification.service';
 import { TransportRequest, TransportRequestStatus } from '../../shared/interfaces/transport-request.interface';
 import { TransportRequestForm } from './requests/form/transport-request-form';
 import { TransportRequestRenew } from './requests/renew/transport-request-renew';
@@ -20,6 +21,7 @@ export default class TransportTracking {
   requestService = inject(TransportRequestService);
   freePassService = inject(FreePassService);
   private personService = inject(PersonService);
+  notification = inject(NotificationService);
 
   constructor() {
     this.freePassService.loadAll();
@@ -175,7 +177,7 @@ export default class TransportTracking {
         },
         error: (err) => {
           console.error('Error creating renewal:', err);
-          alert('Error al crear la renovación. Es posible que ya exista una para este año.');
+          this.notification.show('Error al crear la renovación. Es posible que ya exista una para este año.');
         }
       });
     } else {
@@ -196,11 +198,11 @@ export default class TransportTracking {
           },
           error: (err) => {
             console.error('Error creating renewal:', err);
-            alert('Error al crear la renovación.');
+            this.notification.show('Error al crear la renovación.');
           }
         });
       } else {
-        alert('No se encontró un pase libre activo para esta persona.');
+        this.notification.show('No se encontró un pase libre activo para esta persona.');
         this.closeRenewModal();
       }
     }

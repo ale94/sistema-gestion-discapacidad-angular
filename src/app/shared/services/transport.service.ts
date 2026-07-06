@@ -68,10 +68,10 @@ export class TransportService {
       if (!req.id || !req.id.startsWith('manual-')) continue;
       const d = new Date(req.createdAt);
       if (d.getFullYear() !== year) continue;
-      if (req.type === TransportRequestType.PASE_PROVINCIAL || req.type === TransportRequestType.AMBOS) {
+      if (req.type === TransportRequestType.PASE_PROVINCIAL) {
         carnetsPerMonth[d.getMonth()]++;
       }
-      if (req.type === TransportRequestType.PASAJE_NACIONAL || req.type === TransportRequestType.AMBOS) {
+      if (req.type === TransportRequestType.PASAJE_NACIONAL) {
         pasajesPerMonth[d.getMonth()]++;
       }
     }

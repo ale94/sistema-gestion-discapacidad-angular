@@ -10,7 +10,6 @@ export enum TransportRequestStatus {
 export enum TransportRequestType {
   PASE_PROVINCIAL = 'PASE PROVINCIAL',
   PASAJE_NACIONAL = 'PASAJE NACIONAL',
-  AMBOS = 'AMBOS',
   RENOVACION = 'RENOVACION'
 }
 
