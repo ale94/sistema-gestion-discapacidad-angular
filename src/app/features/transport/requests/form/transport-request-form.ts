@@ -71,10 +71,10 @@ export class TransportRequestForm implements OnInit, OnDestroy {
       type: [TransportRequestType.PASAJE_NACIONAL, Validators.required],
       status: [TransportRequestStatus.PENDIENTE, Validators.required],
       observations: [''],
-      tripDate: [''],
-      ticketQuantity: [1],
-      origin: [''],
-      destination: [''],
+      tripDate: ['', Validators.required],
+      ticketQuantity: [1, Validators.required],
+      origin: ['', Validators.required],
+      destination: ['', Validators.required],
     });
   }
 
