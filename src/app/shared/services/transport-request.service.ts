@@ -168,6 +168,7 @@ export class TransportRequestService {
       this.freePassService.createNationalFreePass({
         personId,
         reason: req.observations,
+        status: this.toBackendStatus(req.status),
         freePassExpiration: req.freePassExpiration,
         tripDate: req.tripDate,
         ticketQuantity: req.ticketQuantity,
