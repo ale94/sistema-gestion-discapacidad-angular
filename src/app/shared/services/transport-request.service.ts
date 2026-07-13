@@ -1,4 +1,5 @@
 import { inject, Injectable, signal, computed } from '@angular/core';
+import { Observable, of, tap, catchError, throwError } from 'rxjs';
 import { TransportRequest, TransportRequestStatus, TransportRequestType } from '../interfaces/transport-request.interface';
 import { FreePassService } from './free-pass.service';
 import { PersonService } from './person.service';
@@ -38,7 +39,7 @@ export class TransportRequestService {
         : { first: '', last: '' };
       all.push({
         id: `renewal-${r.id}`,
-        dni: '',
+        dni: parent ? String(parent.dni ?? '') : '',
         firstName: names.first,
         lastName: names.last,
         dateBirth: '',
@@ -50,6 +51,7 @@ export class TransportRequestService {
         observations: `Renovación año ${r.year}`,
         createdAt: r.createdAt,
         isRegisteredBeneficiary: true,
+        personId: parent?.personId,
       });
     }
 
@@ -250,21 +252,22 @@ export class TransportRequestService {
     }
   }
 
-  deleteRequest(id: string): void {
+  deleteRequest(id: string): Observable<void> {
     if (id.startsWith('fp-')) {
-      this.freePassService.deleteFreePass(Number(id.replace('fp-', '')))
-        .subscribe({
-          next: () => this.syncFromBackend(),
-          error: (err) => console.error('Error al eliminar pase libre:', err)
-        });
+      return this.freePassService.deleteFreePass(Number(id.replace('fp-', ''))).pipe(
+        tap(() => this.syncFromBackend())
+      );
     } else if (id.startsWith('np-')) {
-      this.freePassService.deleteNationalFreePass(Number(id.replace('np-', '')))
-        .subscribe({
-          next: () => this.syncFromBackend(),
-          error: (err) => console.error('Error al eliminar pase nacional:', err)
-        });
+      return this.freePassService.deleteNationalFreePass(Number(id.replace('np-', ''))).pipe(
+        tap(() => this.syncFromBackend())
+      );
+    } else if (id.startsWith('renewal-')) {
+      return this.freePassService.deleteRenewal(Number(id.replace('renewal-', ''))).pipe(
+        tap(() => this.syncFromBackend())
+      );
     } else {
       this.requestsSignal.update(reqs => reqs.filter(req => req.id !== id));
+      return of(void 0);
     }
   }
 }

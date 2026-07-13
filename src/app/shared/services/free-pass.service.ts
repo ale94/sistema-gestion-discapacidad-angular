@@ -85,4 +85,11 @@ export class FreePassService {
       catchError(err => throwError(() => err))
     );
   }
+
+  deleteRenewal(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.url}/free-pass-renewals/${id}`).pipe(
+      tap(() => this.renewals.update(list => list.filter(r => r.id !== id))),
+      catchError(err => throwError(() => err))
+    );
+  }
 }

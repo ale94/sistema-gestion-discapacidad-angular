@@ -218,9 +218,17 @@ export default class TransportTracking {
   confirmDeleteAction() {
     const req = this.requestToDelete();
     if (req?.id) {
-      this.requestService.deleteRequest(req.id);
-      this.currentPage.set(Math.min(this.currentPage(), this.totalPages()));
-      this.requestToDelete.set(null);
+      this.requestService.deleteRequest(req.id).subscribe({
+        next: () => {
+          this.currentPage.set(Math.min(this.currentPage(), this.totalPages()));
+          this.requestToDelete.set(null);
+        },
+        error: (err) => {
+          console.error('Error al eliminar:', err);
+          this.notification.show('Error al eliminar. Intente nuevamente.');
+          this.requestToDelete.set(null);
+        }
+      });
     }
   }
 
