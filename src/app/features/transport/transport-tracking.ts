@@ -161,51 +161,44 @@ export default class TransportTracking {
   }
 
   handleRenew(req: TransportRequest) {
+    const currentYear = new Date().getFullYear();
+
     const person = this.freePassService.freePasses().find(fp =>
+      fp.personId === req.personId
+    ) ?? this.freePassService.freePasses().find(fp =>
       fp.fullName.toLowerCase().includes(req.lastName.toLowerCase()) &&
       fp.fullName.toLowerCase().includes(req.firstName.toLowerCase())
     );
 
-    if (person) {
-      this.freePassService.createRenewal({
-        freePassId: person.id,
-        year: new Date().getFullYear(),
-      }).subscribe({
-        next: () => {
-          this.freePassService.loadAll();
-          this.closeRenewModal();
-        },
-        error: (err) => {
-          console.error('Error creating renewal:', err);
-          this.notification.show('Error al crear la renovación. Es posible que ya exista una para este año.');
-        }
-      });
-    } else {
-      const persons = this.freePassService.freePasses();
-      const matched = persons.find(p => {
-        const name = `${req.lastName} ${req.firstName}`.toLowerCase();
-        return p.fullName.toLowerCase().includes(name) ||
-               name.includes(p.fullName.toLowerCase().replace(',', ''));
-      });
-      if (matched) {
-        this.freePassService.createRenewal({
-          freePassId: matched.id,
-          year: new Date().getFullYear(),
-        }).subscribe({
-          next: () => {
-            this.freePassService.loadAll();
-            this.closeRenewModal();
-          },
-          error: (err) => {
-            console.error('Error creating renewal:', err);
-            this.notification.show('Error al crear la renovación.');
-          }
-        });
-      } else {
-        this.notification.show('No se encontró un pase libre activo para esta persona.');
-        this.closeRenewModal();
-      }
+    if (!person) {
+      this.notification.show('No se encontró un pase libre activo para esta persona.');
+      this.closeRenewModal();
+      return;
     }
+
+    const alreadyRenewed = this.freePassService.renewals().some(
+      r => r.freePassId === person.id && r.year === currentYear
+    );
+
+    if (alreadyRenewed) {
+      this.notification.show('Ya existe una renovación para este año para esta persona.');
+      this.closeRenewModal();
+      return;
+    }
+
+    this.freePassService.createRenewal({
+      freePassId: person.id,
+      year: currentYear,
+    }).subscribe({
+      next: () => {
+        this.freePassService.loadAll();
+        this.closeRenewModal();
+      },
+      error: (err) => {
+        console.error('Error creating renewal:', err);
+        this.notification.show('Error al crear la renovación. Es posible que ya exista una para este año.');
+      }
+    });
   }
 
   saveRequest(req: TransportRequest) {

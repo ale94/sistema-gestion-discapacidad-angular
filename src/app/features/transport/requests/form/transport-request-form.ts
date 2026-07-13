@@ -41,12 +41,29 @@ export class TransportRequestForm implements OnInit, OnDestroy {
     if (!person) return false;
     return this.freePassService.freePasses().some(fp => fp.personId === person.id);
   });
+  hasNationalPass = computed(() => {
+    const person = this.foundPerson();
+    if (!person) return false;
+    return this.freePassService.nationalFreePasses().some(np => np.personId === person.id);
+  });
   availableTypes = computed(() => {
-    const all = Object.values(TransportRequestType).filter(t => t !== TransportRequestType.RENOVACION);
-    if (this.hasProvincialPass()) {
-      return all.filter(t => t !== TransportRequestType.PASE_PROVINCIAL);
+    return Object.values(TransportRequestType).filter(t => t !== TransportRequestType.RENOVACION);
+  });
+  hasDuplicate = computed(() => {
+    const type = this.selectedType();
+    if (type === TransportRequestType.PASE_PROVINCIAL) return this.hasProvincialPass();
+    if (type === TransportRequestType.PASAJE_NACIONAL) return this.hasNationalPass();
+    return false;
+  });
+  duplicateWarning = computed(() => {
+    const type = this.selectedType();
+    if (type === TransportRequestType.PASE_PROVINCIAL && this.hasProvincialPass()) {
+      return 'Esta persona ya posee un Pase Provincial activo. No es posible crear uno nuevo.';
     }
-    return all;
+    if (type === TransportRequestType.PASAJE_NACIONAL && this.hasNationalPass()) {
+      return 'Esta persona ya posee un Pasaje Nacional activo. No es posible crear uno nuevo.';
+    }
+    return null;
   });
   private lookupSubscription: Subscription | null = null;
   private typeSubscription: Subscription | null = null;
@@ -71,10 +88,10 @@ export class TransportRequestForm implements OnInit, OnDestroy {
       type: [TransportRequestType.PASAJE_NACIONAL, Validators.required],
       status: [TransportRequestStatus.PENDIENTE, Validators.required],
       observations: [''],
-      tripDate: ['', Validators.required],
-      ticketQuantity: [1, Validators.required],
-      origin: ['', Validators.required],
-      destination: ['', Validators.required],
+      tripDate: [''],
+      ticketQuantity: [1],
+      origin: [''],
+      destination: [''],
     });
   }
 
@@ -91,9 +108,12 @@ export class TransportRequestForm implements OnInit, OnDestroy {
         this.disableAllExceptStatusAndObs();
       }
     }
-    this.selectedType.set(this.form.get('type')?.value ?? TransportRequestType.PASAJE_NACIONAL);
+    const initialType = this.form.get('type')?.value ?? TransportRequestType.PASAJE_NACIONAL;
+    this.selectedType.set(initialType);
+    this.updateNationalValidators(initialType);
     this.typeSubscription = this.form.get('type')?.valueChanges.subscribe(val => {
       this.selectedType.set(val);
+      this.updateNationalValidators(val);
     }) ?? null;
   }
 
@@ -150,16 +170,10 @@ export class TransportRequestForm implements OnInit, OnDestroy {
     this.checkDone.set(true);
     this.lookupError.set(null);
     this.searching.set(false);
-    const currentType = this.form.get('type')?.value;
-    if (currentType === TransportRequestType.PASE_PROVINCIAL) {
-      if (this.hasProvincialPass()) {
-        this.form.get('type')?.setValue(TransportRequestType.PASAJE_NACIONAL);
-      }
-    }
   }
 
   onSubmit() {
-    if (this.form.invalid) {
+    if (this.form.invalid || this.hasDuplicate()) {
       this.form.markAllAsTouched();
       return;
     }
@@ -189,6 +203,32 @@ export class TransportRequestForm implements OnInit, OnDestroy {
     };
 
     this.save.emit(payload);
+  }
+
+  private updateNationalValidators(type: TransportRequestType) {
+    const isNational = type === TransportRequestType.PASAJE_NACIONAL;
+    const tripDate = this.form.get('tripDate');
+    const ticketQuantity = this.form.get('ticketQuantity');
+    const origin = this.form.get('origin');
+    const destination = this.form.get('destination');
+
+    if (isNational) {
+      tripDate?.setValidators([Validators.required]);
+      ticketQuantity?.setValidators([Validators.required]);
+      origin?.setValidators([Validators.required]);
+      destination?.setValidators([Validators.required]);
+    } else {
+      tripDate?.clearValidators();
+      tripDate?.setValue('');
+      ticketQuantity?.clearValidators();
+      ticketQuantity?.setValue(1);
+      origin?.clearValidators();
+      origin?.setValue('');
+      destination?.clearValidators();
+      destination?.setValue('');
+    }
+
+    [tripDate, ticketQuantity, origin, destination].forEach(c => c?.updateValueAndValidity());
   }
 
   private disablePersonFields() {

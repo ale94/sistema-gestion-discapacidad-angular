@@ -165,22 +165,27 @@ export class TransportRequestService {
     }
 
     if (req.type === TransportRequestType.PASAJE_NACIONAL) {
-      this.freePassService.createNationalFreePass({
-        personId,
-        reason: req.observations,
-        status: this.toBackendStatus(req.status),
-        freePassExpiration: req.freePassExpiration,
-        tripDate: req.tripDate,
-        ticketQuantity: req.ticketQuantity,
-        origin: req.origin,
-        destination: req.destination,
-      }).subscribe({
-        next: () => this.syncFromBackend(),
-        error: (err) => {
-          console.error('Error al crear pasaje nacional:', err);
-          this.notification.show('Error al guardar en el servidor. Intente nuevamente.');
-        }
-      });
+      const exists = this.freePassService.nationalFreePasses().find(np => np.personId === personId);
+      if (!exists) {
+        this.freePassService.createNationalFreePass({
+          personId,
+          reason: req.observations,
+          status: this.toBackendStatus(req.status),
+          freePassExpiration: req.freePassExpiration,
+          tripDate: req.tripDate,
+          ticketQuantity: req.ticketQuantity,
+          origin: req.origin,
+          destination: req.destination,
+        }).subscribe({
+          next: () => this.syncFromBackend(),
+          error: (err) => {
+            console.error('Error al crear pasaje nacional:', err);
+            this.notification.show('Error al guardar en el servidor. Intente nuevamente.');
+          }
+        });
+      } else {
+        this.notification.show('Esta persona ya posee un Pasaje Nacional.');
+      }
     }
   }
 
