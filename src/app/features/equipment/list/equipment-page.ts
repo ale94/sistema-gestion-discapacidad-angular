@@ -23,6 +23,10 @@ export default class EquipmentPage {
   searchTerm = signal('');
   searchInput = signal('');
   searching = signal(false);
+  currentPage = signal(1);
+  pageSize = 5;
+  maxVisiblePages = 5;
+  Math = Math;
 
   filteredLoan = computed(() => {
     const term = this.searchTerm().toLowerCase().trim();
@@ -37,10 +41,23 @@ export default class EquipmentPage {
     });
   });
 
+  totalPages = computed(() => Math.max(1, Math.ceil(this.filteredLoan().length / this.pageSize)));
+  pages = computed(() => Array.from({ length: this.totalPages() }, (_, i) => i + 1));
+  currentPageGroup = computed(() => Math.floor((this.currentPage() - 1) / this.maxVisiblePages));
+  visiblePages = computed(() => {
+    const start = this.currentPageGroup() * this.maxVisiblePages;
+    return this.pages().slice(start, start + this.maxVisiblePages);
+  });
+  paginatedLoan = computed(() => {
+    const start = (this.currentPage() - 1) * this.pageSize;
+    return this.filteredLoan().slice(start, start + this.pageSize);
+  });
+
   onSearchInput(term: string) {
     this.searchInput.set(term);
     if (!term.trim()) {
       this.searchTerm.set('');
+      this.currentPage.set(1);
     }
   }
 
@@ -48,8 +65,25 @@ export default class EquipmentPage {
     this.searching.set(true);
     setTimeout(() => {
       this.searchTerm.set(this.searchInput());
+      this.currentPage.set(1);
       this.searching.set(false);
     }, 2000);
+  }
+
+  goToPage(page: number) {
+    if (page >= 1 && page <= this.totalPages()) {
+      this.currentPage.set(page);
+    }
+  }
+
+  prevGroup() {
+    const firstInGroup = this.currentPageGroup() * this.maxVisiblePages + 1;
+    this.goToPage(firstInGroup - 1);
+  }
+
+  nextGroup() {
+    const firstInNext = (this.currentPageGroup() + 1) * this.maxVisiblePages + 1;
+    this.goToPage(firstInNext);
   }
 
   openAddModal() {

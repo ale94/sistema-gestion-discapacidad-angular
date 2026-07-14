@@ -36,15 +36,20 @@ export class TransportRequestForm implements OnInit, OnDestroy {
   isEditingFreePass = computed(() => {
     return !!this.request && this.request.type === TransportRequestType.PASE_PROVINCIAL;
   });
+  isEditingExistingPass = computed(() => {
+    return !!this.request;
+  });
   hasProvincialPass = computed(() => {
     const person = this.foundPerson();
     if (!person) return false;
-    return this.freePassService.freePasses().some(fp => fp.personId === person.id);
+    const currentId = this.request?.id;
+    return this.freePassService.freePasses().some(fp => fp.personId === person.id && `fp-${fp.id}` !== currentId);
   });
   hasNationalPass = computed(() => {
     const person = this.foundPerson();
     if (!person) return false;
-    return this.freePassService.nationalFreePasses().some(np => np.personId === person.id);
+    const currentId = this.request?.id;
+    return this.freePassService.nationalFreePasses().some(np => np.personId === person.id && `np-${np.id}` !== currentId);
   });
   availableTypes = computed(() => {
     return Object.values(TransportRequestType).filter(t => t !== TransportRequestType.RENOVACION);
@@ -244,8 +249,7 @@ export class TransportRequestForm implements OnInit, OnDestroy {
 
   private disableAllExceptStatusAndObs() {
     const controls = ['dni', 'firstName', 'lastName', 'dateBirth', 'phone',
-      'street', 'district', 'locality', 'province', 'type',
-      'tripDate', 'ticketQuantity', 'origin', 'destination'];
+      'street', 'district', 'locality', 'province'];
     controls.forEach(name => {
       this.form.get(name)?.disable();
     });
@@ -256,10 +260,14 @@ export class TransportRequestForm implements OnInit, OnDestroy {
     if (!personId) return;
     const local = this.personService.persons().find(p => p.id === personId);
     if (local) {
+      this.foundPerson.set(local);
       this.patchAddress(local);
     } else if (this.request?.dni) {
       this.personService.findByDniHttp(this.request.dni).subscribe({
-        next: (person) => this.patchAddress(person),
+        next: (person) => {
+          this.foundPerson.set(person);
+          this.patchAddress(person);
+        },
       });
     }
   }

@@ -81,7 +81,7 @@
           </thead>
 
           <tbody class="bg-white divide-y divide-gray-200">
-            @for (loan of filteredLoan(); track loan.id) {
+            @for (loan of paginatedLoan(); track loan.id) {
               <tr
                 class="hover:bg-gray-50 transition-colors cursor-pointer"
                 (click)="viewProfile(loan)"
@@ -202,6 +202,68 @@
           </tbody>
         </table>
       </div>
+    </div>
+  </div>
+
+  <div class="flex flex-col items-center mt-4 px-2 gap-3">
+    <span class="text-sm text-slate-600">
+      Mostrando {{ (currentPage() - 1) * pageSize + 1 }}–{{ Math.min(currentPage() * pageSize, filteredLoan().length) }} de {{ filteredLoan().length }} registros
+    </span>
+    <div class="flex items-center gap-1">
+      <button
+        (click)="goToPage(1)"
+        [disabled]="currentPage() === 1"
+        class="px-2 py-1.5 rounded-lg text-sm font-medium border border-slate-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-100 transition-colors"
+      >
+        &laquo;
+      </button>
+      <button
+        (click)="goToPage(currentPage() - 1)"
+        [disabled]="currentPage() === 1"
+        class="px-3 py-1.5 rounded-lg text-sm font-medium border border-slate-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-100 transition-colors"
+      >
+        Anterior
+      </button>
+      <button
+        (click)="prevGroup()"
+        [disabled]="currentPageGroup() === 0"
+        class="px-2 py-1.5 rounded-lg text-sm font-medium border border-slate-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-100 transition-colors"
+      >
+        &lsaquo;
+      </button>
+      @for (page of visiblePages(); track page) {
+        <button
+          (click)="goToPage(page)"
+          [ngClass]="{
+            'bg-teal-600 text-white shadow-md': currentPage() === page,
+            'bg-white text-slate-700 border border-slate-300 hover:bg-slate-100': currentPage() !== page,
+          }"
+          class="px-3 py-1.5 rounded-lg text-sm font-medium transition-colors"
+        >
+          {{ page }}
+        </button>
+      }
+      <button
+        (click)="nextGroup()"
+        [disabled]="(currentPageGroup() + 1) * maxVisiblePages >= totalPages()"
+        class="px-2 py-1.5 rounded-lg text-sm font-medium border border-slate-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-100 transition-colors"
+      >
+        &rsaquo;
+      </button>
+      <button
+        (click)="goToPage(currentPage() + 1)"
+        [disabled]="currentPage() === totalPages()"
+        class="px-3 py-1.5 rounded-lg text-sm font-medium border border-slate-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-100 transition-colors"
+      >
+        Siguiente
+      </button>
+      <button
+        (click)="goToPage(totalPages())"
+        [disabled]="currentPage() === totalPages()"
+        class="px-2 py-1.5 rounded-lg text-sm font-medium border border-slate-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-100 transition-colors"
+      >
+        &raquo;
+      </button>
     </div>
   </div>
   }
