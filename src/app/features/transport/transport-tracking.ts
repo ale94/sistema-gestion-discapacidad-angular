@@ -6,7 +6,7 @@ import { TransportRequestService } from '../../shared/services/transport-request
 import { FreePassService } from '../../shared/services/free-pass.service';
 import { PersonService } from '../../shared/services/person.service';
 import { NotificationService } from '../../shared/services/notification.service';
-import { TransportRequest, TransportRequestStatus } from '../../shared/interfaces/transport-request.interface';
+import { TransportRequest, TransportRequestStatus, TransportRequestType } from '../../shared/interfaces/transport-request.interface';
 import { TransportRequestForm } from './requests/form/transport-request-form';
 import { TransportRequestRenew } from './requests/renew/transport-request-renew';
 
@@ -77,15 +77,76 @@ export default class TransportTracking {
   searchInput = signal('');
   searching = signal(false);
 
+  filterSolicitante = signal('');
+  filterDni = signal('');
+  filterTipo = signal('');
+  filterEstado = signal('');
+
+  typeOptions = Object.values(TransportRequestType);
+  statusOptions = Object.values(TransportRequestStatus);
+
+  showTipoDropdown = signal(false);
+  showEstadoDropdown = signal(false);
+
+  toggleTipoDropdown() {
+    this.showTipoDropdown.update(v => !v);
+    this.showEstadoDropdown.set(false);
+  }
+
+  toggleEstadoDropdown() {
+    this.showEstadoDropdown.update(v => !v);
+    this.showTipoDropdown.set(false);
+  }
+
+  selectTipo(value: string) {
+    this.filterTipo.set(value);
+    this.showTipoDropdown.set(false);
+    this.onFilterChange();
+  }
+
+  selectEstado(value: string) {
+    this.filterEstado.set(value);
+    this.showEstadoDropdown.set(false);
+    this.onFilterChange();
+  }
+
+  tipoLabel = computed(() => this.filterTipo() || 'Tipo');
+  estadoLabel = computed(() => this.filterEstado()?.replace('_', ' ') || 'Estado');
+
   pageSize = 5;
   currentPage = signal<number>(1);
+  maxVisiblePages = 5;
+  Math = Math;
 
   filteredRequests = computed(() => {
     const term = this.searchTerm().toLowerCase().trim();
+    const fSolicitante = this.filterSolicitante().toLowerCase().trim();
+    const fDni = this.filterDni().trim();
+    const fTipo = this.filterTipo();
+    const fEstado = this.filterEstado();
+
     return this.requestService.requests().filter(req => {
       const name = `${req.lastName ?? ''} ${req.firstName ?? ''}`.toLowerCase();
-      return !term || name.includes(term) || (req.dni ?? '').toString().includes(term);
+      const matchesSearch = !term || name.includes(term) || (req.dni ?? '').toString().includes(term);
+      const matchesSolicitante = !fSolicitante || name.includes(fSolicitante);
+      const matchesDni = !fDni || (req.dni ?? '').toString().includes(fDni);
+      const matchesTipo = !fTipo || req.type === fTipo;
+      const matchesEstado = !fEstado || req.status === fEstado;
+      return matchesSearch && matchesSolicitante && matchesDni && matchesTipo && matchesEstado;
     });
+  });
+
+  totalPages = computed(() => {
+    return Math.max(1, Math.ceil(this.filteredRequests().length / this.pageSize));
+  });
+
+  pages = computed(() => Array.from({ length: this.totalPages() }, (_, i) => i + 1));
+
+  currentPageGroup = computed(() => Math.floor((this.currentPage() - 1) / this.maxVisiblePages));
+
+  visiblePages = computed(() => {
+    const start = this.currentPageGroup() * this.maxVisiblePages;
+    return this.pages().slice(start, start + this.maxVisiblePages);
   });
 
   pagedRequests = computed(() => {
@@ -93,29 +154,20 @@ export default class TransportTracking {
     return this.filteredRequests().slice(start, start + this.pageSize);
   });
 
-  totalPages = computed(() => {
-    return Math.max(1, Math.ceil(this.filteredRequests().length / this.pageSize));
-  });
-
-  pages = computed(() => {
-    const total = this.totalPages();
-    const current = this.currentPage();
-    const delta = 2;
-    const range: number[] = [];
-    const left = Math.max(2, current - delta);
-    const right = Math.min(total - 1, current + delta);
-
-    range.push(1);
-    for (let i = left; i <= right; i++) range.push(i);
-    if (total > 1) range.push(total);
-
-    return range;
-  });
-
   setPage(page: number) {
     if (page >= 1 && page <= this.totalPages()) {
       this.currentPage.set(page);
     }
+  }
+
+  prevGroup() {
+    const firstInGroup = this.currentPageGroup() * this.maxVisiblePages + 1;
+    this.setPage(firstInGroup - 1);
+  }
+
+  nextGroup() {
+    const firstInNext = (this.currentPageGroup() + 1) * this.maxVisiblePages + 1;
+    this.setPage(firstInNext);
   }
 
   pageInfo = computed(() => {
@@ -131,6 +183,20 @@ export default class TransportTracking {
       this.searchTerm.set('');
       this.currentPage.set(1);
     }
+  }
+
+  onFilterChange() {
+    this.currentPage.set(1);
+  }
+
+  clearFilters() {
+    this.filterSolicitante.set('');
+    this.filterDni.set('');
+    this.filterTipo.set('');
+    this.filterEstado.set('');
+    this.searchTerm.set('');
+    this.searchInput.set('');
+    this.currentPage.set(1);
   }
 
   doSearch() {

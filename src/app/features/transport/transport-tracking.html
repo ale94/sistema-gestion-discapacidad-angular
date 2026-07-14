@@ -154,6 +154,77 @@
             </button>
         </div>
 
+        <!-- Filtros -->
+        <div class="flex gap-3 mb-4">
+            <!-- Dropdown Tipo -->
+            <div class="relative">
+                <button
+                    (click)="toggleTipoDropdown()"
+                    [ngClass]="{
+                        'bg-teal-600 text-white shadow-md': filterTipo() !== '',
+                        'bg-white text-slate-700 border border-slate-300': filterTipo() === '',
+                    }"
+                    class="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium hover:bg-teal-600 hover:text-white transition">
+                    <span>{{ tipoLabel() }}</span>
+                    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </button>
+                @if (showTipoDropdown()) {
+                    <div class="absolute z-10 mt-2 w-56 bg-white border border-slate-200 rounded-xl shadow-lg py-1 animate-fade-in">
+                        <button
+                            (click)="selectTipo('')"
+                            class="w-full text-left px-4 py-2 text-sm hover:bg-teal-50 transition-colors"
+                            [ngClass]="filterTipo() === '' ? 'text-teal-600 font-semibold' : 'text-slate-700'">
+                            Todos los tipos
+                        </button>
+                        @for (t of typeOptions; track t) {
+                            <button
+                                (click)="selectTipo(t)"
+                                class="w-full text-left px-4 py-2 text-sm hover:bg-teal-50 transition-colors"
+                                [ngClass]="filterTipo() === t ? 'text-teal-600 font-semibold' : 'text-slate-700'">
+                                {{ t }}
+                            </button>
+                        }
+                    </div>
+                }
+            </div>
+
+            <!-- Dropdown Estado -->
+            <div class="relative">
+                <button
+                    (click)="toggleEstadoDropdown()"
+                    [ngClass]="{
+                        'bg-teal-600 text-white shadow-md': filterEstado() !== '',
+                        'bg-white text-slate-700 border border-slate-300': filterEstado() === '',
+                    }"
+                    class="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium hover:bg-teal-600 hover:text-white transition">
+                    <span>{{ estadoLabel() }}</span>
+                    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </button>
+                @if (showEstadoDropdown()) {
+                    <div class="absolute z-10 mt-2 w-56 bg-white border border-slate-200 rounded-xl shadow-lg py-1 animate-fade-in">
+                        <button
+                            (click)="selectEstado('')"
+                            class="w-full text-left px-4 py-2 text-sm hover:bg-teal-50 transition-colors"
+                            [ngClass]="filterEstado() === '' ? 'text-teal-600 font-semibold' : 'text-slate-700'">
+                            Todos los estados
+                        </button>
+                        @for (s of statusOptions; track s) {
+                            <button
+                                (click)="selectEstado(s)"
+                                class="w-full text-left px-4 py-2 text-sm hover:bg-teal-50 transition-colors"
+                                [ngClass]="filterEstado() === s ? 'text-teal-600 font-semibold' : 'text-slate-700'">
+                                {{ s.replace('_', ' ') }}
+                            </button>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+
         @if (searching()) {
         <div class="flex flex-col items-center justify-center gap-4 py-16 text-teal-600">
             <svg class="animate-spin h-10 w-10" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -255,18 +326,45 @@
 
         <!-- Paginación -->
         @if (pageInfo().hasPages) {
-        <div class="mt-4 px-6 py-4 bg-white border border-slate-200 rounded-xl shadow-sm flex flex-col sm:flex-row items-center justify-between gap-3">
-            <span class="text-sm text-slate-600">Mostrando {{ pageInfo().start }} - {{ pageInfo().end }} de {{ pageInfo().total }}</span>
-            <div class="flex items-center gap-2 flex-wrap justify-center">
-                <button (click)="setPage(currentPage() - 1)" [disabled]="currentPage() === 1" class="px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed text-sm">Anterior</button>
-                @for (p of pages(); track p) {
-                    @if (p === currentPage()) {
-                        <span class="px-3 py-1.5 rounded-lg bg-teal-600 text-white font-medium text-sm">{{ p }}</span>
-                    } @else {
-                        <button (click)="setPage(p)" class="px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 text-sm">{{ p }}</button>
-                    }
+        <div class="flex flex-col items-center mt-4 px-2 gap-3">
+            <span class="text-sm text-slate-600">
+                Mostrando {{ pageInfo().start }}–{{ pageInfo().end }} de {{ pageInfo().total }} registros
+            </span>
+            <div class="flex items-center gap-1">
+                <button (click)="setPage(1)" [disabled]="currentPage() === 1"
+                    class="px-2 py-1.5 rounded-lg text-sm font-medium border border-slate-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-100 transition-colors">
+                    &laquo;
+                </button>
+                <button (click)="setPage(currentPage() - 1)" [disabled]="currentPage() === 1"
+                    class="px-3 py-1.5 rounded-lg text-sm font-medium border border-slate-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-100 transition-colors">
+                    Anterior
+                </button>
+                <button (click)="prevGroup()" [disabled]="currentPageGroup() === 0"
+                    class="px-2 py-1.5 rounded-lg text-sm font-medium border border-slate-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-100 transition-colors">
+                    &lsaquo;
+                </button>
+                @for (p of visiblePages(); track p) {
+                    <button (click)="setPage(p)"
+                        [ngClass]="{
+                            'bg-teal-600 text-white shadow-md': currentPage() === p,
+                            'bg-white text-slate-700 border border-slate-300 hover:bg-slate-100': currentPage() !== p
+                        }"
+                        class="px-3 py-1.5 rounded-lg text-sm font-medium transition-colors">
+                        {{ p }}
+                    </button>
                 }
-                <button (click)="setPage(currentPage() + 1)" [disabled]="currentPage() === totalPages()" class="px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed text-sm">Siguiente</button>
+                <button (click)="nextGroup()" [disabled]="(currentPageGroup() + 1) * maxVisiblePages >= totalPages()"
+                    class="px-2 py-1.5 rounded-lg text-sm font-medium border border-slate-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-100 transition-colors">
+                    &rsaquo;
+                </button>
+                <button (click)="setPage(currentPage() + 1)" [disabled]="currentPage() === totalPages()"
+                    class="px-3 py-1.5 rounded-lg text-sm font-medium border border-slate-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-100 transition-colors">
+                    Siguiente
+                </button>
+                <button (click)="setPage(totalPages())" [disabled]="currentPage() === totalPages()"
+                    class="px-2 py-1.5 rounded-lg text-sm font-medium border border-slate-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-100 transition-colors">
+                    &raquo;
+                </button>
             </div>
         </div>
         }

@@ -41,6 +41,64 @@
     </button>
   </div>
 
+  <!-- Filtros Tipo/Equipo -->
+  <div class="w-full mx-auto mb-3">
+    <div class="bg-white/80 backdrop-blur shadow-sm rounded-xl p-3">
+      <div class="flex flex-wrap gap-3">
+        @for (t of tipoOptions(); track t) {
+          <button
+            [ngClass]="{
+              'bg-teal-600 text-white shadow-md': filterTipo() === t,
+              'bg-gray-100 text-gray-700': filterTipo() !== t,
+            }"
+            class="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium hover:bg-teal-600 hover:text-white transition"
+            (click)="filterTipo.set(t); onFilterChange()"
+          >
+            <span>{{ t }}</span>
+          </button>
+        }
+      </div>
+    </div>
+  </div>
+
+  <!-- Filtros Estado -->
+  <div class="w-full mx-auto mb-4">
+    <div class="bg-white/80 backdrop-blur shadow-sm rounded-xl p-3">
+      <div class="flex flex-wrap gap-3">
+        <button
+          [ngClass]="{
+            'bg-teal-600 text-white shadow-md': filterEstado() === '',
+            'bg-gray-100 text-gray-700': filterEstado() !== '',
+          }"
+          class="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium shadow-md hover:bg-teal-600 hover:text-white transition"
+          (click)="filterEstado.set(''); onFilterChange()"
+        >
+          <span>Todos los estados</span>
+        </button>
+        <button
+          [ngClass]="{
+            'bg-teal-600 text-white shadow-md': filterEstado() === 'EN_PRESTAMO',
+            'bg-gray-100 text-gray-700': filterEstado() !== 'EN_PRESTAMO',
+          }"
+          class="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium hover:bg-teal-600 hover:text-white transition"
+          (click)="filterEstado.set('EN_PRESTAMO'); onFilterChange()"
+        >
+          <span>En Préstamo</span>
+        </button>
+        <button
+          [ngClass]="{
+            'bg-teal-600 text-white shadow-md': filterEstado() === 'DEVUELTO',
+            'bg-gray-100 text-gray-700': filterEstado() !== 'DEVUELTO',
+          }"
+          class="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium hover:bg-teal-600 hover:text-white transition"
+          (click)="filterEstado.set('DEVUELTO'); onFilterChange()"
+        >
+          <span>Devuelto</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
   @if (searching()) {
     <div class="flex flex-col items-center justify-center gap-4 py-16 text-teal-600">
       <svg class="animate-spin h-10 w-10" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">

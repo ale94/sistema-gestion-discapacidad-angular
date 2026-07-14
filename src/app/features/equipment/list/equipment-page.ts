@@ -28,8 +28,18 @@ export default class EquipmentPage {
   maxVisiblePages = 5;
   Math = Math;
 
+  filterTipo = signal('');
+  filterEstado = signal('');
+
+  tipoOptions = computed(() => {
+    const types = new Set(this.loanEquipmentService.loans().map(l => l.type).filter(Boolean));
+    return Array.from(types);
+  });
+
   filteredLoan = computed(() => {
     const term = this.searchTerm().toLowerCase().trim();
+    const fTipo = this.filterTipo();
+    const fEstado = this.filterEstado();
 
     return this.loanEquipmentService.loans().filter((loan) => {
       const matchesText =
@@ -37,7 +47,14 @@ export default class EquipmentPage {
         (loan.applicant ?? '').toLowerCase().includes(term) ||
         (loan.type ?? '').toLowerCase().includes(term) ||
         (loan.dni ?? '').toString().includes(term);
-      return matchesText;
+
+      const matchesTipo = !fTipo || loan.type === fTipo;
+
+      let matchesEstado = true;
+      if (fEstado === 'EN_PRESTAMO') matchesEstado = !loan.returnDate;
+      else if (fEstado === 'DEVUELTO') matchesEstado = !!loan.returnDate;
+
+      return matchesText && matchesTipo && matchesEstado;
     });
   });
 
@@ -59,6 +76,10 @@ export default class EquipmentPage {
       this.searchTerm.set('');
       this.currentPage.set(1);
     }
+  }
+
+  onFilterChange() {
+    this.currentPage.set(1);
   }
 
   doSearch() {
