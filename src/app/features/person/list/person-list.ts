@@ -24,6 +24,7 @@ export default class PersonList {
   isModalOpen = signal(false);
   editingPerson = signal<Person | null>(null);
   personToDelete = signal<Person | null>(null);
+  errorMessage = signal<string | null>(null);
   activeFilter = signal<'ALL' | 'CUD' | 'PENSION' | 'PASE_LIBRE' | 'AUH' | 'FEDERAL_PROGRAM' | 'MERCHANDISE'>('ALL');
 
   searchTerm = signal('');
@@ -133,13 +134,21 @@ export default class PersonList {
     if (this.personToDelete()) {
       this.personService.deletePerson(this.personToDelete()!.id).subscribe({
         next: () => this.cancelDelete(),
-        error: () => alert('Error al eliminar la persona. Intente nuevamente.')
+        error: () => this.showErrorModal('Error al eliminar la persona. Intente nuevamente.')
       });
     }
   }
 
   cancelDelete(): void {
     this.personToDelete.set(null);
+  }
+
+  showErrorModal(message: string): void {
+    this.errorMessage.set(message);
+  }
+
+  closeErrorModal(): void {
+    this.errorMessage.set(null);
   }
 
   handleSave(personData: Person) {
@@ -151,7 +160,8 @@ export default class PersonList {
       next: () => this.closeModal(),
       error: (err) => {
         console.error('Error al guardar la persona:', err.message);
-        alert('Error al guardar la persona. Intente nuevamente.');
+        this.closeModal();
+        this.showErrorModal('Error al guardar la persona. Intente nuevamente.');
       }
     });
   }

@@ -83,7 +83,9 @@ export default class TransportTracking {
   filterEstado = signal('');
 
   typeOptions = Object.values(TransportRequestType);
-  statusOptions = Object.values(TransportRequestStatus);
+  statusOptions = Object.values(TransportRequestStatus).filter(
+    s => s !== TransportRequestStatus.FINALIZADA && s !== TransportRequestStatus.EN_REVISION
+  );
 
   showTipoDropdown = signal(false);
   showEstadoDropdown = signal(false);

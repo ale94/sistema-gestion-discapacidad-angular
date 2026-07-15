@@ -336,7 +336,50 @@
       </button>
     </div>
   </div>
-  }
+}
+@if (errorMessage(); as msg) {
+  <div
+    class="fixed inset-0 bg-gray-800/30 backdrop-blur-md flex items-center justify-center z-50 animate-fade-in p-4"
+    (click)="closeErrorModal()"
+  >
+    <div
+      class="bg-white rounded-xl shadow-2xl w-full max-w-md border border-slate-200 animate-slide-up"
+      (click)="$event.stopPropagation()"
+    >
+      <div class="p-6 text-center">
+        <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100">
+          <svg
+            class="h-6 w-6 text-red-600"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            aria-hidden="true"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"
+            />
+          </svg>
+        </div>
+        <h3 class="mt-4 text-lg font-semibold leading-6 text-slate-900">Error</h3>
+        <div class="mt-2">
+          <p class="text-sm text-slate-500">{{ msg }}</p>
+        </div>
+      </div>
+      <div class="p-4 bg-slate-50 rounded-b-xl flex justify-center">
+        <button
+          type="button"
+          (click)="closeErrorModal()"
+          class="px-6 py-2 rounded-lg text-slate-700 bg-white hover:bg-slate-100 transition-colors font-medium border border-slate-300"
+        >
+          Cerrar
+        </button>
+      </div>
+    </div>
+  </div>
+}
 </div>
 
 @if (isModalOpen()) {
