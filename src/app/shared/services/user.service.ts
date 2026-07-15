@@ -20,7 +20,10 @@ export class UserService {
 
   getAll() {
     this.http.get<User[]>(`${this.url}` + "/users")
-      .subscribe(data => this.users.set(data));
+      .subscribe({
+        next: (data) => this.users.set(data),
+        error: (err) => console.error('Error al cargar usuarios:', err)
+      });
   }
 
   create(user: User): Observable<User> {

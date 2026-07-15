@@ -3,6 +3,7 @@ import { inject, Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, tap } from 'rxjs';
 import { environment } from '../../../environments/environment';
+import { UserService } from './user.service';
 
 interface LoginRequest {
   username: string;
@@ -116,4 +117,24 @@ export const authGuard = () => {
     return true;
   }
   return router.parseUrl('/login');
+};
+
+export const adminGuard = () => {
+  const authService = inject(AuthService);
+  const userService = inject(UserService);
+  const router: Router = inject(Router);
+
+  if (!authService.isAuthenticated()) {
+    return router.parseUrl('/login');
+  }
+
+  const currentUsername = authService.username();
+  const users = userService.users();
+  const isAdmin = users.some(u => u.userName === currentUsername && u.role === 'ADMIN');
+
+  if (isAdmin) {
+    return true;
+  }
+
+  return router.parseUrl('/dashboard');
 };

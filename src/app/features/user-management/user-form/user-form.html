@@ -2,7 +2,7 @@
   [formGroup]="userForm"
   (ngSubmit)="onSubmit()"
   class="flex flex-col w-full max-w-2xl bg-white rounded-2xl shadow-2xl overflow-hidden animate-slide-up"
-  autocomplete="off"
+  autocomplete="new-password"
 >
   <div class="bg-slate-50 px-8 py-5 border-b border-slate-100 flex justify-between items-center">
     <div>
@@ -39,6 +39,7 @@
           type="text"
           formControlName="firstName"
           placeholder="Ej: Juan"
+          autocomplete="off"
           class="px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:bg-white outline-none transition-all text-sm"
         />
         @if (formUtils.isValidField(userForm, 'firstName')) {
@@ -54,6 +55,7 @@
           type="text"
           formControlName="lastName"
           placeholder="Ej: Gomez"
+          autocomplete="off"
           class="px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:bg-white outline-none transition-all text-sm"
         />
         @if (formUtils.isValidField(userForm, 'lastName')) {
@@ -69,6 +71,7 @@
           type="number"
           formControlName="dni"
           placeholder="12345678"
+          autocomplete="off"
           class="px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:bg-white outline-none transition-all text-sm"
         />
         @if (formUtils.isValidField(userForm, 'dni')) {
@@ -123,6 +126,7 @@
           [type]="showPassword() ? 'text' : 'password'"
           formControlName="password"
           placeholder="••••••••"
+          autocomplete="new-password"
           class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:bg-white outline-none transition-all text-sm"
         />
         <button

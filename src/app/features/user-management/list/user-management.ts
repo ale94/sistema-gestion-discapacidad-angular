@@ -1,5 +1,6 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { UserService } from '../../../shared/services/user.service';
+import { AuthService } from '../../../shared/services/auth.service';
 import { User } from '../../../shared/interfaces/user';
 import { FormsModule } from '@angular/forms';
 import { UserForm } from "../user-form/user-form";
@@ -13,6 +14,13 @@ import { DecimalPipe, TitleCasePipe } from '@angular/common';
 export default class UserManagement {
 
   private userService = inject(UserService);
+  private authService = inject(AuthService);
+
+  isAdmin = computed(() => {
+    const currentUsername = this.authService.username();
+    if (!currentUsername) return false;
+    return this.userService.users().some(u => u.userName === currentUsername && u.role === 'ADMIN');
+  });
 
   // Estados de la UI
   searchTerm = signal('');

@@ -2,6 +2,7 @@ export interface FreePassRequest {
   personId: number;
   reason?: string;
   status?: string;
+  freePassExpiration?: string;
 }
 
 export interface FreePassResponse {
@@ -37,6 +38,7 @@ export interface NationalFreePassRequest {
   destination?: string;
   status?: string;
   reason?: string;
+  freePassExpiration?: string;
 }
 
 export interface NationalFreePassResponse {

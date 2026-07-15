@@ -20,13 +20,26 @@ export default class EquipmentPage {
   editingLoanEquipment = signal<LoanEquipment | null>(null);
   loanEquipmentToDelete = signal<LoanEquipment | null>(null);
   loanToReturn = signal<LoanEquipment | null>(null);
-  loanToUndo = signal<LoanEquipment | null>(null);
   searchTerm = signal('');
   searchInput = signal('');
   searching = signal(false);
+  currentPage = signal(1);
+  pageSize = 5;
+  maxVisiblePages = 5;
+  Math = Math;
+
+  filterTipo = signal('');
+  filterEstado = signal('');
+
+  tipoOptions = computed(() => {
+    const types = new Set(this.loanEquipmentService.loans().map(l => l.type).filter(Boolean));
+    return Array.from(types);
+  });
 
   filteredLoan = computed(() => {
     const term = this.searchTerm().toLowerCase().trim();
+    const fTipo = this.filterTipo();
+    const fEstado = this.filterEstado();
 
     return this.loanEquipmentService.loans().filter((loan) => {
       const matchesText =
@@ -34,23 +47,64 @@ export default class EquipmentPage {
         (loan.applicant ?? '').toLowerCase().includes(term) ||
         (loan.type ?? '').toLowerCase().includes(term) ||
         (loan.dni ?? '').toString().includes(term);
-      return matchesText;
+
+      const matchesTipo = !fTipo || loan.type === fTipo;
+
+      let matchesEstado = true;
+      if (fEstado === 'EN_PRESTAMO') matchesEstado = !loan.returnDate;
+      else if (fEstado === 'DEVUELTO') matchesEstado = !!loan.returnDate;
+
+      return matchesText && matchesTipo && matchesEstado;
     });
+  });
+
+  totalPages = computed(() => Math.max(1, Math.ceil(this.filteredLoan().length / this.pageSize)));
+  pages = computed(() => Array.from({ length: this.totalPages() }, (_, i) => i + 1));
+  currentPageGroup = computed(() => Math.floor((this.currentPage() - 1) / this.maxVisiblePages));
+  visiblePages = computed(() => {
+    const start = this.currentPageGroup() * this.maxVisiblePages;
+    return this.pages().slice(start, start + this.maxVisiblePages);
+  });
+  paginatedLoan = computed(() => {
+    const start = (this.currentPage() - 1) * this.pageSize;
+    return this.filteredLoan().slice(start, start + this.pageSize);
   });
 
   onSearchInput(term: string) {
     this.searchInput.set(term);
     if (!term.trim()) {
       this.searchTerm.set('');
+      this.currentPage.set(1);
     }
+  }
+
+  onFilterChange() {
+    this.currentPage.set(1);
   }
 
   doSearch() {
     this.searching.set(true);
     setTimeout(() => {
       this.searchTerm.set(this.searchInput());
+      this.currentPage.set(1);
       this.searching.set(false);
     }, 2000);
+  }
+
+  goToPage(page: number) {
+    if (page >= 1 && page <= this.totalPages()) {
+      this.currentPage.set(page);
+    }
+  }
+
+  prevGroup() {
+    const firstInGroup = this.currentPageGroup() * this.maxVisiblePages + 1;
+    this.goToPage(firstInGroup - 1);
+  }
+
+  nextGroup() {
+    const firstInNext = (this.currentPageGroup() + 1) * this.maxVisiblePages + 1;
+    this.goToPage(firstInNext);
   }
 
   openAddModal() {
@@ -122,15 +176,11 @@ export default class EquipmentPage {
   confirmReturnAction() {
     const loan = this.loanToReturn();
     if (loan) {
-      const today = new Date();
-      const year = today.getFullYear();
-      const month = today.getMonth();
-      const day = today.getDate();
-      const dateObject = new Date(year, month, day);
+      const dateStr = new Date().toISOString().split('T')[0];
 
       const updatedData: LoanEquipment = {
         ...loan,
-        returnDate: dateObject
+        returnDate: dateStr
       };
 
       this.loanEquipmentService.updateLoan(updatedData).subscribe({
@@ -140,8 +190,10 @@ export default class EquipmentPage {
     }
   }
 
+  loanToUndo = signal<LoanEquipment & { newExpiration?: string } | null>(null);
+
   undoReturn(loan: LoanEquipment) {
-    this.loanToUndo.set(loan);
+    this.loanToUndo.set({ ...loan, newExpiration: '' });
   }
 
   confirmUndoAction() {
@@ -149,7 +201,8 @@ export default class EquipmentPage {
     if (loan) {
       const updatedData: LoanEquipment = {
         ...loan,
-        returnDate: undefined
+        returnDate: undefined,
+        expiration: loan.newExpiration || loan.expiration
       };
 
       this.loanEquipmentService.updateLoan(updatedData).subscribe({
@@ -157,5 +210,9 @@ export default class EquipmentPage {
         error: () => alert('Error al deshacer la devolución. Intente nuevamente.')
       });
     }
+  }
+
+  onNewExpirationChange(value: string) {
+    this.loanToUndo.update(loan => loan ? { ...loan, newExpiration: value } : null);
   }
 }

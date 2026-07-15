@@ -28,6 +28,7 @@ export class PersonForm {
   private fb: FormBuilder = inject(FormBuilder);
 
   personForm!: FormGroup;
+  formErrors: string[] = [];
 
   isEditMode = false;
 
@@ -54,8 +55,8 @@ export class PersonForm {
       address: this.fb.group({
         street: [currentPerson?.address?.street || '', [Validators.required, Validators.minLength(4)]],
         district: [currentPerson?.address?.district || '', [Validators.required, Validators.minLength(4)]],
-        locality: [currentPerson?.address?.locality || '', [Validators.required, Validators.minLength(4)]],
-        // province: [currentPerson?.address?.province || '', [Validators.required, Validators.minLength(4)]]
+        locality: [currentPerson?.address?.locality || 'Libertador General San Martín', [Validators.required, Validators.minLength(4)]],
+        province: [currentPerson?.address?.province || 'Jujuy', [Validators.required, Validators.minLength(4)]]
       }),
 
       // Health
@@ -90,7 +91,7 @@ export class PersonForm {
         auh: [currentPerson?.benefit?.auh ?? false],
         merchandise: [currentPerson?.benefit?.merchandise ?? false],
         freePass: [currentPerson?.benefit?.freePass ?? false],
-        freePassExpiration: [currentPerson?.benefit?.freePassExpiration ?? ''],
+        //freePassExpiration: [currentPerson?.benefit?.freePassExpiration ?? ''],
       }),
 
       familyMembers: this.fb.array(currentPerson?.familyMembers?.map(family =>
@@ -104,24 +105,42 @@ export class PersonForm {
     });
   }
 
+  private getInvalidFields(): string[] {
+    const invalid: string[] = [];
+    Object.keys(this.personForm.controls).forEach(key => {
+      const control = this.personForm.get(key);
+      if (control instanceof FormGroup) {
+        Object.keys((control as FormGroup).controls).forEach(subKey => {
+          if ((control as FormGroup).get(subKey)?.invalid) invalid.push(`${key}.${subKey}`);
+        });
+      } else if (control?.invalid) {
+        invalid.push(key);
+      }
+    });
+    return invalid;
+  }
+
   onSubmit() {
     this.personForm.markAllAsTouched();
-    if (this.personForm.valid) {
-      const formValue = this.personForm.value;
-      if (this.isEditMode && this.person()) {
-        const original = this.person()!;
-        this.save.emit({
-          ...original,
-          ...formValue,
-          address: { ...original.address, ...formValue.address },
-          health: { ...original.health, ...formValue.health },
-          work: { ...original.work, ...formValue.work },
-          education: { ...original.education, ...formValue.education },
-          benefit: { ...original.benefit, ...formValue.benefit },
-        });
-      } else {
-        this.save.emit(formValue);
-      }
+    this.formErrors = [];
+    if (this.personForm.invalid) {
+      this.formErrors = this.getInvalidFields();
+      return;
+    }
+    const formValue = this.personForm.value;
+    if (this.isEditMode && this.person()) {
+      const original = this.person()!;
+      this.save.emit({
+        ...original,
+        ...formValue,
+        address: { ...original.address, ...formValue.address },
+        health: { ...original.health, ...formValue.health },
+        work: { ...original.work, ...formValue.work },
+        education: { ...original.education, ...formValue.education },
+        benefit: { ...original.benefit, ...formValue.benefit },
+      });
+    } else {
+      this.save.emit(formValue);
     }
   }
 

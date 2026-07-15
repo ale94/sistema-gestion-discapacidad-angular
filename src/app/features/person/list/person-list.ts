@@ -24,7 +24,8 @@ export default class PersonList {
   isModalOpen = signal(false);
   editingPerson = signal<Person | null>(null);
   personToDelete = signal<Person | null>(null);
-  activeFilter = signal<'ALL' | 'CUD' | 'PENSION' | 'PASE_LIBRE'>('ALL');
+  errorMessage = signal<string | null>(null);
+  activeFilter = signal<'ALL' | 'CUD' | 'PENSION' | 'PASE_LIBRE' | 'AUH' | 'FEDERAL_PROGRAM' | 'MERCHANDISE'>('ALL');
 
   searchTerm = signal('');
   searchInput = signal('');
@@ -43,6 +44,9 @@ export default class PersonList {
       CUD: (p) => p.health?.activeCud ?? false,
       PENSION: (p) => p.benefit?.pension ?? false,
       PASE_LIBRE: (p) => p.benefit?.freePass ?? false,
+      AUH: (p) => p.benefit?.auh ?? false,
+      FEDERAL_PROGRAM: (p) => p.benefit?.federalProgram ?? false,
+      MERCHANDISE: (p) => p.benefit?.merchandise ?? false,
     };
 
     return this.personService.persons().filter((person) => {
@@ -107,7 +111,7 @@ export default class PersonList {
     this.goToPage(firstInNext);
   }
 
-  setFilter(filter: 'ALL' | 'CUD' | 'PENSION' | 'PASE_LIBRE') {
+  setFilter(filter: 'ALL' | 'CUD' | 'PENSION' | 'PASE_LIBRE' | 'AUH' | 'FEDERAL_PROGRAM' | 'MERCHANDISE') {
     this.activeFilter.set(filter);
     this.currentPage.set(1);
   }
@@ -130,13 +134,21 @@ export default class PersonList {
     if (this.personToDelete()) {
       this.personService.deletePerson(this.personToDelete()!.id).subscribe({
         next: () => this.cancelDelete(),
-        error: () => alert('Error al eliminar la persona. Intente nuevamente.')
+        error: () => this.showErrorModal('Error al eliminar la persona. Intente nuevamente.')
       });
     }
   }
 
   cancelDelete(): void {
     this.personToDelete.set(null);
+  }
+
+  showErrorModal(message: string): void {
+    this.errorMessage.set(message);
+  }
+
+  closeErrorModal(): void {
+    this.errorMessage.set(null);
   }
 
   handleSave(personData: Person) {
@@ -148,7 +160,8 @@ export default class PersonList {
       next: () => this.closeModal(),
       error: (err) => {
         console.error('Error al guardar la persona:', err.message);
-        alert('Error al guardar la persona. Intente nuevamente.');
+        this.closeModal();
+        this.showErrorModal('Error al guardar la persona. Intente nuevamente.');
       }
     });
   }

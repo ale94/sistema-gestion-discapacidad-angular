@@ -10,7 +10,6 @@ export enum TransportRequestStatus {
 export enum TransportRequestType {
   PASE_PROVINCIAL = 'PASE PROVINCIAL',
   PASAJE_NACIONAL = 'PASAJE NACIONAL',
-  AMBOS = 'AMBOS',
   RENOVACION = 'RENOVACION'
 }
 
@@ -29,4 +28,9 @@ export interface TransportRequest {
   createdAt: string;
   isRegisteredBeneficiary?: boolean;
   freePassExpiration?: string;
+  personId?: number;
+  tripDate?: string;
+  ticketQuantity?: number;
+  origin?: string;
+  destination?: string;
 }

@@ -20,8 +20,9 @@ export class EventService {
 
   loadEvents() {
     this.http.get<Event[]>(`${this.url}/events`)
-      .subscribe(data => {
-        this.events.set(data);
+      .subscribe({
+        next: (data) => this.events.set(data),
+        error: (err) => console.error('Error al cargar eventos:', err)
       });
   }
 

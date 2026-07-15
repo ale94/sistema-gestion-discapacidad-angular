@@ -28,12 +28,17 @@ export class IndicatorForm {
     this.isEditMode = !!currentPerson;
 
     this.personForm = this.fb.group({
-      firstName: [currentPerson?.firstName || '', [Validators.required, Validators.minLength(3)]],
-      lastName: [currentPerson?.lastName || '', [Validators.required, Validators.minLength(3)]],
-      dni: [currentPerson?.dni || '', [Validators.required, Validators.pattern('^[0-9]{7,8}$')]],
-      phone: [currentPerson?.phone || '', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
-      indicatorType: [currentPerson?.indicatorType || '', [Validators.required, Validators.minLength(5)]],
-      address: [currentPerson?.address || '', [Validators.required, Validators.minLength(5)]],
+      firstName: [currentPerson?.firstName || '', [Validators.required, Validators.minLength(2)]],
+      lastName: [currentPerson?.lastName || '', [Validators.required, Validators.minLength(2)]],
+      dni: [currentPerson?.dni || '', [Validators.required, Validators.pattern('^[0-9]{6,8}$')]],
+      phone: [currentPerson?.phone || '', [Validators.required, Validators.pattern('^[0-9]{7,13}$')]],
+      indicatorType: [currentPerson?.indicatorType || '', [Validators.required, Validators.minLength(3)]],
+      address: this.fb.group({
+        street: [currentPerson?.address?.street || '', [Validators.required, Validators.minLength(4)]],
+        district: [currentPerson?.address?.district || '', [Validators.required, Validators.minLength(4)]],
+        locality: [currentPerson?.address?.locality || 'Libertador General San Martín', [Validators.required, Validators.minLength(4)]],
+        province: [currentPerson?.address?.province || 'Jujuy', [Validators.required, Validators.minLength(4)]]
+      }),
     });
   }
 

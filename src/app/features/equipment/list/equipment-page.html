@@ -41,6 +41,64 @@
     </button>
   </div>
 
+  <!-- Filtros Tipo/Equipo -->
+  <div class="w-full mx-auto mb-3">
+    <div class="bg-white/80 backdrop-blur shadow-sm rounded-xl p-3">
+      <div class="flex flex-wrap gap-3">
+        @for (t of tipoOptions(); track t) {
+          <button
+            [ngClass]="{
+              'bg-teal-600 text-white shadow-md': filterTipo() === t,
+              'bg-gray-100 text-gray-700': filterTipo() !== t,
+            }"
+            class="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium hover:bg-teal-600 hover:text-white transition"
+            (click)="filterTipo.set(t); onFilterChange()"
+          >
+            <span>{{ t }}</span>
+          </button>
+        }
+      </div>
+    </div>
+  </div>
+
+  <!-- Filtros Estado -->
+  <div class="w-full mx-auto mb-4">
+    <div class="bg-white/80 backdrop-blur shadow-sm rounded-xl p-3">
+      <div class="flex flex-wrap gap-3">
+        <button
+          [ngClass]="{
+            'bg-teal-600 text-white shadow-md': filterEstado() === '',
+            'bg-gray-100 text-gray-700': filterEstado() !== '',
+          }"
+          class="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium shadow-md hover:bg-teal-600 hover:text-white transition"
+          (click)="filterEstado.set(''); onFilterChange()"
+        >
+          <span>Todos los estados</span>
+        </button>
+        <button
+          [ngClass]="{
+            'bg-teal-600 text-white shadow-md': filterEstado() === 'EN_PRESTAMO',
+            'bg-gray-100 text-gray-700': filterEstado() !== 'EN_PRESTAMO',
+          }"
+          class="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium hover:bg-teal-600 hover:text-white transition"
+          (click)="filterEstado.set('EN_PRESTAMO'); onFilterChange()"
+        >
+          <span>En Préstamo</span>
+        </button>
+        <button
+          [ngClass]="{
+            'bg-teal-600 text-white shadow-md': filterEstado() === 'DEVUELTO',
+            'bg-gray-100 text-gray-700': filterEstado() !== 'DEVUELTO',
+          }"
+          class="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium hover:bg-teal-600 hover:text-white transition"
+          (click)="filterEstado.set('DEVUELTO'); onFilterChange()"
+        >
+          <span>Devuelto</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
   @if (searching()) {
     <div class="flex flex-col items-center justify-center gap-4 py-16 text-teal-600">
       <svg class="animate-spin h-10 w-10" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -81,7 +139,7 @@
           </thead>
 
           <tbody class="bg-white divide-y divide-gray-200">
-            @for (loan of filteredLoan(); track loan.id) {
+            @for (loan of paginatedLoan(); track loan.id) {
               <tr
                 class="hover:bg-gray-50 transition-colors cursor-pointer"
                 (click)="viewProfile(loan)"
@@ -202,6 +260,68 @@
           </tbody>
         </table>
       </div>
+    </div>
+  </div>
+
+  <div class="flex flex-col items-center mt-4 px-2 gap-3">
+    <span class="text-sm text-slate-600">
+      Mostrando {{ (currentPage() - 1) * pageSize + 1 }}–{{ Math.min(currentPage() * pageSize, filteredLoan().length) }} de {{ filteredLoan().length }} registros
+    </span>
+    <div class="flex items-center gap-1">
+      <button
+        (click)="goToPage(1)"
+        [disabled]="currentPage() === 1"
+        class="px-2 py-1.5 rounded-lg text-sm font-medium border border-slate-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-100 transition-colors"
+      >
+        &laquo;
+      </button>
+      <button
+        (click)="goToPage(currentPage() - 1)"
+        [disabled]="currentPage() === 1"
+        class="px-3 py-1.5 rounded-lg text-sm font-medium border border-slate-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-100 transition-colors"
+      >
+        Anterior
+      </button>
+      <button
+        (click)="prevGroup()"
+        [disabled]="currentPageGroup() === 0"
+        class="px-2 py-1.5 rounded-lg text-sm font-medium border border-slate-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-100 transition-colors"
+      >
+        &lsaquo;
+      </button>
+      @for (page of visiblePages(); track page) {
+        <button
+          (click)="goToPage(page)"
+          [ngClass]="{
+            'bg-teal-600 text-white shadow-md': currentPage() === page,
+            'bg-white text-slate-700 border border-slate-300 hover:bg-slate-100': currentPage() !== page,
+          }"
+          class="px-3 py-1.5 rounded-lg text-sm font-medium transition-colors"
+        >
+          {{ page }}
+        </button>
+      }
+      <button
+        (click)="nextGroup()"
+        [disabled]="(currentPageGroup() + 1) * maxVisiblePages >= totalPages()"
+        class="px-2 py-1.5 rounded-lg text-sm font-medium border border-slate-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-100 transition-colors"
+      >
+        &rsaquo;
+      </button>
+      <button
+        (click)="goToPage(currentPage() + 1)"
+        [disabled]="currentPage() === totalPages()"
+        class="px-3 py-1.5 rounded-lg text-sm font-medium border border-slate-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-100 transition-colors"
+      >
+        Siguiente
+      </button>
+      <button
+        (click)="goToPage(totalPages())"
+        [disabled]="currentPage() === totalPages()"
+        class="px-2 py-1.5 rounded-lg text-sm font-medium border border-slate-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-100 transition-colors"
+      >
+        &raquo;
+      </button>
     </div>
   </div>
   }
@@ -350,6 +470,15 @@
           El préstamo de <strong>{{ loan.applicant }}</strong> volverá a estar
           <strong>En Préstamo</strong>.
         </p>
+        <div class="mt-4 text-left">
+          <label class="block text-sm font-medium text-slate-700 mb-1">Nueva Fecha de Expiración</label>
+          <input
+            type="date"
+            [ngModel]="loan.newExpiration"
+            (ngModelChange)="onNewExpirationChange($event)"
+            class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
+          />
+        </div>
       </div>
       <div class="p-4 bg-slate-50 rounded-b-xl flex justify-center space-x-4">
         <button

@@ -1,0 +1,894 @@
+[1m[33m
+Warning: This is a simple server for use in testing or debugging Angular applications
+locally. It hasn't been reviewed for security issues.
+
+Binding this server to an open connection can result in compromising your application or
+computer. Using a different host than the one passed to the "--host" flag might result in
+websocket connection issues.
+    [39m[22m
+[33m❯[39m Building...
+[32m✔[39m Building...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m             [2m | [22m [1mRaw size[22m
+[32mstyles.css[39m         [2m | [22m[2mstyles[22m            [2m | [22m [36m73.02 kB[39m[2m | [22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m              [2m | [22m  [36m4.96 kB[39m[2m | [22m
+[32mchunk-75PTPPLK.js[39m  [2m | [22m[2m-[22m                 [2m | [22m  [36m3.69 kB[39m[2m | [22m
+[32mchunk-VUJOFXKG.js[39m  [2m | [22m[2m-[22m                 [2m | [22m[36m938 bytes[39m[2m | [22m
+[32mchunk-VNI2QXAC.js[39m  [2m | [22m[2m-[22m                 [2m | [22m[36m187 bytes[39m[2m | [22m
+
+[1m [22m                  [2m | [22m[1mInitial total[22m     [2m | [22m [1m82.79 kB[22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m             [2m | [22m [1mRaw size[22m
+[32mchunk-ZIG67OII.js[39m  [2m | [22m[2mtransport-tracking[22m[2m | [22m[36m144.50 kB[39m[2m | [22m
+[32mchunk-CJ2KTPK4.js[39m  [2m | [22m[2mequipment-page[22m    [2m | [22m [36m72.48 kB[39m[2m | [22m
+[32mchunk-OPOC5EAR.js[39m  [2m | [22m[2m-[22m                 [2m | [22m [36m70.51 kB[39m[2m | [22m
+[32mchunk-5WRPBGLZ.js[39m  [2m | [22m[2mperson-list[22m       [2m | [22m [36m53.65 kB[39m[2m | [22m
+[32mchunk-RD7Y2FXE.js[39m  [2m | [22m[2mperson-indicator[22m  [2m | [22m [36m52.45 kB[39m[2m | [22m
+[32mchunk-45ZUESGD.js[39m  [2m | [22m[2muser-management[22m   [2m | [22m [36m50.36 kB[39m[2m | [22m
+[32mchunk-O7AGHCBG.js[39m  [2m | [22m[2mlist[22m              [2m | [22m [36m49.96 kB[39m[2m | [22m
+[32mchunk-WKQPKGU3.js[39m  [2m | [22m[2mperson-profile[22m    [2m | [22m [36m41.50 kB[39m[2m | [22m
+[32mchunk-LFPMJLBY.js[39m  [2m | [22m[2mmain-layout[22m       [2m | [22m [36m35.03 kB[39m[2m | [22m
+[32mchunk-IBYX25CB.js[39m  [2m | [22m[2mdashboard-page[22m    [2m | [22m [36m34.38 kB[39m[2m | [22m
+[32mchunk-TURFEWST.js[39m  [2m | [22m[2mchart-page[22m        [2m | [22m [36m24.55 kB[39m[2m | [22m
+[32mchunk-ZAEQHTN3.js[39m  [2m | [22m[2mprofile[22m           [2m | [22m [36m20.31 kB[39m[2m | [22m
+[32mchunk-AEF5TSS3.js[39m  [2m | [22m[2minfo-system[22m       [2m | [22m [36m18.05 kB[39m[2m | [22m
+[32mchunk-DEELRHDX.js[39m  [2m | [22m[2mlogin-page[22m        [2m | [22m [36m13.14 kB[39m[2m | [22m
+[32mchunk-JBVCJJGA.js[39m  [2m | [22m[2m-[22m                 [2m | [22m  [36m2.94 kB[39m[2m | [22m
+[2m...and 4 more lazy chunks files. Use "--verbose" to show all the files.[22m
+
+Application bundle generation complete. [5.271 seconds] - 2026-06-30T19:50:13.726Z
+
+Watch mode enabled. Watching for file changes...
+NOTE: Raw file sizes do not reflect development server per-request transformations.
+  [32m➜[39m  [1mLocal[22m:   [36mhttp://localhost:[1m4200[22m/[39m
+  [32m➜[39m  [1mNetwork[22m: [36mhttp://172.22.32.1:[1m4200[22m/[39m
+  [32m➜[39m  [1mNetwork[22m: [36mhttp://192.168.56.1:[1m4200[22m/[39m
+  [32m➜[39m  [1mNetwork[22m: [36mhttp://192.168.64.1:[1m4200[22m/[39m
+  [32m➜[39m  [1mNetwork[22m: [36mhttp://192.168.179.1:[1m4200[22m/[39m
+  [32m➜[39m  [1mNetwork[22m: [36mhttp://192.168.1.2:[1m4200[22m/[39m
+[33m❯[39m Changes detected. Rebuilding...
+[32m✔[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m           [2m | [22m[1mRaw size[22m
+[32mstyles.css[39m         [2m | [22m[2mstyles[22m          [2m | [22m[36m73.50 kB[39m[2m | [22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m            [2m | [22m [36m4.96 kB[39m[2m | [22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m           [2m | [22m[1mRaw size[22m
+[32mchunk-C53X6CRX.js[39m  [2m | [22m[2mperson-indicator[22m[2m | [22m[36m52.90 kB[39m[2m | [22m
+
+Application bundle generation complete. [1.785 seconds] - 2026-06-30T19:55:08.110Z
+
+Stylesheet update sent to client(s).
+Component update sent to client(s).
+[33m❯[39m Changes detected. Rebuilding...
+[32m✔[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m           [2m | [22m[1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m            [2m | [22m [36m4.96 kB[39m[2m | [22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m           [2m | [22m[1mRaw size[22m
+[32mchunk-7OCKQZCR.js[39m  [2m | [22m[2m-[22m               [2m | [22m[36m70.55 kB[39m[2m | [22m
+[32mchunk-OPZHHALR.js[39m  [2m | [22m[2mperson-list[22m     [2m | [22m[36m53.65 kB[39m[2m | [22m
+[32mchunk-P7IBSQQS.js[39m  [2m | [22m[2mperson-indicator[22m[2m | [22m[36m52.90 kB[39m[2m | [22m
+
+Application bundle generation complete. [0.666 seconds] - 2026-06-30T19:58:19.300Z
+
+Page reload sent to client(s).
+[33m❯[39m Changes detected. Rebuilding...
+[32m✔[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m           [2m | [22m[1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m            [2m | [22m [36m4.96 kB[39m[2m | [22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m           [2m | [22m[1mRaw size[22m
+[32mchunk-K4QNWELC.js[39m  [2m | [22m[2m-[22m               [2m | [22m[36m70.56 kB[39m[2m | [22m
+[32mchunk-NAV2K5M6.js[39m  [2m | [22m[2mperson-list[22m     [2m | [22m[36m53.65 kB[39m[2m | [22m
+[32mchunk-OKEPKCAS.js[39m  [2m | [22m[2mperson-indicator[22m[2m | [22m[36m52.90 kB[39m[2m | [22m
+
+Application bundle generation complete. [0.554 seconds] - 2026-06-30T20:00:39.038Z
+
+Component update sent to client(s).
+[33m❯[39m Changes detected. Rebuilding...
+[32m✔[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m           [2m | [22m[1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m            [2m | [22m [36m4.96 kB[39m[2m | [22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m           [2m | [22m[1mRaw size[22m
+[32mchunk-MFFQLQ4L.js[39m  [2m | [22m[2mperson-indicator[22m[2m | [22m[36m52.90 kB[39m[2m | [22m
+
+Application bundle generation complete. [0.509 seconds] - 2026-06-30T20:03:55.117Z
+
+Page reload sent to client(s).
+[33m❯[39m Changes detected. Rebuilding...
+[32m✔[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m           [2m | [22m[1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m            [2m | [22m [36m4.96 kB[39m[2m | [22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m           [2m | [22m[1mRaw size[22m
+[32mchunk-3ZH4VRHN.js[39m  [2m | [22m[2mperson-indicator[22m[2m | [22m[36m53.06 kB[39m[2m | [22m
+
+Application bundle generation complete. [0.269 seconds] - 2026-06-30T20:04:01.574Z
+
+Component update sent to client(s).
+[33m❯[39m Changes detected. Rebuilding...
+[32m✔[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m           [2m | [22m[1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m            [2m | [22m [36m4.96 kB[39m[2m | [22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m           [2m | [22m[1mRaw size[22m
+[32mchunk-RTQDQGA7.js[39m  [2m | [22m[2mperson-indicator[22m[2m | [22m[36m53.19 kB[39m[2m | [22m
+
+Application bundle generation complete. [0.334 seconds] - 2026-06-30T20:04:06.707Z
+
+Page reload sent to client(s).
+[33m❯[39m Changes detected. Rebuilding...
+[32m✔[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m           [2m | [22m[1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m            [2m | [22m [36m4.96 kB[39m[2m | [22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m           [2m | [22m[1mRaw size[22m
+[32mchunk-NKCS5EJH.js[39m  [2m | [22m[2mperson-indicator[22m[2m | [22m[36m54.02 kB[39m[2m | [22m
+
+Application bundle generation complete. [0.331 seconds] - 2026-06-30T20:09:11.969Z
+
+Page reload sent to client(s).
+[33m❯[39m Changes detected. Rebuilding...
+[32m✔[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m           [2m | [22m[1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m            [2m | [22m [36m4.96 kB[39m[2m | [22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m           [2m | [22m[1mRaw size[22m
+[32mchunk-UDTQFSB7.js[39m  [2m | [22m[2m-[22m               [2m | [22m[36m70.71 kB[39m[2m | [22m
+[32mchunk-PFWJV6XE.js[39m  [2m | [22m[2mperson-indicator[22m[2m | [22m[36m54.02 kB[39m[2m | [22m
+[32mchunk-A4H4UGU2.js[39m  [2m | [22m[2mperson-list[22m     [2m | [22m[36m53.65 kB[39m[2m | [22m
+
+Application bundle generation complete. [0.552 seconds] - 2026-06-30T20:17:13.047Z
+
+Component update sent to client(s).
+[33m❯[39m Changes detected. Rebuilding...
+[32m✔[39m Changes detected. Rebuilding...
+Application bundle generation failed. [0.643 seconds] - 2026-06-30T20:21:25.507Z
+
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'familyMembers' does not exist on type 'PersonForm'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/person/form/person-form.html:156:11:
+[37m      156 │       @if ([32mfamilyMembers[37m.controls.length !== 0) {
+          ╵            [32m~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component PersonForm.
+
+    src/app/features/person/form/person-form.ts:18:15:
+[37m      18 │   templateUrl: [32m'./person-form.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'familyMembers' does not exist on type 'PersonForm'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/person/form/person-form.html:167:24:
+[37m      167 │         @for (family of [32mfamilyMembers[37m.controls; track $index; let...
+          ╵                         [32m~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component PersonForm.
+
+    src/app/features/person/form/person-form.ts:18:15:
+[37m      18 │   templateUrl: [32m'./person-form.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'removeFamily' does not exist on type 'PersonForm'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/person/form/person-form.html:201:43:
+[37m      201 │             <button type="button" (click)="[32mremoveFamily[37m(i)"
+          ╵                                            [32m~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component PersonForm.
+
+    src/app/features/person/form/person-form.ts:18:15:
+[37m      18 │   templateUrl: [32m'./person-form.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'addFamily' does not exist on type 'PersonForm'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/person/form/person-form.html:216:37:
+[37m      216 │       <button type="button" (click)="[32maddFamily[37m()"
+          ╵                                      [32m~~~~~~~~~[0m
+
+  Error occurs in the template of component PersonForm.
+
+    src/app/features/person/form/person-form.ts:18:15:
+[37m      18 │   templateUrl: [32m'./person-form.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2551: Property 'onCancel' does not exist on type 'PersonForm'. Did you mean 'cancel'?[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/person/form/person-form.html:401:35:
+[37m      401 │     <button type="button" (click)="[32monCancel[37m()"
+          ╵                                    [32m~~~~~~~~[0m
+
+  Error occurs in the template of component PersonForm.
+
+    src/app/features/person/form/person-form.ts:18:15:
+[37m      18 │   templateUrl: [32m'./person-form.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'subKey' does not exist on type 'string[]'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/person/form/person-form.ts:114:40:
+[37m      114 │           Object.keys(control.controls).[32msubKey[37m => {
+          ╵                                         [32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ';' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/person/form/person-form.ts:114:47:
+[37m      114 │           Object.keys(control.controls).subKey [32m=>[37m {
+          ╵                                                [32m~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'subKey'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/person/form/person-form.ts:115:28:
+[37m      115 │             if (control.get([32msubKey[37m)?.invalid) invalid.push(`${key...
+          ╵                             [32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'subKey'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/person/form/person-form.ts:115:69:
+[37m      115 │ ... (control.get(subKey)?.invalid) invalid.push(`${key}.${[32msubKey[37m}`);
+          ╵                                                           [32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1128: Declaration or statement expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/person/form/person-form.ts:116:11:
+[37m      116 │           }[32m)[37m;
+          ╵            [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'control'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/person/form/person-form.ts:117:19:
+[37m      117 │         } else if ([32mcontrol[37m?.invalid) {
+          ╵                    [32m~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2552: Cannot find name 'invalid'. Did you mean 'oninvalid'?[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/person/form/person-form.ts:118:10:
+[37m      118 │           [32minvalid[37m.push(key);
+          ╵           [32m~~~~~~~[0m
+
+  'oninvalid' is declared here.
+
+    node_modules/typescript/lib/lib.dom.d.ts:38919:12:
+[37m      38919 │ declare var [32moninvalid[37m: ((this: Window, ev: Event) => any) | null;
+            ╵             [32m~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'key'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/person/form/person-form.ts:118:23:
+[37m      118 │           invalid.push([32mkey[37m);
+          ╵                        [32m~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1068: Unexpected token. A constructor, method, accessor, or property was expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/person/form/person-form.ts:120:7:
+[37m      120 │       }[32m)[37m;
+          ╵        [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS7010: 'alert', which lacks return-type annotation, implicitly has an 'any' return type.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/person/form/person-form.ts:121:6:
+[37m      121 │       [32malert[37m('Faltan campos obligatorios:\n' + invalid.join('\n'));
+          ╵       [32m~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1003: Identifier expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/person/form/person-form.ts:121:12:
+[37m      121 │       alert([32m'Faltan campos obligatorios:\n'[37m + invalid.join('\n'));
+          ╵             [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS7006: Parameter '(Missing)' implicitly has an 'any' type.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/person/form/person-form.ts:121:12:
+[37m      121 │       alert([32m[37m'Faltan campos obligatorios:\n' + invalid.join('\n'));
+          ╵             [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1138: Parameter declaration expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/person/form/person-form.ts:121:44:
+[37m      121 │       alert('Faltan campos obligatorios:\n' [32m+[37m invalid.join('\n'));
+          ╵                                             [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2552: Cannot find name 'invalid'. Did you mean 'oninvalid'?[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/person/form/person-form.ts:121:46:
+[37m      121 │       alert('Faltan campos obligatorios:\n' + [32minvalid[37m.join('\n'));
+          ╵                                               [32m~~~~~~~[0m
+
+  'oninvalid' is declared here.
+
+    node_modules/typescript/lib/lib.dom.d.ts:38919:12:
+[37m      38919 │ declare var [32moninvalid[37m: ((this: Window, ev: Event) => any) | null;
+            ╵             [32m~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ';' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/person/form/person-form.ts:121:64:
+[37m      121 │       alert('Faltan campos obligatorios:\n' + invalid.join('\n')[32m)[37m;
+          ╵                                                                 [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1128: Declaration or statement expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/person/form/person-form.ts:123:4:
+[37m      123 │     [32m}[37m
+          ╵     [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2532: Object is possibly 'undefined'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/person/form/person-form.ts:124:22:
+[37m      124 │     const formValue = [32mthis[37m.personForm.value;
+          ╵                       [32m~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2532: Object is possibly 'undefined'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/person/form/person-form.ts:125:8:
+[37m      125 │     if ([32mthis[37m.isEditMode && this.person()) {
+          ╵         [32m~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2532: Object is possibly 'undefined'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/person/form/person-form.ts:125:27:
+[37m      125 │     if (this.isEditMode && [32mthis[37m.person()) {
+          ╵                            [32m~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2532: Object is possibly 'undefined'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/person/form/person-form.ts:126:23:
+[37m      126 │       const original = [32mthis[37m.person()!;
+          ╵                        [32m~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2532: Object is possibly 'undefined'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/person/form/person-form.ts:127:6:
+[37m      127 │       [32mthis[37m.save.emit({
+          ╵       [32m~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2532: Object is possibly 'undefined'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/person/form/person-form.ts:137:6:
+[37m      137 │       [32mthis[37m.save.emit(formValue);
+          ╵       [32m~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1128: Declaration or statement expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/person/form/person-form.ts:139:2:
+[37m      139 │   [32m}[37m
+          ╵   [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2552: Cannot find name 'onCancel'. Did you mean 'oncancel'?[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/person/form/person-form.ts:141:2:
+[37m      141 │   [32monCancel[37m() {
+          ╵   [32m~~~~~~~~[0m
+
+  'oncancel' is declared here.
+
+    node_modules/typescript/lib/lib.dom.d.ts:38863:12:
+[37m      38863 │ declare var [32moncancel[37m: ((this: Window, ev: Event) => any) | null;
+            ╵             [32m~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ';' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/person/form/person-form.ts:141:13:
+[37m      141 │   onCancel() [32m{[37m
+          ╵              [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2532: Object is possibly 'undefined'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/person/form/person-form.ts:142:4:
+[37m      142 │     [32mthis[37m.cancel.emit();
+          ╵     [32m~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1434: Unexpected keyword or identifier.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/person/form/person-form.ts:145:2:
+[37m      145 │   [32mget[37m familyMembers() {
+          ╵   [32m~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'get'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/person/form/person-form.ts:145:2:
+[37m      145 │   [32mget[37m familyMembers() {
+          ╵   [32m~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'familyMembers'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/person/form/person-form.ts:145:6:
+[37m      145 │   get [32mfamilyMembers[37m() {
+          ╵       [32m~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ';' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/person/form/person-form.ts:145:22:
+[37m      145 │   get familyMembers() [32m{[37m
+          ╵                       [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'createFamily'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/person/form/person-form.ts:149:2:
+[37m      149 │   [32mcreateFamily[37m(): FormGroup {
+          ╵   [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ';' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/person/form/person-form.ts:149:16:
+[37m      149 │   createFamily()[32m:[37m FormGroup {
+          ╵                 [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1434: Unexpected keyword or identifier.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/person/form/person-form.ts:149:18:
+[37m      149 │   createFamily(): [32mFormGroup[37m {
+          ╵                   [32m~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'addFamily'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/person/form/person-form.ts:159:2:
+[37m      159 │   [32maddFamily[37m() {
+          ╵   [32m~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ';' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/person/form/person-form.ts:159:14:
+[37m      159 │   addFamily() [32m{[37m
+          ╵               [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2532: Object is possibly 'undefined'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/person/form/person-form.ts:160:26:
+[37m      160 │     const familyMembers = [32mthis[37m.familyMembers;
+          ╵                           [32m~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2532: Object is possibly 'undefined'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/person/form/person-form.ts:162:25:
+[37m      162 │       familyMembers.push([32mthis[37m.createFamily());
+          ╵                          [32m~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'removeFamily'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/person/form/person-form.ts:166:2:
+[37m      166 │   [32mremoveFamily[37m(index: number) {
+          ╵   [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'index'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/person/form/person-form.ts:166:15:
+[37m      166 │   removeFamily([32mindex[37m: number) {
+          ╵                [32m~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ',' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/person/form/person-form.ts:166:20:
+[37m      166 │   removeFamily(index[32m:[37m number) {
+          ╵                     [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2693: 'number' only refers to a type, but is being used as a value here.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/person/form/person-form.ts:166:22:
+[37m      166 │   removeFamily(index: [32mnumber[37m) {
+          ╵                       [32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ';' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/person/form/person-form.ts:166:30:
+[37m      166 │   removeFamily(index: number) [32m{[37m
+          ╵                               [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2532: Object is possibly 'undefined'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/person/form/person-form.ts:167:4:
+[37m      167 │     [32mthis[37m.familyMembers.removeAt(index);
+          ╵     [32m~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'index'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/person/form/person-form.ts:167:32:
+[37m      167 │     this.familyMembers.removeAt([32mindex[37m);
+          ╵                                 [32m~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1128: Declaration or statement expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/person/form/person-form.ts:170:0:
+[37m      170 │ [32m}[37m
+          ╵ [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTop-level return cannot be used inside an ECMAScript module[0m
+
+    src/app/features/person/form/person-form.ts:724:0:
+[37m      724 │ [32mreturn[37m;
+          ╵ [32m~~~~~~[0m
+
+  This file is considered to be an ECMAScript module because of the "export" keyword here:
+
+    src/app/features/person/form/person-form.ts:300:0:
+[37m      300 │ [32mexport[37m class PersonForm {
+          ╵ [32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTop-level return cannot be used inside an ECMAScript module[0m
+
+    src/app/features/person/form/person-form.ts:748:4:
+[37m      748 │     [32mreturn[37m this.personForm.get('familyMembers');
+          ╵     [32m~~~~~~[0m
+
+  This file is considered to be an ECMAScript module because of the "export" keyword here:
+
+    src/app/features/person/form/person-form.ts:300:0:
+[37m      300 │ [32mexport[37m class PersonForm {
+          ╵ [32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTop-level return cannot be used inside an ECMAScript module[0m
+
+    src/app/features/person/form/person-form.ts:753:4:
+[37m      753 │     [32mreturn[37m this.fb.group({
+          ╵     [32m~~~~~~[0m
+
+  This file is considered to be an ECMAScript module because of the "export" keyword here:
+
+    src/app/features/person/form/person-form.ts:300:0:
+[37m      300 │ [32mexport[37m class PersonForm {
+          ╵ [32m~~~~~~[0m
+
+[39m[22m
+[33m❯[39m Changes detected. Rebuilding...
+[32m✔[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m             [2m | [22m [1mRaw size[22m
+[32mstyles.css[39m         [2m | [22m[2mstyles[22m            [2m | [22m [36m73.50 kB[39m[2m | [22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m              [2m | [22m  [36m4.96 kB[39m[2m | [22m
+[32mchunk-75PTPPLK.js[39m  [2m | [22m[2m-[22m                 [2m | [22m  [36m3.69 kB[39m[2m | [22m
+[32mchunk-VUJOFXKG.js[39m  [2m | [22m[2m-[22m                 [2m | [22m[36m938 bytes[39m[2m | [22m
+[32mchunk-VNI2QXAC.js[39m  [2m | [22m[2m-[22m                 [2m | [22m[36m187 bytes[39m[2m | [22m
+
+[1m [22m                  [2m | [22m[1mInitial total[22m     [2m | [22m [1m83.28 kB[22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m             [2m | [22m [1mRaw size[22m
+[32mchunk-ZIG67OII.js[39m  [2m | [22m[2mtransport-tracking[22m[2m | [22m[36m144.50 kB[39m[2m | [22m
+[32mchunk-CJ2KTPK4.js[39m  [2m | [22m[2mequipment-page[22m    [2m | [22m [36m72.48 kB[39m[2m | [22m
+[32mchunk-P5HDEAR4.js[39m  [2m | [22m[2m-[22m                 [2m | [22m [36m71.25 kB[39m[2m | [22m
+[32mchunk-CSAK6WTM.js[39m  [2m | [22m[2mperson-indicator[22m  [2m | [22m [36m54.02 kB[39m[2m | [22m
+[32mchunk-ODAQFZ67.js[39m  [2m | [22m[2mperson-list[22m       [2m | [22m [36m53.65 kB[39m[2m | [22m
+[32mchunk-45ZUESGD.js[39m  [2m | [22m[2muser-management[22m   [2m | [22m [36m50.36 kB[39m[2m | [22m
+[32mchunk-O7AGHCBG.js[39m  [2m | [22m[2mlist[22m              [2m | [22m [36m49.96 kB[39m[2m | [22m
+[32mchunk-WKQPKGU3.js[39m  [2m | [22m[2mperson-profile[22m    [2m | [22m [36m41.50 kB[39m[2m | [22m
+[32mchunk-LFPMJLBY.js[39m  [2m | [22m[2mmain-layout[22m       [2m | [22m [36m35.03 kB[39m[2m | [22m
+[32mchunk-IBYX25CB.js[39m  [2m | [22m[2mdashboard-page[22m    [2m | [22m [36m34.38 kB[39m[2m | [22m
+[32mchunk-TURFEWST.js[39m  [2m | [22m[2mchart-page[22m        [2m | [22m [36m24.55 kB[39m[2m | [22m
+[32mchunk-ZAEQHTN3.js[39m  [2m | [22m[2mprofile[22m           [2m | [22m [36m20.31 kB[39m[2m | [22m
+[32mchunk-AEF5TSS3.js[39m  [2m | [22m[2minfo-system[22m       [2m | [22m [36m18.05 kB[39m[2m | [22m
+[32mchunk-DEELRHDX.js[39m  [2m | [22m[2mlogin-page[22m        [2m | [22m [36m13.14 kB[39m[2m | [22m
+[32mchunk-JBVCJJGA.js[39m  [2m | [22m[2m-[22m                 [2m | [22m  [36m2.94 kB[39m[2m | [22m
+[2m...and 4 more lazy chunks files. Use "--verbose" to show all the files.[22m
+
+Application bundle generation complete. [0.539 seconds] - 2026-06-30T20:21:35.368Z
+
+Page reload sent to client(s).
+[33m❯[39m Changes detected. Rebuilding...
+[32m✔[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m           [2m | [22m[1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m            [2m | [22m [36m4.96 kB[39m[2m | [22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m           [2m | [22m[1mRaw size[22m
+[32mchunk-YNPJY47M.js[39m  [2m | [22m[2m-[22m               [2m | [22m[36m71.10 kB[39m[2m | [22m
+[32mchunk-REJDEOEL.js[39m  [2m | [22m[2mperson-indicator[22m[2m | [22m[36m54.02 kB[39m[2m | [22m
+[32mchunk-3LW4D6AU.js[39m  [2m | [22m[2mperson-list[22m     [2m | [22m[36m53.65 kB[39m[2m | [22m
+
+Application bundle generation complete. [0.393 seconds] - 2026-06-30T20:21:38.623Z
+
+Component update sent to client(s).
+[33m❯[39m Changes detected. Rebuilding...
+[32m✔[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m           [2m | [22m[1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m            [2m | [22m [36m4.96 kB[39m[2m | [22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m           [2m | [22m[1mRaw size[22m
+[32mchunk-KFPFMYAD.js[39m  [2m | [22m[2mperson-indicator[22m[2m | [22m[36m54.13 kB[39m[2m | [22m
+
+Application bundle generation complete. [0.590 seconds] - 2026-06-30T20:25:31.027Z
+
+Page reload sent to client(s).
+[33m❯[39m Changes detected. Rebuilding...
+[32m✔[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m           [2m | [22m[1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m            [2m | [22m [36m4.96 kB[39m[2m | [22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m           [2m | [22m[1mRaw size[22m
+[32mchunk-MDVENQ3O.js[39m  [2m | [22m[2mperson-indicator[22m[2m | [22m[36m54.17 kB[39m[2m | [22m
+
+Application bundle generation complete. [0.342 seconds] - 2026-06-30T20:25:34.053Z
+
+Page reload sent to client(s).
+[33m❯[39m Changes detected. Rebuilding...
+[32m✔[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m           [2m | [22m[1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m            [2m | [22m [36m4.96 kB[39m[2m | [22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m           [2m | [22m[1mRaw size[22m
+[32mchunk-FY3NJUGO.js[39m  [2m | [22m[2mperson-indicator[22m[2m | [22m[36m54.40 kB[39m[2m | [22m
+
+Application bundle generation complete. [0.327 seconds] - 2026-06-30T20:25:38.412Z
+
+Page reload sent to client(s).
+[33m❯[39m Changes detected. Rebuilding...
+[32m✔[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m           [2m | [22m[1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m            [2m | [22m [36m4.96 kB[39m[2m | [22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m           [2m | [22m[1mRaw size[22m
+[32mchunk-Y7FUJBP4.js[39m  [2m | [22m[2m-[22m               [2m | [22m[36m71.13 kB[39m[2m | [22m
+[32mchunk-I5WNFAZB.js[39m  [2m | [22m[2mperson-indicator[22m[2m | [22m[36m54.40 kB[39m[2m | [22m
+[32mchunk-XYW2DA2L.js[39m  [2m | [22m[2mperson-list[22m     [2m | [22m[36m53.65 kB[39m[2m | [22m
+
+Application bundle generation complete. [0.852 seconds] - 2026-06-30T20:25:43.089Z
+
+Page reload sent to client(s).
+[33m❯[39m Changes detected. Rebuilding...
+[32m✔[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m           [2m | [22m[1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m            [2m | [22m [36m4.96 kB[39m[2m | [22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m           [2m | [22m[1mRaw size[22m
+[32mchunk-PXNC37VX.js[39m  [2m | [22m[2m-[22m               [2m | [22m[36m71.12 kB[39m[2m | [22m
+[32mchunk-EBX7Z2U2.js[39m  [2m | [22m[2mperson-indicator[22m[2m | [22m[36m54.40 kB[39m[2m | [22m
+[32mchunk-GKPDZKR2.js[39m  [2m | [22m[2mperson-list[22m     [2m | [22m[36m53.65 kB[39m[2m | [22m
+
+Application bundle generation complete. [0.490 seconds] - 2026-06-30T20:25:46.718Z
+
+Page reload sent to client(s).
+[33m❯[39m Changes detected. Rebuilding...
+[32m✔[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m           [2m | [22m[1mRaw size[22m
+[32mstyles.css[39m         [2m | [22m[2mstyles[22m          [2m | [22m[36m73.61 kB[39m[2m | [22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m            [2m | [22m [36m4.96 kB[39m[2m | [22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m           [2m | [22m[1mRaw size[22m
+[32mchunk-5XWGIN5E.js[39m  [2m | [22m[2m-[22m               [2m | [22m[36m72.91 kB[39m[2m | [22m
+[32mchunk-ISQQJBIX.js[39m  [2m | [22m[2mperson-indicator[22m[2m | [22m[36m54.40 kB[39m[2m | [22m
+[32mchunk-6UPESTMR.js[39m  [2m | [22m[2mperson-list[22m     [2m | [22m[36m53.65 kB[39m[2m | [22m
+
+Application bundle generation complete. [0.472 seconds] - 2026-06-30T20:25:51.641Z
+
+Stylesheet update sent to client(s).
+Component update sent to client(s).
+[33m❯[39m Changes detected. Rebuilding...
+[32m✔[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m           [2m | [22m[1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m            [2m | [22m [36m4.96 kB[39m[2m | [22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m           [2m | [22m[1mRaw size[22m
+[32mchunk-CT56LRB3.js[39m  [2m | [22m[2mperson-indicator[22m[2m | [22m[36m54.49 kB[39m[2m | [22m
+
+Application bundle generation complete. [0.440 seconds] - 2026-06-30T20:28:58.788Z
+
+Page reload sent to client(s).
+[33m❯[39m Changes detected. Rebuilding...
+[32m✔[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m           [2m | [22m[1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m            [2m | [22m [36m4.96 kB[39m[2m | [22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m           [2m | [22m[1mRaw size[22m
+[32mchunk-DFWZDZWB.js[39m  [2m | [22m[2mperson-indicator[22m[2m | [22m[36m54.64 kB[39m[2m | [22m
+
+Application bundle generation complete. [0.293 seconds] - 2026-06-30T20:29:03.243Z
+
+Page reload sent to client(s).
+[33m❯[39m Changes detected. Rebuilding...
+[32m✔[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m           [2m | [22m[1mRaw size[22m
+[32mstyles.css[39m         [2m | [22m[2mstyles[22m          [2m | [22m[36m73.76 kB[39m[2m | [22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m            [2m | [22m [36m4.96 kB[39m[2m | [22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m           [2m | [22m[1mRaw size[22m
+[32mchunk-4Y43Y6BX.js[39m  [2m | [22m[2mperson-indicator[22m[2m | [22m[36m56.58 kB[39m[2m | [22m
+
+Application bundle generation complete. [0.311 seconds] - 2026-06-30T20:29:08.364Z
+
+Stylesheet update sent to client(s).
+Component update sent to client(s).
+[33m❯[39m Changes detected. Rebuilding...
+[32m✔[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m           [2m | [22m[1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m            [2m | [22m [36m4.96 kB[39m[2m | [22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m           [2m | [22m[1mRaw size[22m
+[32mchunk-R4XCSKIA.js[39m  [2m | [22m[2mperson-indicator[22m[2m | [22m[36m55.75 kB[39m[2m | [22m
+
+Application bundle generation complete. [0.584 seconds] - 2026-06-30T20:34:03.841Z
+
+Page reload sent to client(s).
+[33m❯[39m Changes detected. Rebuilding...
+[32m✔[39m Changes detected. Rebuilding...
+Application bundle generation failed. [0.409 seconds] - 2026-06-30T20:49:23.928Z
+
+[1m[33m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mDuplicate member "ngOnInit" in class body[0m [duplicate-class-member]
+
+    src/app/features/transport/requests/form/transport-request-form.ts:187:4:
+[37m      187 │     [32mngOnInit[37m() {
+          ╵     [32m~~~~~~~~[0m
+
+  The original member "ngOnInit" is here:
+
+    src/app/features/transport/requests/form/transport-request-form.ts:172:4:
+[37m      172 │     [32mngOnInit[37m() {
+          ╵     [32m~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mDuplicate member "ngOnDestroy" in class body[0m [duplicate-class-member]
+
+    src/app/features/transport/requests/form/transport-request-form.ts:195:4:
+[37m      195 │     [32mngOnDestroy[37m() {
+          ╵     [32m~~~~~~~~~~~[0m
+
+  The original member "ngOnDestroy" is here:
+
+    src/app/features/transport/requests/form/transport-request-form.ts:183:4:
+[37m      183 │     [32mngOnDestroy[37m() {
+          ╵     [32m~~~~~~~~~~~[0m
+
+[39m[22m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2393: Duplicate function implementation.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/transport/requests/form/transport-request-form.ts:74:2:
+[37m      74 │   [32mngOnInit[37m() {
+         ╵   [32m~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2393: Duplicate function implementation.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/transport/requests/form/transport-request-form.ts:86:2:
+[37m      86 │   [32mngOnDestroy[37m() {
+         ╵   [32m~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2393: Duplicate function implementation.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/transport/requests/form/transport-request-form.ts:91:2:
+[37m      91 │   [32mngOnInit[37m() {
+         ╵   [32m~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2393: Duplicate function implementation.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/transport/requests/form/transport-request-form.ts:100:2:
+[37m      100 │   [32mngOnDestroy[37m() {
+          ╵   [32m~~~~~~~~~~~[0m
+
+[39m[22m
+[33m❯[39m Changes detected. Rebuilding...
+[32m✔[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m             [2m | [22m [1mRaw size[22m
+[32mstyles.css[39m         [2m | [22m[2mstyles[22m            [2m | [22m [36m73.76 kB[39m[2m | [22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m              [2m | [22m  [36m4.96 kB[39m[2m | [22m
+[32mchunk-75PTPPLK.js[39m  [2m | [22m[2m-[22m                 [2m | [22m  [36m3.69 kB[39m[2m | [22m
+[32mchunk-VUJOFXKG.js[39m  [2m | [22m[2m-[22m                 [2m | [22m[36m938 bytes[39m[2m | [22m
+[32mchunk-VNI2QXAC.js[39m  [2m | [22m[2m-[22m                 [2m | [22m[36m187 bytes[39m[2m | [22m
+
+[1m [22m                  [2m | [22m[1mInitial total[22m     [2m | [22m [1m83.53 kB[22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m             [2m | [22m [1mRaw size[22m
+[32mchunk-EF2R55JV.js[39m  [2m | [22m[2mtransport-tracking[22m[2m | [22m[36m144.81 kB[39m[2m | [22m
+[32mchunk-5XWGIN5E.js[39m  [2m | [22m[2m-[22m                 [2m | [22m [36m72.91 kB[39m[2m | [22m
+[32mchunk-CJ2KTPK4.js[39m  [2m | [22m[2mequipment-page[22m    [2m | [22m [36m72.48 kB[39m[2m | [22m
+[32mchunk-R4XCSKIA.js[39m  [2m | [22m[2mperson-indicator[22m  [2m | [22m [36m55.75 kB[39m[2m | [22m
+[32mchunk-6UPESTMR.js[39m  [2m | [22m[2mperson-list[22m       [2m | [22m [36m53.65 kB[39m[2m | [22m
+[32mchunk-45ZUESGD.js[39m  [2m | [22m[2muser-management[22m   [2m | [22m [36m50.36 kB[39m[2m | [22m
+[32mchunk-O7AGHCBG.js[39m  [2m | [22m[2mlist[22m              [2m | [22m [36m49.96 kB[39m[2m | [22m
+[32mchunk-WKQPKGU3.js[39m  [2m | [22m[2mperson-profile[22m    [2m | [22m [36m41.50 kB[39m[2m | [22m
+[32mchunk-LFPMJLBY.js[39m  [2m | [22m[2mmain-layout[22m       [2m | [22m [36m35.03 kB[39m[2m | [22m
+[32mchunk-IBYX25CB.js[39m  [2m | [22m[2mdashboard-page[22m    [2m | [22m [36m34.38 kB[39m[2m | [22m
+[32mchunk-TURFEWST.js[39m  [2m | [22m[2mchart-page[22m        [2m | [22m [36m24.55 kB[39m[2m | [22m
+[32mchunk-ZAEQHTN3.js[39m  [2m | [22m[2mprofile[22m           [2m | [22m [36m20.31 kB[39m[2m | [22m
+[32mchunk-AEF5TSS3.js[39m  [2m | [22m[2minfo-system[22m       [2m | [22m [36m18.05 kB[39m[2m | [22m
+[32mchunk-DEELRHDX.js[39m  [2m | [22m[2mlogin-page[22m        [2m | [22m [36m13.14 kB[39m[2m | [22m
+[32mchunk-JBVCJJGA.js[39m  [2m | [22m[2m-[22m                 [2m | [22m  [36m2.94 kB[39m[2m | [22m
+[2m...and 4 more lazy chunks files. Use "--verbose" to show all the files.[22m
+
+Application bundle generation complete. [0.406 seconds] - 2026-06-30T20:49:31.394Z
+
+Page reload sent to client(s).
+[33m❯[39m Changes detected. Rebuilding...
+[32m✔[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m             [2m | [22m [1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m              [2m | [22m  [36m4.96 kB[39m[2m | [22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m             [2m | [22m [1mRaw size[22m
+[32mchunk-WJ2W7XPE.js[39m  [2m | [22m[2mtransport-tracking[22m[2m | [22m[36m144.79 kB[39m[2m | [22m
+
+Application bundle generation complete. [0.354 seconds] - 2026-06-30T20:49:43.439Z
+
+Page reload sent to client(s).
+[33m❯[39m Changes detected. Rebuilding...
+[32m✔[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m             [2m | [22m [1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m              [2m | [22m  [36m4.96 kB[39m[2m | [22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m             [2m | [22m [1mRaw size[22m
+[32mchunk-DIZQSWSJ.js[39m  [2m | [22m[2mtransport-tracking[22m[2m | [22m[36m144.77 kB[39m[2m | [22m
+
+Application bundle generation complete. [0.341 seconds] - 2026-06-30T20:49:46.773Z
+
+Page reload sent to client(s).
+[33m❯[39m Changes detected. Rebuilding...
+[32m✔[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m             [2m | [22m [1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m              [2m | [22m  [36m4.96 kB[39m[2m | [22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m             [2m | [22m [1mRaw size[22m
+[32mchunk-MQJQV4F6.js[39m  [2m | [22m[2mtransport-tracking[22m[2m | [22m[36m144.73 kB[39m[2m | [22m
+
+Application bundle generation complete. [0.354 seconds] - 2026-06-30T20:50:01.033Z
+
+Page reload sent to client(s).
+[33m❯[39m Changes detected. Rebuilding...
+[32m✔[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m             [2m | [22m [1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m              [2m | [22m  [36m4.96 kB[39m[2m | [22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m             [2m | [22m [1mRaw size[22m
+[32mchunk-XPTKOX4J.js[39m  [2m | [22m[2mtransport-tracking[22m[2m | [22m[36m144.69 kB[39m[2m | [22m
+
+Application bundle generation complete. [0.389 seconds] - 2026-06-30T20:50:09.608Z
+
+Page reload sent to client(s).
+[33m❯[39m Changes detected. Rebuilding...
+[32m✔[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m             [2m | [22m [1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m              [2m | [22m  [36m4.96 kB[39m[2m | [22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m             [2m | [22m [1mRaw size[22m
+[32mchunk-L7MVANDG.js[39m  [2m | [22m[2mtransport-tracking[22m[2m | [22m[36m144.78 kB[39m[2m | [22m
+
+Application bundle generation complete. [0.360 seconds] - 2026-06-30T20:50:27.624Z
+
+Page reload sent to client(s).

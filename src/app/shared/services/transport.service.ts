@@ -1,12 +1,15 @@
 import { computed, Injectable, inject, signal } from '@angular/core';
 import { MonthlyData } from '../interfaces/monthly.data.interface';
 import { FreePassService } from './free-pass.service';
+import { TransportRequestService } from './transport-request.service';
+import { TransportRequestType } from '../interfaces/transport-request.interface';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TransportService {
   private freePassService = inject(FreePassService);
+  private requestService = inject(TransportRequestService);
 
   selectedYear = signal<number>(new Date().getFullYear());
 
@@ -57,6 +60,18 @@ export class TransportService {
     for (const np of this.freePassService.nationalFreePasses()) {
       const d = new Date(np.createdAt);
       if (d.getFullYear() === year) {
+        pasajesPerMonth[d.getMonth()]++;
+      }
+    }
+
+    for (const req of this.requestService.requests()) {
+      if (!req.id || !req.id.startsWith('manual-')) continue;
+      const d = new Date(req.createdAt);
+      if (d.getFullYear() !== year) continue;
+      if (req.type === TransportRequestType.PASE_PROVINCIAL) {
+        carnetsPerMonth[d.getMonth()]++;
+      }
+      if (req.type === TransportRequestType.PASAJE_NACIONAL) {
         pasajesPerMonth[d.getMonth()]++;
       }
     }

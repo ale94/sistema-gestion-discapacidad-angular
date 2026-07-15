@@ -41,14 +41,14 @@
             {{ formUtils.getFieldError(loanForm, 'equipmentNumber') }}
           </span>
         }
-      </div>
+      </div> 
       <div>
         <label for="applicant" class="form-label">Solicitante</label>
         <input
           formControlName="applicant"
           type="text"
           class="form-input"
-          placeholder="Ej: Juan Gomez"
+          placeholder="Ej: Juan Pérez"
         />
         @if (formUtils.isValidField(loanForm, 'applicant')) {
           <span class="text-xs text-red-600">

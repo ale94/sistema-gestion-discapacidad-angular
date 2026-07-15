@@ -58,9 +58,26 @@ export class FreePassService {
     );
   }
 
+  updateFreePass(id: number, request: FreePassRequest): Observable<FreePassResponse> {
+    return this.http.put<FreePassResponse>(`${this.url}/free-passes/${id}`, request).pipe(
+      tap(updated => this.freePasses.update(list => list.map(fp => fp.id === id ? updated : fp))),
+      catchError(err => throwError(() => err))
+    );
+  }
+
+  updateNationalFreePass(id: number, request: NationalFreePassRequest): Observable<NationalFreePassResponse> {
+    return this.http.put<NationalFreePassResponse>(`${this.url}/national-free-passes/${id}`, request).pipe(
+      tap(updated => this.nationalFreePasses.update(list => list.map(np => np.id === id ? updated : np))),
+      catchError(err => throwError(() => err))
+    );
+  }
+
   deleteFreePass(id: number): Observable<void> {
     return this.http.delete<void>(`${this.url}/free-passes/${id}`).pipe(
-      tap(() => this.freePasses.update(list => list.filter(fp => fp.id !== id))),
+      tap(() => {
+        this.freePasses.update(list => list.filter(fp => fp.id !== id));
+        this.renewals.update(list => list.filter(r => r.freePassId !== id));
+      }),
       catchError(err => throwError(() => err))
     );
   }
@@ -68,6 +85,13 @@ export class FreePassService {
   deleteNationalFreePass(id: number): Observable<void> {
     return this.http.delete<void>(`${this.url}/national-free-passes/${id}`).pipe(
       tap(() => this.nationalFreePasses.update(list => list.filter(fp => fp.id !== id))),
+      catchError(err => throwError(() => err))
+    );
+  }
+
+  deleteRenewal(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.url}/free-pass-renewals/${id}`).pipe(
+      tap(() => this.renewals.update(list => list.filter(r => r.id !== id))),
       catchError(err => throwError(() => err))
     );
   }

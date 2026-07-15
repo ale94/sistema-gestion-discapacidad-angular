@@ -28,7 +28,7 @@ export class UserForm {
     this.userForm = this.fb.group({
       firstName: [currentUser?.firstName || '', [Validators.required, Validators.minLength(3)]],
       lastName: [currentUser?.lastName || '', [Validators.required, Validators.minLength(3)]],
-      password: [currentUser?.password || '', [Validators.required, Validators.minLength(4)]],
+      password: [currentUser?.password || '', this.isEditMode ? [Validators.minLength(4)] : [Validators.required, Validators.minLength(4)]],
       dni: [currentUser?.dni || '', [Validators.required, Validators.pattern('^[0-9]{7,8}$')]],
       role: [currentUser?.role || '', Validators.required],
     });
@@ -38,10 +38,16 @@ export class UserForm {
     this.userForm.markAllAsTouched();
     if (this.userForm.valid) {
       const formValue = this.userForm.value;
+      const payload = {
+        ...formValue,
+        dni: Number(formValue.dni),
+        userName: formValue.dni,
+        active: this.isEditMode && this.user() ? this.user()!.active : true
+      };
       if (this.isEditMode && this.user()) {
-        this.save.emit({ ...this.user(), ...formValue });
+        this.save.emit({ ...this.user(), ...payload });
       } else {
-        this.save.emit(formValue);
+        this.save.emit(payload);
       }
     }
   }

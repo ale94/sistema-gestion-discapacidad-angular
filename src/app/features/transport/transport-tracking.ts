@@ -1,10 +1,12 @@
-import { Component, effect, inject, signal, computed } from '@angular/core';
+import { Component, effect, inject, signal, computed, untracked } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TransportService } from '../../shared/services/transport.service';
 import { TransportRequestService } from '../../shared/services/transport-request.service';
 import { FreePassService } from '../../shared/services/free-pass.service';
-import { TransportRequest, TransportRequestStatus } from '../../shared/interfaces/transport-request.interface';
+import { PersonService } from '../../shared/services/person.service';
+import { NotificationService } from '../../shared/services/notification.service';
+import { TransportRequest, TransportRequestStatus, TransportRequestType } from '../../shared/interfaces/transport-request.interface';
 import { TransportRequestForm } from './requests/form/transport-request-form';
 import { TransportRequestRenew } from './requests/renew/transport-request-renew';
 
@@ -18,15 +20,20 @@ export default class TransportTracking {
   transportService = inject(TransportService);
   requestService = inject(TransportRequestService);
   freePassService = inject(FreePassService);
+  private personService = inject(PersonService);
+  notification = inject(NotificationService);
 
   constructor() {
     this.freePassService.loadAll();
+    this.personService.loadPersons();
     effect(() => {
       const data = this.freePassService.freePasses();
       const national = this.freePassService.nationalFreePasses();
       if (data.length > 0 || national.length > 0) {
-        this.requestService.syncFromBackend();
-        this.transportService.refresh();
+        untracked(() => {
+          this.requestService.syncFromBackend();
+          this.transportService.refresh();
+        });
       }
     });
   }
@@ -64,20 +71,84 @@ export default class TransportTracking {
   showRequestModal = signal<boolean>(false);
   selectedRequest = signal<TransportRequest | null>(null);
   showRenewModal = signal<boolean>(false);
+  requestToDelete = signal<TransportRequest | null>(null);
 
   searchTerm = signal('');
   searchInput = signal('');
   searching = signal(false);
 
+  filterSolicitante = signal('');
+  filterDni = signal('');
+  filterTipo = signal('');
+  filterEstado = signal('');
+
+  typeOptions = Object.values(TransportRequestType);
+  statusOptions = Object.values(TransportRequestStatus).filter(
+    s => s !== TransportRequestStatus.FINALIZADA && s !== TransportRequestStatus.EN_REVISION
+  );
+
+  showTipoDropdown = signal(false);
+  showEstadoDropdown = signal(false);
+
+  toggleTipoDropdown() {
+    this.showTipoDropdown.update(v => !v);
+    this.showEstadoDropdown.set(false);
+  }
+
+  toggleEstadoDropdown() {
+    this.showEstadoDropdown.update(v => !v);
+    this.showTipoDropdown.set(false);
+  }
+
+  selectTipo(value: string) {
+    this.filterTipo.set(value);
+    this.showTipoDropdown.set(false);
+    this.onFilterChange();
+  }
+
+  selectEstado(value: string) {
+    this.filterEstado.set(value);
+    this.showEstadoDropdown.set(false);
+    this.onFilterChange();
+  }
+
+  tipoLabel = computed(() => this.filterTipo() || 'Tipo');
+  estadoLabel = computed(() => this.filterEstado()?.replace('_', ' ') || 'Estado');
+
   pageSize = 5;
   currentPage = signal<number>(1);
+  maxVisiblePages = 5;
+  Math = Math;
 
   filteredRequests = computed(() => {
     const term = this.searchTerm().toLowerCase().trim();
+    const fSolicitante = this.filterSolicitante().toLowerCase().trim();
+    const fDni = this.filterDni().trim();
+    const fTipo = this.filterTipo();
+    const fEstado = this.filterEstado();
+
     return this.requestService.requests().filter(req => {
       const name = `${req.lastName ?? ''} ${req.firstName ?? ''}`.toLowerCase();
-      return !term || name.includes(term) || (req.dni ?? '').toString().includes(term);
+      const matchesSearch = !term || name.includes(term) || (req.dni ?? '').toString().includes(term);
+      const matchesSolicitante = !fSolicitante || name.includes(fSolicitante);
+      const matchesDni = !fDni || (req.dni ?? '').toString().includes(fDni);
+      const matchesTipo = !fTipo || req.type === fTipo;
+      const matchesEstado = !fEstado || req.status === fEstado;
+      return matchesSearch && matchesSolicitante && matchesDni && matchesTipo && matchesEstado;
     });
+  });
+
+  totalPages = computed(() => {
+    return Math.max(1, Math.ceil(this.filteredRequests().length / this.pageSize));
+  });
+
+  pages = computed(() => Array.from({ length: this.totalPages() }, (_, i) => i + 1));
+
+  currentPageGroup = computed(() => Math.floor((this.currentPage() - 1) / this.maxVisiblePages));
+
+  visiblePages = computed(() => {
+    const start = this.currentPageGroup() * this.maxVisiblePages;
+    return this.pages().slice(start, start + this.maxVisiblePages);
   });
 
   pagedRequests = computed(() => {
@@ -85,29 +156,20 @@ export default class TransportTracking {
     return this.filteredRequests().slice(start, start + this.pageSize);
   });
 
-  totalPages = computed(() => {
-    return Math.max(1, Math.ceil(this.filteredRequests().length / this.pageSize));
-  });
-
-  pages = computed(() => {
-    const total = this.totalPages();
-    const current = this.currentPage();
-    const delta = 2;
-    const range: number[] = [];
-    const left = Math.max(2, current - delta);
-    const right = Math.min(total - 1, current + delta);
-
-    range.push(1);
-    for (let i = left; i <= right; i++) range.push(i);
-    if (total > 1) range.push(total);
-
-    return range;
-  });
-
   setPage(page: number) {
     if (page >= 1 && page <= this.totalPages()) {
       this.currentPage.set(page);
     }
+  }
+
+  prevGroup() {
+    const firstInGroup = this.currentPageGroup() * this.maxVisiblePages + 1;
+    this.setPage(firstInGroup - 1);
+  }
+
+  nextGroup() {
+    const firstInNext = (this.currentPageGroup() + 1) * this.maxVisiblePages + 1;
+    this.setPage(firstInNext);
   }
 
   pageInfo = computed(() => {
@@ -123,6 +185,20 @@ export default class TransportTracking {
       this.searchTerm.set('');
       this.currentPage.set(1);
     }
+  }
+
+  onFilterChange() {
+    this.currentPage.set(1);
+  }
+
+  clearFilters() {
+    this.filterSolicitante.set('');
+    this.filterDni.set('');
+    this.filterTipo.set('');
+    this.filterEstado.set('');
+    this.searchTerm.set('');
+    this.searchInput.set('');
+    this.currentPage.set(1);
   }
 
   doSearch() {
@@ -153,51 +229,44 @@ export default class TransportTracking {
   }
 
   handleRenew(req: TransportRequest) {
+    const currentYear = new Date().getFullYear();
+
     const person = this.freePassService.freePasses().find(fp =>
+      fp.personId === req.personId
+    ) ?? this.freePassService.freePasses().find(fp =>
       fp.fullName.toLowerCase().includes(req.lastName.toLowerCase()) &&
       fp.fullName.toLowerCase().includes(req.firstName.toLowerCase())
     );
 
-    if (person) {
-      this.freePassService.createRenewal({
-        freePassId: person.id,
-        year: new Date().getFullYear(),
-      }).subscribe({
-        next: () => {
-          this.freePassService.loadAll();
-          this.closeRenewModal();
-        },
-        error: (err) => {
-          console.error('Error creating renewal:', err);
-          alert('Error al crear la renovación. Es posible que ya exista una para este año.');
-        }
-      });
-    } else {
-      const persons = this.freePassService.freePasses();
-      const matched = persons.find(p => {
-        const name = `${req.lastName} ${req.firstName}`.toLowerCase();
-        return p.fullName.toLowerCase().includes(name) ||
-               name.includes(p.fullName.toLowerCase().replace(',', ''));
-      });
-      if (matched) {
-        this.freePassService.createRenewal({
-          freePassId: matched.id,
-          year: new Date().getFullYear(),
-        }).subscribe({
-          next: () => {
-            this.freePassService.loadAll();
-            this.closeRenewModal();
-          },
-          error: (err) => {
-            console.error('Error creating renewal:', err);
-            alert('Error al crear la renovación.');
-          }
-        });
-      } else {
-        alert('No se encontró un pase libre activo para esta persona.');
-        this.closeRenewModal();
-      }
+    if (!person) {
+      this.notification.show('No se encontró un pase libre activo para esta persona.');
+      this.closeRenewModal();
+      return;
     }
+
+    const alreadyRenewed = this.freePassService.renewals().some(
+      r => r.freePassId === person.id && r.year === currentYear
+    );
+
+    if (alreadyRenewed) {
+      this.notification.show('Ya existe una renovación para este año para esta persona.');
+      this.closeRenewModal();
+      return;
+    }
+
+    this.freePassService.createRenewal({
+      freePassId: person.id,
+      year: currentYear,
+    }).subscribe({
+      next: () => {
+        this.freePassService.loadAll();
+        this.closeRenewModal();
+      },
+      error: (err) => {
+        console.error('Error creating renewal:', err);
+        this.notification.show('Error al crear la renovación. Es posible que ya exista una para este año.');
+      }
+    });
   }
 
   saveRequest(req: TransportRequest) {
@@ -206,14 +275,33 @@ export default class TransportTracking {
     } else {
       this.requestService.addRequest(req);
     }
+    this.transportService.refresh();
     this.closeRequestModal();
   }
 
-  deleteRequest(id: string) {
-    if (confirm('¿Está seguro de eliminar esta solicitud?')) {
-      this.requestService.deleteRequest(id);
-      this.currentPage.set(Math.min(this.currentPage(), this.totalPages()));
+  requestDelete(req: TransportRequest) {
+    this.requestToDelete.set(req);
+  }
+
+  confirmDeleteAction() {
+    const req = this.requestToDelete();
+    if (req?.id) {
+      this.requestService.deleteRequest(req.id).subscribe({
+        next: () => {
+          this.currentPage.set(Math.min(this.currentPage(), this.totalPages()));
+          this.requestToDelete.set(null);
+        },
+        error: (err) => {
+          console.error('Error al eliminar:', err);
+          this.notification.show('Error al eliminar. Intente nuevamente.');
+          this.requestToDelete.set(null);
+        }
+      });
     }
+  }
+
+  cancelDelete() {
+    this.requestToDelete.set(null);
   }
 
   getStatusClass(status: TransportRequestStatus): string {

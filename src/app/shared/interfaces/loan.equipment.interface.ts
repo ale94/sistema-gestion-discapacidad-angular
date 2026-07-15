@@ -1,13 +1,13 @@
 export interface LoanEquipment {
   id: number;
-  requestDate: Date;
-  expiration: Date;
+  requestDate: string;
+  expiration: string;
   type: string;
-  equipmentNumber: number;
-  year: number;
+  equipmentNumber: string;
+  year: string;
   applicant: string;
   dni: number;
   address: string;
   phone: number;
-  returnDate?: Date;
+  returnDate?: string;
 }
