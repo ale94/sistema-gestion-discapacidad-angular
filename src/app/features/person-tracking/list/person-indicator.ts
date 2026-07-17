@@ -68,10 +68,11 @@ export default class PersonIndicator {
       tutor: '',
       gender: '',
       registrationDate: new Date(),
-      education: { id: 0, educationLevel: '', name: '', address: '' },
+      dateDeath: undefined,
+      education: { id: 0, educationLevel: '', name: '', address: '', educationStatus: '' },
       work: { id: 0, companyName: '', status: '', address: '', socialWork: false, nameSocialWork: '' },
-      health: { id: 0, diagnostic: '', disabilityType: '', cudNumber: '', activeCud: false, rehabilitationTreatment: false },
-      benefit: { id: 0, federalProgram: false, pension: false, auh: false, merchandise: false, freePass: false, freePassExpiration: '' },
+      health: { id: 0, diagnostic: '', disabilityType: '', cudNumber: '', activeCud: false, expirationDate: '', rehabilitationTreatment: false },
+      benefit: { id: 0, federalProgram: false, pension: false, auh: false, suaf: false, merchandise: false, freePass: false, freePassExpiration: '' },
       familyMembers: [],
     });
     this.showTransitionModal.set(true);

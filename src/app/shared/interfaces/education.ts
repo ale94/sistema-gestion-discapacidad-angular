@@ -3,4 +3,5 @@ export interface Education {
   name: string;
   address: string;
   educationLevel: string;
+  educationStatus?: string;
 }

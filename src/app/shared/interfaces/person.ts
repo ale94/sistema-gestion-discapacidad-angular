@@ -13,6 +13,7 @@ export interface Person {
   dni: number;
   civilStatus: string;
   dateBirth: Date;
+  dateDeath?: Date;
   tutor: string;
   phone: number;
   gender: string;
