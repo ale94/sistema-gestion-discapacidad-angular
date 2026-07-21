@@ -94,10 +94,18 @@
           </span>
           }
         </div>
+        <div class="flex items-center gap-3">
+          <label class="flex items-center gap-2 cursor-pointer">
+            <input type="checkbox" [checked]="isDeceased()" (change)="toggleDeceased()" class="form-checkbox" />
+            <span class="form-label mb-0">¿Está fallecido?</span>
+          </label>
+        </div>
+        @if (isDeceased()) {
         <div>
           <label class="form-label">Fecha de Fallecimiento</label>
           <input formControlName="dateDeath" type="date" class="form-input" />
         </div>
+        }
       </div>
     </fieldset>
 
@@ -388,12 +396,12 @@
 
       <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-2">
         <div class="flex items-center">
-          <input formControlName="auh" type="checkbox" class="form-checkbox" />
+          <input formControlName="auh" type="checkbox" class="form-checkbox" (change)="onAuHChange()" />
           <label class="ml-2 text-sm text-slate-700">AUH</label>
         </div>
 
         <div class="flex items-center">
-          <input formControlName="suaf" type="checkbox" class="form-checkbox" />
+          <input formControlName="suaf" type="checkbox" class="form-checkbox" (change)="onSuafChange()" />
           <label class="ml-2 text-sm text-slate-700">SUAF</label>
         </div>
 

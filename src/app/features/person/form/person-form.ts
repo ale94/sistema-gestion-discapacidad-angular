@@ -1,4 +1,4 @@
-import { Component, inject, input, output, OnInit } from '@angular/core';
+import { Component, inject, input, output, signal, OnInit } from '@angular/core';
 import {
   FormArray,
   FormBuilder,
@@ -31,6 +31,7 @@ export class PersonForm implements OnInit {
   formErrors: string[] = [];
 
   isEditMode = false;
+  isDeceased = signal(false);
 
   personUtils = PersonUtils;
   formUtils = FormUtils;
@@ -38,6 +39,7 @@ export class PersonForm implements OnInit {
   ngOnInit(): void {
     const currentPerson = this.person();
     this.isEditMode = !!currentPerson;
+    this.isDeceased.set(!!currentPerson?.dateDeath);
 
     this.personForm = this.fb.group({
 
@@ -130,7 +132,10 @@ export class PersonForm implements OnInit {
       this.formErrors = this.getInvalidFields();
       return;
     }
-    const formValue = this.personForm.value;
+    const formValue = { ...this.personForm.value };
+    if (!this.isDeceased()) {
+      formValue.dateDeath = '';
+    }
     if (this.isEditMode && this.person()) {
       const original = this.person()!;
       this.save.emit({
@@ -149,6 +154,27 @@ export class PersonForm implements OnInit {
 
   onCancel() {
     this.cancel.emit();
+  }
+
+  toggleDeceased() {
+    this.isDeceased.update(v => !v);
+    if (!this.isDeceased()) {
+      this.personForm.get('dateDeath')?.setValue('');
+    }
+  }
+
+  onAuHChange() {
+    const auh = this.personForm.get('benefit.auh')?.value;
+    if (auh) {
+      this.personForm.get('benefit.suaf')?.setValue(false);
+    }
+  }
+
+  onSuafChange() {
+    const suaf = this.personForm.get('benefit.suaf')?.value;
+    if (suaf) {
+      this.personForm.get('benefit.auh')?.setValue(false);
+    }
   }
 
   get familyMembers() {
