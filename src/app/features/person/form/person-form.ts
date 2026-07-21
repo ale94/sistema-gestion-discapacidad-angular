@@ -1,4 +1,4 @@
-import { Component, inject, input, output } from '@angular/core';
+import { Component, inject, input, output, signal, OnInit } from '@angular/core';
 import {
   FormArray,
   FormBuilder,
@@ -18,7 +18,7 @@ import { PersonUtils } from '../../../shared/utils/person.utils';
   templateUrl: './person-form.html',
   styleUrls: ['./person-form.css'],
 })
-export class PersonForm {
+export class PersonForm implements OnInit {
 
   person = input<Person | null>(null);
 
@@ -31,6 +31,7 @@ export class PersonForm {
   formErrors: string[] = [];
 
   isEditMode = false;
+  isDeceased = signal(false);
 
   personUtils = PersonUtils;
   formUtils = FormUtils;
@@ -38,6 +39,7 @@ export class PersonForm {
   ngOnInit(): void {
     const currentPerson = this.person();
     this.isEditMode = !!currentPerson;
+    this.isDeceased.set(!!currentPerson?.dateDeath);
 
     this.personForm = this.fb.group({
 
@@ -47,6 +49,7 @@ export class PersonForm {
       dni: [currentPerson?.dni || '', [Validators.required, Validators.pattern('^[0-9]{7,8}$')]],
       civilStatus: [currentPerson?.civilStatus || '', Validators.required],
       dateBirth: [currentPerson?.dateBirth || '', Validators.required],
+      dateDeath: [currentPerson?.dateDeath || ''],
       tutor: [currentPerson?.tutor || ''],
       phone: [currentPerson?.phone || '', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
       gender: [currentPerson?.gender || '', Validators.required],
@@ -63,8 +66,9 @@ export class PersonForm {
       health: this.fb.group({
         diagnostic: [currentPerson?.health?.diagnostic || '', [Validators.required, Validators.minLength(4)]],
         disabilityType: [currentPerson?.health?.disabilityType || '', Validators.required],
-        cudNumber: [currentPerson?.health?.cudNumber || '', [Validators.required, Validators.minLength(4)]],
+        cudNumber: [currentPerson?.health?.cudNumber || ''],
         activeCud: [currentPerson?.health?.activeCud ?? false, Validators.required],
+        expirationDate: [currentPerson?.health?.expirationDate || ''],
         rehabilitationTreatment: [currentPerson?.health?.rehabilitationTreatment ?? false, Validators.required],
       }),
 
@@ -82,6 +86,7 @@ export class PersonForm {
         educationLevel: [currentPerson?.education?.educationLevel || '', Validators.required],
         name: [currentPerson?.education?.name || ''],
         address: [currentPerson?.education?.address || ''],
+        educationStatus: [currentPerson?.education?.educationStatus || '', Validators.required],
       }),
 
       // Benefits
@@ -89,16 +94,16 @@ export class PersonForm {
         federalProgram: [currentPerson?.benefit?.federalProgram ?? false],
         pension: [currentPerson?.benefit?.pension ?? false],
         auh: [currentPerson?.benefit?.auh ?? false],
+        suaf: [currentPerson?.benefit?.suaf ?? false],
         merchandise: [currentPerson?.benefit?.merchandise ?? false],
         freePass: [currentPerson?.benefit?.freePass ?? false],
-        //freePassExpiration: [currentPerson?.benefit?.freePassExpiration ?? ''],
       }),
 
       familyMembers: this.fb.array(currentPerson?.familyMembers?.map(family =>
         this.fb.group({
           fullName: [family.fullName || '', Validators.required],
-          dni: [family.dni || '', Validators.required],
-          dateBirth: [family.dateBirth || '', Validators.required],
+          dni: [family.dni || ''],
+          dateBirth: [family.dateBirth || ''],
           phone: [family.phone || '', Validators.required],
           parentage: [family.parentage || '', Validators.required]
         })) || [])
@@ -127,7 +132,10 @@ export class PersonForm {
       this.formErrors = this.getInvalidFields();
       return;
     }
-    const formValue = this.personForm.value;
+    const formValue = { ...this.personForm.value };
+    if (!this.isDeceased()) {
+      formValue.dateDeath = '';
+    }
     if (this.isEditMode && this.person()) {
       const original = this.person()!;
       this.save.emit({
@@ -146,6 +154,32 @@ export class PersonForm {
 
   onCancel() {
     this.cancel.emit();
+  }
+
+  toggleDeceased() {
+    this.isDeceased.update(v => !v);
+    const dateDeathControl = this.personForm.get('dateDeath');
+    if (this.isDeceased()) {
+      dateDeathControl?.setValidators([Validators.required]);
+    } else {
+      dateDeathControl?.clearValidators();
+      dateDeathControl?.setValue('');
+    }
+    dateDeathControl?.updateValueAndValidity();
+  }
+
+  onAuHChange() {
+    const auh = this.personForm.get('benefit.auh')?.value;
+    if (auh) {
+      this.personForm.get('benefit.suaf')?.setValue(false);
+    }
+  }
+
+  onSuafChange() {
+    const suaf = this.personForm.get('benefit.suaf')?.value;
+    if (suaf) {
+      this.personForm.get('benefit.auh')?.setValue(false);
+    }
   }
 
   get familyMembers() {
@@ -171,6 +205,13 @@ export class PersonForm {
 
   removeFamily(index: number) {
     this.familyMembers.removeAt(index);
+  }
+
+  isCudExpired(): boolean {
+    const active = this.personForm.get('health.activeCud')?.value;
+    const expDate = this.personForm.get('health.expirationDate')?.value;
+    if (!active || !expDate) return false;
+    return new Date(expDate) < new Date();
   }
 
 }

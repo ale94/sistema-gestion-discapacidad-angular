@@ -194,10 +194,18 @@
           @for (person of paginatedPeople(); track person.id) {
             <tr
               (click)="viewProfile(person)"
-              class="cursor-pointer hover:bg-teal-50 transition-colors"
+              class="cursor-pointer transition-colors"
+              [class.hover-bg-teal-50]="!person.dateDeath"
+              [class.opacity-50]="person.dateDeath"
+              [class.bg-slate-50]="person.dateDeath"
             >
               <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-900">
                 {{ person.lastName | titlecase }} {{ person.firstName | titlecase }}
+                @if (person.dateDeath) {
+                <span class="ml-2 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-slate-200 text-slate-600">
+                  Fallecido
+                </span>
+                }
               </td>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600">
                 {{ person.dni | number }}

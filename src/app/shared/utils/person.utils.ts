@@ -13,7 +13,8 @@ export class PersonUtils {
       'fisica',
       'sensorial',
       'intelectual',
-      'psiquica',
+      'mental',
+      'biseral',
       'multiple'
     ]
   }

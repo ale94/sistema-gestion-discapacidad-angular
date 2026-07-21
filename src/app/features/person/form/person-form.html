@@ -94,6 +94,23 @@
           </span>
           }
         </div>
+        <div class="flex items-center gap-3">
+          <label class="flex items-center gap-2 cursor-pointer">
+            <input type="checkbox" [checked]="isDeceased()" (change)="toggleDeceased()" class="form-checkbox" />
+            <span class="form-label mb-0">¿Está fallecido?</span>
+          </label>
+        </div>
+        @if (isDeceased()) {
+        <div>
+          <label class="form-label">Fecha de Fallecimiento</label>
+          <input formControlName="dateDeath" type="date" class="form-input" />
+          @if (formUtils.isValidField(personForm, 'dateDeath')) {
+          <span class="text-xs text-red-600">
+            {{ formUtils.getFieldError(personForm, 'dateDeath') }}
+          </span>
+          }
+        </div>
+        }
       </div>
     </fieldset>
 
@@ -226,6 +243,12 @@
     <fieldset formGroupName="health" class="lg:col-span-3 border border-slate-300 rounded-lg p-4 mb-4 bg-white">
       <legend class="px-2 text-md font-semibold text-teal-600">3. Situación de Salud</legend>
 
+      @if (isCudExpired()) {
+      <div class="mb-3 p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">
+        ⚠ El CUD se encuentra vencido. Verifique la fecha de vencimiento.
+      </div>
+      }
+
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-2">
         <div class="lg:col-span-2">
           <label class="form-label">Diagnóstico</label>
@@ -273,6 +296,11 @@
             {{ formUtils.getFieldError(personForm, 'health.activeCud') }}
           </span>
           }
+        </div>
+
+        <div>
+          <label class="form-label">Fecha de Vencimiento CUD</label>
+          <input formControlName="expirationDate" type="date" class="form-input" />
         </div>
 
         <div>
@@ -351,7 +379,20 @@
           </span>
           }
         </div>
-        <div class="lg:col-span-2">
+        <div>
+          <label class="form-label">Estado Educativo</label>
+          <select formControlName="educationStatus" class="form-input">
+            <option value="" disabled selected>Seleccione una opción</option>
+            <option value="COMPLETO">Completo</option>
+            <option value="INCOMPLETO">Incompleto</option>
+          </select>
+          @if (formUtils.isValidField(personForm, 'education.educationStatus')) {
+          <span class="text-xs text-red-600">
+            {{ formUtils.getFieldError(personForm, 'education.educationStatus') }}
+          </span>
+          }
+        </div>
+        <div>
           <label class="form-label">Establecimiento Educativo</label>
           <input formControlName="name" type="text" class="form-input"
             placeholder="Nombre de la escuela o institución" />
@@ -365,8 +406,13 @@
 
       <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-2">
         <div class="flex items-center">
-          <input formControlName="auh" type="checkbox" class="form-checkbox" />
+          <input formControlName="auh" type="checkbox" class="form-checkbox" (change)="onAuHChange()" />
           <label class="ml-2 text-sm text-slate-700">AUH</label>
+        </div>
+
+        <div class="flex items-center">
+          <input formControlName="suaf" type="checkbox" class="form-checkbox" (change)="onSuafChange()" />
+          <label class="ml-2 text-sm text-slate-700">SUAF</label>
         </div>
 
         <div class="flex items-center">
@@ -388,12 +434,6 @@
           <input formControlName="freePass" type="checkbox" class="form-checkbox" />
           <label class="ml-2 text-sm text-slate-700">Pase Libre</label>
         </div>
-        <!--
-        <div class="flex items-center gap-2">
-          <label class="text-sm text-slate-700 whitespace-nowrap">Vencimiento:</label>
-          <input formControlName="freePassExpiration" type="date" class="w-full px-4 py-2 border border-slate-300 rounded-lg bg-white text-slate-800 text-sm" />
-        </div>
-        -->
       </div>
     </fieldset>
   </div>

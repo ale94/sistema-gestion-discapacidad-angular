@@ -32,4 +32,9 @@ export default class PersonProfile {
     }
     return age;
   }
+
+  isCudExpired(p: any): boolean {
+    if (!p.health.activeCud || !p.health.expirationDate) return false;
+    return new Date(p.health.expirationDate) < new Date();
+  }
 }
