@@ -104,6 +104,11 @@
         <div>
           <label class="form-label">Fecha de Fallecimiento</label>
           <input formControlName="dateDeath" type="date" class="form-input" />
+          @if (formUtils.isValidField(personForm, 'dateDeath')) {
+          <span class="text-xs text-red-600">
+            {{ formUtils.getFieldError(personForm, 'dateDeath') }}
+          </span>
+          }
         </div>
         }
       </div>
@@ -377,10 +382,15 @@
         <div>
           <label class="form-label">Estado Educativo</label>
           <select formControlName="educationStatus" class="form-input">
-            <option value="" selected>Seleccione una opción</option>
+            <option value="" disabled selected>Seleccione una opción</option>
             <option value="COMPLETO">Completo</option>
             <option value="INCOMPLETO">Incompleto</option>
           </select>
+          @if (formUtils.isValidField(personForm, 'education.educationStatus')) {
+          <span class="text-xs text-red-600">
+            {{ formUtils.getFieldError(personForm, 'education.educationStatus') }}
+          </span>
+          }
         </div>
         <div>
           <label class="form-label">Establecimiento Educativo</label>

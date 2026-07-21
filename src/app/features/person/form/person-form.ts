@@ -86,7 +86,7 @@ export class PersonForm implements OnInit {
         educationLevel: [currentPerson?.education?.educationLevel || '', Validators.required],
         name: [currentPerson?.education?.name || ''],
         address: [currentPerson?.education?.address || ''],
-        educationStatus: [currentPerson?.education?.educationStatus || ''],
+        educationStatus: [currentPerson?.education?.educationStatus || '', Validators.required],
       }),
 
       // Benefits
@@ -158,9 +158,14 @@ export class PersonForm implements OnInit {
 
   toggleDeceased() {
     this.isDeceased.update(v => !v);
-    if (!this.isDeceased()) {
-      this.personForm.get('dateDeath')?.setValue('');
+    const dateDeathControl = this.personForm.get('dateDeath');
+    if (this.isDeceased()) {
+      dateDeathControl?.setValidators([Validators.required]);
+    } else {
+      dateDeathControl?.clearValidators();
+      dateDeathControl?.setValue('');
     }
+    dateDeathControl?.updateValueAndValidity();
   }
 
   onAuHChange() {
