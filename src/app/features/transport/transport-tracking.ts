@@ -115,7 +115,7 @@ export default class TransportTracking {
   tipoLabel = computed(() => this.filterTipo() || 'Tipo');
   estadoLabel = computed(() => this.filterEstado()?.replace('_', ' ') || 'Estado');
 
-  pageSize = 5;
+  pageSize = 10;
   currentPage = signal<number>(1);
   maxVisiblePages = 5;
   Math = Math;

@@ -24,7 +24,7 @@ export default class EquipmentPage {
   searchInput = signal('');
   searching = signal(false);
   currentPage = signal(1);
-  pageSize = 5;
+  pageSize = 10;
   maxVisiblePages = 5;
   Math = Math;
 
