@@ -15,7 +15,8 @@ export class PersonUtils {
       'intelectual',
       'mental',
       'visceral',
-      'multiple'
+      'multiple',
+      'sin especificar'
     ]
   }
   static jobStatuses(): string[] {
