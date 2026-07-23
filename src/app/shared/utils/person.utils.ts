@@ -16,7 +16,7 @@ export class PersonUtils {
       'mental',
       'visceral',
       'multiple',
-      'sin especificar'
+      'sin diagnostico'
     ]
   }
   static jobStatuses(): string[] {
