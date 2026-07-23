@@ -47,19 +47,19 @@ export class PersonForm implements OnInit {
       firstName: [currentPerson?.firstName || '', [Validators.required, Validators.minLength(3)]],
       lastName: [currentPerson?.lastName || '', [Validators.required, Validators.minLength(3)]],
       dni: [currentPerson?.dni || '', [Validators.required, Validators.pattern('^[0-9]{7,8}$')]],
-      civilStatus: [currentPerson?.civilStatus || '', Validators.required],
+      civilStatus: [currentPerson?.civilStatus || ''],
       dateBirth: [currentPerson?.dateBirth || '', Validators.required],
       dateDeath: [currentPerson?.dateDeath || ''],
       tutor: [currentPerson?.tutor || ''],
-      phone: [currentPerson?.phone || '', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
+      phone: [currentPerson?.phone || '', Validators.pattern('^[0-9]{10}$')],
       gender: [currentPerson?.gender || '', Validators.required],
 
       // Address
       address: this.fb.group({
-        street: [currentPerson?.address?.street || '', [Validators.required, Validators.minLength(4)]],
-        district: [currentPerson?.address?.district || '', [Validators.required, Validators.minLength(4)]],
-        locality: [currentPerson?.address?.locality || 'Libertador General San Martín', [Validators.required, Validators.minLength(4)]],
-        province: [currentPerson?.address?.province || 'Jujuy', [Validators.required, Validators.minLength(4)]]
+        street: [currentPerson?.address?.street || '', Validators.minLength(4)],
+        district: [currentPerson?.address?.district || '', Validators.minLength(4)],
+        locality: [currentPerson?.address?.locality || 'Libertador General San Martín', Validators.minLength(4)],
+        province: [currentPerson?.address?.province || 'Jujuy', Validators.minLength(4)]
       }),
 
       // Health
@@ -67,26 +67,26 @@ export class PersonForm implements OnInit {
         diagnostic: [currentPerson?.health?.diagnostic || '', [Validators.required, Validators.minLength(4)]],
         disabilityType: [currentPerson?.health?.disabilityType || '', Validators.required],
         cudNumber: [currentPerson?.health?.cudNumber || ''],
-        activeCud: [currentPerson?.health?.activeCud ?? false, Validators.required],
+        activeCud: [currentPerson?.health?.activeCud ?? false],
         expirationDate: [currentPerson?.health?.expirationDate || ''],
-        rehabilitationTreatment: [currentPerson?.health?.rehabilitationTreatment ?? false, Validators.required],
+        rehabilitationTreatment: [currentPerson?.health?.rehabilitationTreatment ?? false],
       }),
 
       // Work
       work: this.fb.group({
         companyName: [currentPerson?.work?.companyName || ''],
-        status: [currentPerson?.work?.status || '', Validators.required],
+        status: [currentPerson?.work?.status || ''],
         address: [currentPerson?.work?.address || ''],
-        socialWork: [currentPerson?.work?.socialWork ?? false, Validators.required],
+        socialWork: [currentPerson?.work?.socialWork ?? false],
         nameSocialWork: [currentPerson?.work?.nameSocialWork || ''],
       }),
 
       // Education
       education: this.fb.group({
-        educationLevel: [currentPerson?.education?.educationLevel || '', Validators.required],
+        educationLevel: [currentPerson?.education?.educationLevel || ''],
         name: [currentPerson?.education?.name || ''],
         address: [currentPerson?.education?.address || ''],
-        educationStatus: [currentPerson?.education?.educationStatus || '', Validators.required],
+        educationStatus: [currentPerson?.education?.educationStatus || ''],
       }),
 
       // Benefits
@@ -101,11 +101,11 @@ export class PersonForm implements OnInit {
 
       familyMembers: this.fb.array(currentPerson?.familyMembers?.map(family =>
         this.fb.group({
-          fullName: [family.fullName || '', Validators.required],
+          fullName: [family.fullName || ''],
           dni: [family.dni || ''],
           dateBirth: [family.dateBirth || ''],
-          phone: [family.phone || '', Validators.required],
-          parentage: [family.parentage || '', Validators.required]
+          phone: [family.phone || ''],
+          parentage: [family.parentage || '']
         })) || [])
     });
   }

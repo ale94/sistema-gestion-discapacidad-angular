@@ -10,12 +10,13 @@ export class PersonUtils {
   }
   static disabilityTypes(): string[] {
     return [
-      'fisica',
+      'motriz',
       'sensorial',
       'intelectual',
       'mental',
-      'biseral',
-      'multiple'
+      'visceral',
+      'multiple',
+      'sin especificar'
     ]
   }
   static jobStatuses(): string[] {
