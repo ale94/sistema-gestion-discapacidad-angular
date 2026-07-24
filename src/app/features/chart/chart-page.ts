@@ -82,28 +82,30 @@ export default class ChartPage {
    * Transforma la lista de personas en datos contables por año
    */
   private processData(people: Person[]) {
-    // Objeto para acumular el conteo: { '2023': 150, '2024': 200 }
     const yearCounts: { [key: string]: number } = {};
-    const neighborhoodCounts: { [key: string]: number } = {};
     const educationCounts: { [key: string]: number } = {};
     const socialWorkCounts: { [key: string]: number } = {};
 
-    people.forEach(person => {
-      // Usamos el campo correcto: fechaEmpadronamiento (formato YYYY-MM-DD)
-      const dateString = person.registrationDate;
+    const neighborhoodCounts: { [key: string]: number } = {};
+    this.barrios.forEach(b => neighborhoodCounts[b] = 0);
 
-      // 1. Convertir la cadena de fecha a un objeto Date y extraer el año
+    people.forEach(person => {
+      const dateString = person.registrationDate;
       const date = new Date(dateString);
 
-      // Asegurarse de que la fecha sea válida antes de procesar
       if (!isNaN(date.getTime())) {
         const year = date.getFullYear().toString();
-
-        // 2. Contar la ocurrencia del año
         yearCounts[year] = (yearCounts[year] || 0) + 1;
 
-        const neighborhood = this.normalizeBarrio(person.address.street);
-        neighborhoodCounts[neighborhood] = (neighborhoodCounts[neighborhood] || 0) + 1;
+        const district = (person.address.district || '').toLowerCase()
+          .normalize('NFD').replace(/[\u0301]/g, '');
+        for (const barrio of this.barrios) {
+          const norm = barrio.normalize('NFD').replace(/[\u0301]/g, '').toLowerCase();
+          if (district.includes(norm)) {
+            neighborhoodCounts[barrio]++;
+            break;
+          }
+        }
 
         const education = person.education.educationLevel || 'Sin Especificar';
         educationCounts[education] = (educationCounts[education] || 0) + 1;
@@ -134,7 +136,7 @@ export default class ChartPage {
       ]
     };
 
-    const neighborhoodLabels = Object.keys(neighborhoodCounts);
+    const neighborhoodLabels = this.barrios;
     this.barNeighborhoodData = {
       labels: neighborhoodLabels,
       datasets: [{
