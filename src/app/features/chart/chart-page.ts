@@ -3,6 +3,7 @@ import { ChartConfiguration, ChartData } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
 import { PersonService } from '../../shared/services/person.service';
 import { Person } from '../../shared/interfaces/person';
+import { PersonUtils } from '../../shared/utils/person.utils';
 
 @Component({
   selector: 'chart-page',
@@ -50,6 +51,27 @@ export default class ChartPage {
 
   personService = inject(PersonService);
 
+  private barrios = PersonUtils.barriosLibertador();
+
+  private normalizeBarrio(district: string): string {
+    if (!district) return 'Sin Especificar';
+    const clean = district
+      .replace(/^b[°º]\s*/i, '')
+      .normalize('NFD').replace(/[\u0301]/g, '')
+      .toLowerCase()
+      .trim();
+
+    for (const barrio of this.barrios) {
+      const norm = barrio
+        .normalize('NFD').replace(/[\u0301]/g, '')
+        .toLowerCase();
+      if (clean.startsWith(norm) || clean.includes(norm)) {
+        return barrio;
+      }
+    }
+    return district;
+  }
+
   constructor() {
     effect(() => {
       this.processData(this.personService.persons());
@@ -80,7 +102,7 @@ export default class ChartPage {
         // 2. Contar la ocurrencia del año
         yearCounts[year] = (yearCounts[year] || 0) + 1;
 
-        const neighborhood = person.address.district || 'Sin Especificar';
+        const neighborhood = this.normalizeBarrio(person.address.district);
         neighborhoodCounts[neighborhood] = (neighborhoodCounts[neighborhood] || 0) + 1;
 
         const education = person.education.educationLevel || 'Sin Especificar';
