@@ -102,7 +102,7 @@ export default class ChartPage {
         // 2. Contar la ocurrencia del año
         yearCounts[year] = (yearCounts[year] || 0) + 1;
 
-        const neighborhood = this.normalizeBarrio(person.address.district);
+        const neighborhood = this.normalizeBarrio(person.address.street);
         neighborhoodCounts[neighborhood] = (neighborhoodCounts[neighborhood] || 0) + 1;
 
         const education = person.education.educationLevel || 'Sin Especificar';
