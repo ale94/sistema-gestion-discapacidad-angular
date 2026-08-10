@@ -92,6 +92,7 @@ export class TransportRequestForm implements OnInit, OnDestroy {
       province: [''],
       type: [TransportRequestType.PASAJE_NACIONAL, Validators.required],
       status: [TransportRequestStatus.PENDIENTE, Validators.required],
+      requestDate: [''],
       observations: [''],
       tripDate: [''],
       ticketQuantity: [1],
@@ -108,11 +109,15 @@ export class TransportRequestForm implements OnInit, OnDestroy {
       this.foundPerson.set(null);
       this.form.get('dni')?.clearValidators();
       this.form.get('dni')?.updateValueAndValidity();
+      this.form.get('requestDate')?.setValue(this.toDateInput(this.request.createdAt));
       this.loadPersonForEdit();
       if (this.request.type === TransportRequestType.PASE_PROVINCIAL) {
         this.disableAllExceptStatusAndObs();
       }
+    } else {
+      this.form.get('requestDate')?.setValue(this.toDateInput(new Date().toISOString()));
     }
+    this.form.get('requestDate')?.disable();
     const initialType = this.form.get('type')?.value ?? TransportRequestType.PASAJE_NACIONAL;
     this.selectedType.set(initialType);
     this.updateNationalValidators(initialType);
@@ -184,11 +189,12 @@ export class TransportRequestForm implements OnInit, OnDestroy {
     }
 
     const raw = this.form.getRawValue();
+    const { requestDate, ...fields } = raw;
     const createdAt = this.request?.createdAt ?? new Date().toISOString();
     const parts = [raw.street, raw.district, `${raw.locality}, ${raw.province}`].filter(Boolean);
     const payload: TransportRequest = {
       ...(this.request ?? {}),
-      ...raw,
+      ...fields,
       dni: String(raw.dni ?? ''),
       firstName: String(raw.firstName ?? ''),
       lastName: String(raw.lastName ?? ''),

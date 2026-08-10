@@ -36,7 +36,15 @@ export class TransportRequestRenew {
       address: [{ value: '', disabled: true }, Validators.required],
       phone: [{ value: '', disabled: true }, Validators.required],
       freePassExpiration: [''],
+      renewalDate: [this.todayISO()],
     });
+  }
+
+  private todayISO(): string {
+    const now = new Date();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    return `${now.getFullYear()}-${month}-${day}`;
   }
 
   lookupDni() {
@@ -123,6 +131,7 @@ export class TransportRequestRenew {
       createdAt: new Date().toISOString(),
       isRegisteredBeneficiary: !!this.foundPerson(),
       freePassExpiration: raw.freePassExpiration || undefined,
+      renewalDate: raw.renewalDate || undefined,
     };
 
     this.renew.emit(payload);
