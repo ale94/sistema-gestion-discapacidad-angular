@@ -230,7 +230,7 @@ export default class TransportTracking {
   }
 
   handleRenew(req: TransportRequest) {
-    const currentYear = new Date().getFullYear();
+    const currentYear = new Date(req.renewalDate || new Date()).getFullYear();
 
     const person = this.freePassService.freePasses().find(fp =>
       fp.personId === req.personId
@@ -258,6 +258,7 @@ export default class TransportTracking {
     this.freePassService.createRenewal({
       freePassId: person.id,
       year: currentYear,
+      renewalDate: req.renewalDate || undefined
     }).subscribe({
       next: () => {
         this.freePassService.loadAll();

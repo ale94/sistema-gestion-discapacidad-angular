@@ -117,7 +117,7 @@ export class TransportRequestForm implements OnInit, OnDestroy {
     } else {
       this.form.get('requestDate')?.setValue(this.toDateInput(new Date().toISOString()));
     }
-    this.form.get('requestDate')?.disable();
+    //this.form.get('requestDate')?.disable();
     const initialType = this.form.get('type')?.value ?? TransportRequestType.PASAJE_NACIONAL;
     this.selectedType.set(initialType);
     this.updateNationalValidators(initialType);
@@ -211,6 +211,8 @@ export class TransportRequestForm implements OnInit, OnDestroy {
       ticketQuantity: raw.ticketQuantity ? Number(raw.ticketQuantity) : undefined,
       origin: raw.origin || undefined,
       destination: raw.destination || undefined,
+      requestDate: raw.requestDate || undefined,
+      renewalDate: raw.renewalDate || undefined,
     };
 
     this.save.emit(payload);

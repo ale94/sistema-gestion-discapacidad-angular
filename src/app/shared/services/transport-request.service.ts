@@ -50,6 +50,7 @@ export class TransportRequestService {
         type: TransportRequestType.RENOVACION,
         status: TransportRequestStatus.APROBADA,
         observations: `Renovación año ${r.year}`,
+        renewalDate: r.renewalDate,
         createdAt: r.createdAt,
         isRegisteredBeneficiary: true,
         personId: parent?.personId,
@@ -94,6 +95,7 @@ export class TransportRequestService {
       status: this.mapStatus(fp.status),
       observations: fp.reason || '',
       createdAt: fp.createdAt,
+      requestDate: fp.requestDate,
       isRegisteredBeneficiary: true,
       personId: fp.personId,
     };
@@ -113,6 +115,7 @@ export class TransportRequestService {
       type: TransportRequestType.PASAJE_NACIONAL,
       status: this.mapStatus(np.status),
       observations: np.reason || '',
+      requestDate: np.requestDate,
       createdAt: np.createdAt,
       isRegisteredBeneficiary: true,
       personId: np.personId,
@@ -154,7 +157,8 @@ export class TransportRequestService {
         this.freePassService.createFreePass({
           personId,
           reason: req.observations,
-          status: this.toBackendStatus(req.status)
+          status: this.toBackendStatus(req.status),
+          requestDate: req.requestDate,
         }).subscribe({
           next: () => this.syncFromBackend(),
           error: (err) => {
@@ -179,6 +183,7 @@ export class TransportRequestService {
           ticketQuantity: req.ticketQuantity,
           origin: req.origin,
           destination: req.destination,
+          requestDate: req.requestDate,
         }).subscribe({
           next: () => this.syncFromBackend(),
           error: (err) => {
@@ -226,6 +231,7 @@ export class TransportRequestService {
         personId: updatedData.personId || 0,
         reason: updatedData.observations,
         freePassExpiration: updatedData.freePassExpiration,
+        requestDate: updatedData.requestDate,
       }).subscribe({
         next: () => this.syncFromBackend(),
         error: (err) => {
@@ -244,6 +250,7 @@ export class TransportRequestService {
         ticketQuantity: updatedData.ticketQuantity,
         origin: updatedData.origin,
         destination: updatedData.destination,
+        requestDate: updatedData.requestDate,
       }).subscribe({
         next: () => this.syncFromBackend(),
         error: (err) => {
@@ -270,6 +277,7 @@ export class TransportRequestService {
           ticketQuantity: updatedData.ticketQuantity,
           origin: updatedData.origin,
           destination: updatedData.destination,
+          requestDate: updatedData.requestDate,
         }))
       ).subscribe({
         next: () => {
@@ -289,6 +297,7 @@ export class TransportRequestService {
           personId,
           reason: updatedData.observations,
           status: this.toBackendStatus(updatedData.status),
+          requestDate: updatedData.requestDate,
         }))
       ).subscribe({
         next: () => {

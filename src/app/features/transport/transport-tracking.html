@@ -252,7 +252,11 @@
                         @for (req of pagedRequests(); track req.id) {
                         <tr class="hover:bg-slate-50">
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600">
-                                {{ req.createdAt | date:'dd/MM/yyyy' }}
+                                @if (req.type === 'RENOVACION') {
+                                    {{ req.renewalDate | date:'dd/MM/yyyy' }}
+                                } @else {
+                                    {{ req.requestDate | date:'dd/MM/yyyy' }}
+                                }
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-900">
                                 <span>{{ req.lastName | titlecase }} {{ req.firstName | titlecase }}</span>
