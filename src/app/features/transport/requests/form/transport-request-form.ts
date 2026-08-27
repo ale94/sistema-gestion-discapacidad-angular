@@ -109,7 +109,7 @@ export class TransportRequestForm implements OnInit, OnDestroy {
       this.foundPerson.set(null);
       this.form.get('dni')?.clearValidators();
       this.form.get('dni')?.updateValueAndValidity();
-      this.form.get('requestDate')?.setValue(this.toDateInput(this.request.createdAt));
+      this.form.get('requestDate')?.setValue(this.toDateInput(this.request.requestDate));
       this.loadPersonForEdit();
       if (this.request.type === TransportRequestType.PASE_PROVINCIAL) {
         this.disableAllExceptStatusAndObs();
@@ -295,9 +295,7 @@ export class TransportRequestForm implements OnInit, OnDestroy {
     if (!value) return '';
     const d = new Date(value);
     if (isNaN(d.getTime())) return '';
-    const yyyy = d.getFullYear();
-    const mm = String(d.getMonth() + 1).padStart(2, '0');
-    const dd = String(d.getDate()).padStart(2, '0');
-    return `${yyyy}-${mm}-${dd}`;
+    // Devuelve directamente "YYYY-MM-DD" en formato UTC
+    return d.toISOString().split('T')[0];
   }
 }
