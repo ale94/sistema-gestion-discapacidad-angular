@@ -92,6 +92,7 @@ export class TransportRequestForm implements OnInit, OnDestroy {
       province: [''],
       type: [TransportRequestType.PASAJE_NACIONAL, Validators.required],
       status: [TransportRequestStatus.PENDIENTE, Validators.required],
+      requestDate: [''],
       observations: [''],
       tripDate: [''],
       ticketQuantity: [1],
@@ -108,11 +109,15 @@ export class TransportRequestForm implements OnInit, OnDestroy {
       this.foundPerson.set(null);
       this.form.get('dni')?.clearValidators();
       this.form.get('dni')?.updateValueAndValidity();
+      this.form.get('requestDate')?.setValue(this.toDateInput(this.request.requestDate));
       this.loadPersonForEdit();
       if (this.request.type === TransportRequestType.PASE_PROVINCIAL) {
         this.disableAllExceptStatusAndObs();
       }
+    } else {
+      this.form.get('requestDate')?.setValue(this.toDateInput(new Date().toISOString()));
     }
+    //this.form.get('requestDate')?.disable();
     const initialType = this.form.get('type')?.value ?? TransportRequestType.PASAJE_NACIONAL;
     this.selectedType.set(initialType);
     this.updateNationalValidators(initialType);
@@ -184,11 +189,12 @@ export class TransportRequestForm implements OnInit, OnDestroy {
     }
 
     const raw = this.form.getRawValue();
+    const { requestDate, ...fields } = raw;
     const createdAt = this.request?.createdAt ?? new Date().toISOString();
     const parts = [raw.street, raw.district, `${raw.locality}, ${raw.province}`].filter(Boolean);
     const payload: TransportRequest = {
       ...(this.request ?? {}),
-      ...raw,
+      ...fields,
       dni: String(raw.dni ?? ''),
       firstName: String(raw.firstName ?? ''),
       lastName: String(raw.lastName ?? ''),
@@ -205,6 +211,8 @@ export class TransportRequestForm implements OnInit, OnDestroy {
       ticketQuantity: raw.ticketQuantity ? Number(raw.ticketQuantity) : undefined,
       origin: raw.origin || undefined,
       destination: raw.destination || undefined,
+      requestDate: raw.requestDate || undefined,
+      renewalDate: raw.renewalDate || undefined,
     };
 
     this.save.emit(payload);
@@ -287,9 +295,7 @@ export class TransportRequestForm implements OnInit, OnDestroy {
     if (!value) return '';
     const d = new Date(value);
     if (isNaN(d.getTime())) return '';
-    const yyyy = d.getFullYear();
-    const mm = String(d.getMonth() + 1).padStart(2, '0');
-    const dd = String(d.getDate()).padStart(2, '0');
-    return `${yyyy}-${mm}-${dd}`;
+    // Devuelve directamente "YYYY-MM-DD" en formato UTC
+    return d.toISOString().split('T')[0];
   }
 }

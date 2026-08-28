@@ -3,6 +3,7 @@ export interface FreePassRequest {
   reason?: string;
   status?: string;
   freePassExpiration?: string;
+  requestDate?: string;
 }
 
 export interface FreePassResponse {
@@ -16,11 +17,13 @@ export interface FreePassResponse {
   status: string;
   createdAt: string;
   updatedAt: string;
+  requestDate: string;
 }
 
 export interface FreePassRenewalRequest {
   freePassId: number;
   year: number;
+  renewalDate?: string;
 }
 
 export interface FreePassRenewalResponse {
@@ -28,6 +31,7 @@ export interface FreePassRenewalResponse {
   freePassId: number;
   year: number;
   createdAt: string;
+  renewalDate: string;
 }
 
 export interface NationalFreePassRequest {
@@ -39,6 +43,7 @@ export interface NationalFreePassRequest {
   status?: string;
   reason?: string;
   freePassExpiration?: string;
+  requestDate?: string;
 }
 
 export interface NationalFreePassResponse {
@@ -54,6 +59,7 @@ export interface NationalFreePassResponse {
   reason: string;
   createdAt: string;
   updatedAt: string;
+  requestDate: string;
 }
 
 export interface FreePassStatusRequest {
