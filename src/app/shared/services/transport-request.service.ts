@@ -5,6 +5,7 @@ import { FreePassService } from './free-pass.service';
 import { PersonService } from './person.service';
 import { NotificationService } from './notification.service';
 import { FreePassResponse, NationalFreePassResponse } from '../interfaces/free-pass.interface';
+import { extractErrorMessage } from '../utils/error-message.utils';
 
 @Injectable({
   providedIn: 'root',
@@ -49,6 +50,7 @@ export class TransportRequestService {
         type: TransportRequestType.RENOVACION,
         status: TransportRequestStatus.APROBADA,
         observations: `Renovación año ${r.year}`,
+        renewalDate: r.renewalDate,
         createdAt: r.createdAt,
         isRegisteredBeneficiary: true,
         personId: parent?.personId,
@@ -93,6 +95,7 @@ export class TransportRequestService {
       status: this.mapStatus(fp.status),
       observations: fp.reason || '',
       createdAt: fp.createdAt,
+      requestDate: fp.requestDate,
       isRegisteredBeneficiary: true,
       personId: fp.personId,
     };
@@ -112,6 +115,7 @@ export class TransportRequestService {
       type: TransportRequestType.PASAJE_NACIONAL,
       status: this.mapStatus(np.status),
       observations: np.reason || '',
+      requestDate: np.requestDate,
       createdAt: np.createdAt,
       isRegisteredBeneficiary: true,
       personId: np.personId,
@@ -153,12 +157,13 @@ export class TransportRequestService {
         this.freePassService.createFreePass({
           personId,
           reason: req.observations,
-          status: this.toBackendStatus(req.status)
+          status: this.toBackendStatus(req.status),
+          requestDate: req.requestDate,
         }).subscribe({
           next: () => this.syncFromBackend(),
           error: (err) => {
             console.error('Error al crear pase libre:', err);
-            this.notification.show('Error al guardar en el servidor. Intente nuevamente.');
+            this.notification.show(extractErrorMessage(err));
           }
         });
       } else {
@@ -178,11 +183,12 @@ export class TransportRequestService {
           ticketQuantity: req.ticketQuantity,
           origin: req.origin,
           destination: req.destination,
+          requestDate: req.requestDate,
         }).subscribe({
           next: () => this.syncFromBackend(),
           error: (err) => {
             console.error('Error al crear pasaje nacional:', err);
-            this.notification.show('Error al guardar en el servidor. Intente nuevamente.');
+            this.notification.show(extractErrorMessage(err));
           }
         });
       } else {
@@ -213,7 +219,10 @@ export class TransportRequestService {
         const backendStatus = this.toBackendStatus(updatedData.status);
         if (backendStatus) {
           this.freePassService.updateFreePassStatus(freePassId, backendStatus).subscribe({
-            error: (err) => console.error('Error al actualizar estado del pase libre:', err)
+            error: (err) => {
+              console.error('Error al actualizar estado del pase libre:', err);
+              this.notification.show(extractErrorMessage(err));
+            }
           });
         }
       }
@@ -222,11 +231,12 @@ export class TransportRequestService {
         personId: updatedData.personId || 0,
         reason: updatedData.observations,
         freePassExpiration: updatedData.freePassExpiration,
+        requestDate: updatedData.requestDate,
       }).subscribe({
         next: () => this.syncFromBackend(),
         error: (err) => {
           console.error('Error al actualizar pase libre:', err);
-          this.notification.show('Error al actualizar pase libre: ' + (err.error?.message || err.message || JSON.stringify(err)));
+          this.notification.show(extractErrorMessage(err));
         }
       });
     } else if (id.startsWith('np-')) {
@@ -240,11 +250,12 @@ export class TransportRequestService {
         ticketQuantity: updatedData.ticketQuantity,
         origin: updatedData.origin,
         destination: updatedData.destination,
+        requestDate: updatedData.requestDate,
       }).subscribe({
         next: () => this.syncFromBackend(),
         error: (err) => {
           console.error('Error al actualizar pasaje nacional:', err);
-          this.notification.show('Error al actualizar pasaje nacional: ' + (err.error?.message || err.message || JSON.stringify(err)));
+          this.notification.show(extractErrorMessage(err));
         }
       });
     }
@@ -266,6 +277,7 @@ export class TransportRequestService {
           ticketQuantity: updatedData.ticketQuantity,
           origin: updatedData.origin,
           destination: updatedData.destination,
+          requestDate: updatedData.requestDate,
         }))
       ).subscribe({
         next: () => {
@@ -274,7 +286,7 @@ export class TransportRequestService {
         },
         error: (err) => {
           console.error('Error al convertir pase a nacional:', err);
-          this.notification.show('Error al convertir el tipo de pase. Intente nuevamente.');
+          this.notification.show(extractErrorMessage(err));
           this.freePassService.loadAll();
         }
       });
@@ -285,6 +297,7 @@ export class TransportRequestService {
           personId,
           reason: updatedData.observations,
           status: this.toBackendStatus(updatedData.status),
+          requestDate: updatedData.requestDate,
         }))
       ).subscribe({
         next: () => {
@@ -293,7 +306,7 @@ export class TransportRequestService {
         },
         error: (err) => {
           console.error('Error al convertir pase a provincial:', err);
-          this.notification.show('Error al convertir el tipo de pase. Intente nuevamente.');
+          this.notification.show(extractErrorMessage(err));
           this.freePassService.loadAll();
         }
       });

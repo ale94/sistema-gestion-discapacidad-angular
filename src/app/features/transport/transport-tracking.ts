@@ -9,6 +9,7 @@ import { NotificationService } from '../../shared/services/notification.service'
 import { TransportRequest, TransportRequestStatus, TransportRequestType } from '../../shared/interfaces/transport-request.interface';
 import { TransportRequestForm } from './requests/form/transport-request-form';
 import { TransportRequestRenew } from './requests/renew/transport-request-renew';
+import { extractErrorMessage } from '../../shared/utils/error-message.utils';
 
 @Component({
   selector: 'transport-tracking',
@@ -229,7 +230,7 @@ export default class TransportTracking {
   }
 
   handleRenew(req: TransportRequest) {
-    const currentYear = new Date().getFullYear();
+    const currentYear = new Date(req.renewalDate || new Date()).getFullYear();
 
     const person = this.freePassService.freePasses().find(fp =>
       fp.personId === req.personId
@@ -257,6 +258,7 @@ export default class TransportTracking {
     this.freePassService.createRenewal({
       freePassId: person.id,
       year: currentYear,
+      renewalDate: req.renewalDate || undefined
     }).subscribe({
       next: () => {
         this.freePassService.loadAll();
@@ -264,7 +266,7 @@ export default class TransportTracking {
       },
       error: (err) => {
         console.error('Error creating renewal:', err);
-        this.notification.show('Error al crear la renovación. Es posible que ya exista una para este año.');
+        this.notification.show(extractErrorMessage(err));
       }
     });
   }
@@ -293,7 +295,7 @@ export default class TransportTracking {
         },
         error: (err) => {
           console.error('Error al eliminar:', err);
-          this.notification.show('Error al eliminar. Intente nuevamente.');
+          this.notification.show(extractErrorMessage(err));
           this.requestToDelete.set(null);
         }
       });
