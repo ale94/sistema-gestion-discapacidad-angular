@@ -18,6 +18,7 @@ import { PersonService } from '../../shared/services/person.service';
 import { PersonUtils } from '../../shared/utils/person.utils';
 
 const iconUrl = 'assets/leaflet/marker.svg';
+const LIBERTADOR_GENERAL_SAN_MARTIN_CENTER: L.LatLngExpression = [-23.8168127, -64.7952625];
 
 const defaultIcon = L.icon({
   iconUrl,
@@ -136,7 +137,7 @@ export default class Map implements AfterViewInit, OnDestroy {
     );
 
     this.map = L.map(mapElement, {
-      center: [-23.8168127, -64.7952625],
+      center: LIBERTADOR_GENERAL_SAN_MARTIN_CENTER,
       zoom: 14,
       layers: [osm, this.markerLayer],
     });
