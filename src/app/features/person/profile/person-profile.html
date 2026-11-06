@@ -5,14 +5,16 @@
     <h1 class="text-2xl sm:text-3xl md:text-3xl font-bold text-slate-900">
       Perfil de {{ p.firstName | titlecase }} {{ p.lastName | titlecase }}
     </h1>
-    <a routerLink="/personas"
+    <a
+      [routerLink]="mapQueryParams() ? ['/mapa'] : ['/personas']"
+      [queryParams]="mapQueryParams()"
       class="flex items-center bg-white hover:bg-slate-100 text-slate-800 font-bold py-2 px-4 rounded-lg transition-colors duration-300 shadow-lg border border-slate-200">
       <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
         <path fill-rule="evenodd"
           d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
           clip-rule="evenodd" />
       </svg>
-      Volver a la Lista
+      {{ mapQueryParams() ? 'Volver al Mapa' : 'Volver a la Lista' }}
     </a>
   </div>
 
