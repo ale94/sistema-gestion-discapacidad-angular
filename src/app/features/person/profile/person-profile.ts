@@ -37,4 +37,20 @@ export default class PersonProfile {
     if (!p.health.activeCud || !p.health.expirationDate) return false;
     return new Date(p.health.expirationDate) < new Date();
   }
+
+  mapQueryParams(): Record<string, string> | null {
+    const params = this.route.snapshot.queryParamMap;
+    if (params.get('returnTo') !== 'mapa') {
+      return null;
+    }
+
+    const queryParams: Record<string, string> = {};
+    for (const key of ['dni', 'district', 'disability']) {
+      const value = params.get(key);
+      if (value) {
+        queryParams[key] = value;
+      }
+    }
+    return queryParams;
+  }
 }

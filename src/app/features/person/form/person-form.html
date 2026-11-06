@@ -160,6 +160,40 @@
             </span>
           }
         </div>
+        <div>
+          <label class="form-label">Latitud</label>
+          <input
+            formControlName="latitude"
+            type="number"
+            step="any"
+            min="-90"
+            max="90"
+            class="form-input"
+            placeholder="Ej: -23.8168127"
+          />
+          @if (formUtils.isValidField(personForm, 'address.latitude')) {
+            <span class="text-xs text-red-600">
+              La latitud debe estar entre -90 y 90.
+            </span>
+          }
+        </div>
+        <div>
+          <label class="form-label">Longitud</label>
+          <input
+            formControlName="longitude"
+            type="number"
+            step="any"
+            min="-180"
+            max="180"
+            class="form-input"
+            placeholder="Ej: -64.7952625"
+          />
+          @if (formUtils.isValidField(personForm, 'address.longitude')) {
+            <span class="text-xs text-red-600">
+              La longitud debe estar entre -180 y 180.
+            </span>
+          }
+        </div>
       </div>
     </fieldset>
 

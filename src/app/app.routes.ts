@@ -61,6 +61,10 @@ export const routes: Routes = [
         path: 'informacion',
         loadComponent: () => import('./shared/components/info-system/info-system'),
       },
+      {
+        path: 'mapa',
+        loadComponent: () => import('./features/map/map'),
+      }
     ],
   },
   {

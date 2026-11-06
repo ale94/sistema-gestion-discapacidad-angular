@@ -4,4 +4,6 @@ export interface Address {
   district: string;
   locality: string;
   province: string;
+  latitude?: number;
+  longitude?: number;
 }

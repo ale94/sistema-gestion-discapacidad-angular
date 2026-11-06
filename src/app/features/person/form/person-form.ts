@@ -59,7 +59,15 @@ export class PersonForm implements OnInit {
         street: [currentPerson?.address?.street || '', Validators.minLength(4)],
         district: [currentPerson?.address?.district || '', Validators.minLength(4)],
         locality: [currentPerson?.address?.locality || 'Libertador General San Martín', Validators.minLength(4)],
-        province: [currentPerson?.address?.province || 'Jujuy', Validators.minLength(4)]
+        province: [currentPerson?.address?.province || 'Jujuy', Validators.minLength(4)],
+        latitude: [
+          currentPerson?.address?.latitude ?? null,
+          [Validators.min(-90), Validators.max(90)],
+        ],
+        longitude: [
+          currentPerson?.address?.longitude ?? null,
+          [Validators.min(-180), Validators.max(180)],
+        ],
       }),
 
       // Health
@@ -133,6 +141,8 @@ export class PersonForm implements OnInit {
       return;
     }
     const formValue = { ...this.personForm.value };
+    formValue.address.latitude = this.normalizeCoordinate(formValue.address.latitude);
+    formValue.address.longitude = this.normalizeCoordinate(formValue.address.longitude);
     if (!this.isDeceased()) {
       formValue.dateDeath = '';
     }
@@ -150,6 +160,15 @@ export class PersonForm implements OnInit {
     } else {
       this.save.emit(formValue);
     }
+  }
+
+  private normalizeCoordinate(value: number | string | null | undefined): number | null {
+    if (value === null || value === undefined || value === '') {
+      return null;
+    }
+
+    const coordinate = Number(value);
+    return Number.isFinite(coordinate) ? coordinate : null;
   }
 
   onCancel() {
