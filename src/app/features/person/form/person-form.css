@@ -24,6 +24,11 @@
   box-shadow: 0 0 0 1px #14b8a6;
 }
 
+.coordinate-input {
+  cursor: not-allowed;
+  background-color: #e2e8f0;
+}
+
 .form-checkbox {
   height: 1.25rem;
   width: 1.25rem;
@@ -36,4 +41,130 @@
 .form-checkbox:focus {
   outline: none;
   box-shadow: 0 0 0 2px #14b8a6, 0 0 0 4px #f8fafc;
+}
+
+.location-picker-button {
+  width: 100%;
+  padding: .65rem 1rem;
+  border: 1px solid #0d9488;
+  border-radius: .5rem;
+  color: #0f766e;
+  background: #f0fdfa;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.location-picker-button:hover {
+  background: #ccfbf1;
+}
+
+.location-modal-backdrop {
+  position: fixed;
+  z-index: 1000;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  background: rgb(15 23 42 / 65%);
+}
+
+.location-modal {
+  width: min(900px, 100%);
+  overflow: hidden;
+  border-radius: .75rem;
+  background: white;
+  box-shadow: 0 25px 50px -12px rgb(15 23 42 / 35%);
+}
+
+.location-modal-header,
+.location-modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+}
+
+.location-modal-header {
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.location-modal-header h2 {
+  margin: 0;
+  color: #0f172a;
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.location-modal-header p {
+  margin: .25rem 0 0;
+  color: #64748b;
+  font-size: .85rem;
+}
+
+.location-close-button {
+  border: 0;
+  color: #64748b;
+  background: transparent;
+  font-size: 1.75rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.location-map {
+  width: 100%;
+  height: min(60vh, 500px);
+  min-height: 320px;
+}
+
+.location-error {
+  margin: 0;
+  padding: .65rem 1.25rem;
+  color: #b91c1c;
+  background: #fef2f2;
+  font-size: .85rem;
+}
+
+.location-modal-footer {
+  flex-wrap: wrap;
+  border-top: 1px solid #e2e8f0;
+  color: #475569;
+  font-size: .85rem;
+}
+
+.location-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+}
+
+.current-location-button,
+.location-confirm-button {
+  padding: .6rem .85rem;
+  border-radius: .45rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.current-location-button {
+  border: 1px solid #cbd5e1;
+  color: #334155;
+  background: white;
+}
+
+.location-confirm-button {
+  border: 1px solid #0d9488;
+  color: white;
+  background: #0d9488;
+}
+
+@media (max-width: 640px) {
+  .location-modal-footer {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .location-actions {
+    flex-direction: column;
+  }
 }
