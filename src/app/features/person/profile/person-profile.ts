@@ -45,7 +45,7 @@ export default class PersonProfile {
     }
 
     const queryParams: Record<string, string> = {};
-    for (const key of ['dni', 'district', 'disability']) {
+    for (const key of ['search', 'dni', 'district', 'disability']) {
       const value = params.get(key);
       if (value) {
         queryParams[key] = value;

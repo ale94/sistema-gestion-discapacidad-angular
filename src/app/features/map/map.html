@@ -13,11 +13,11 @@
 
   <div class="filters-card">
     <label>
-      <span>Buscar por DNI</span>
+      <span>Buscar por DNI, nombre o apellido</span>
       <input
         type="search"
-        placeholder="Ej. 30123456"
-        [ngModel]="searchDni()"
+        placeholder="Ej. 30123456, Juan o Pérez"
+        [ngModel]="searchTerm()"
         (ngModelChange)="updateSearch($event)"
       />
     </label>

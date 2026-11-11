@@ -43,7 +43,7 @@ export default class Map implements AfterViewInit, OnDestroy {
   private router = inject(Router);
   personService = inject(PersonService);
   persons = this.personService.persons;
-  searchDni = signal('');
+  searchTerm = signal('');
   selectedDistrict = signal('');
   selectedDisability = signal('');
   private markerLayer = L.layerGroup();
@@ -71,16 +71,27 @@ export default class Map implements AfterViewInit, OnDestroy {
   });
 
   filteredPersons = computed(() => {
-    const dni = this.searchDni().trim();
+    const term = this.normalize(this.searchTerm());
     const district = this.normalize(this.selectedDistrict());
     const disability = this.normalize(this.selectedDisability());
 
     return this.persons().filter((person) => {
       const personDistrict = this.normalize(person.address?.district);
       const personDisability = this.normalize(person.health?.disabilityType);
+      const firstName = this.normalize(person.firstName);
+      const lastName = this.normalize(person.lastName);
+      const fullName = `${firstName} ${lastName}`;
+      const reversedFullName = `${lastName} ${firstName}`;
+      const matchesSearch =
+        !term ||
+        String(person.dni).includes(term) ||
+        firstName.includes(term) ||
+        lastName.includes(term) ||
+        fullName.includes(term) ||
+        reversedFullName.includes(term);
 
       return (
-        (!dni || String(person.dni).includes(dni)) &&
+        matchesSearch &&
         (!district || personDistrict === district || personDistrict.includes(district)) &&
         (!disability || personDisability === disability)
       );
@@ -93,7 +104,7 @@ export default class Map implements AfterViewInit, OnDestroy {
 
   constructor() {
     const queryParams = this.route.snapshot.queryParamMap;
-    this.searchDni.set(queryParams.get('dni') ?? '');
+    this.searchTerm.set(queryParams.get('search') ?? queryParams.get('dni') ?? '');
     this.selectedDistrict.set(queryParams.get('district') ?? '');
     this.selectedDisability.set(queryParams.get('disability') ?? '');
     this.personService.loadPersons();
@@ -152,14 +163,14 @@ export default class Map implements AfterViewInit, OnDestroy {
   }
 
   clearFilters(): void {
-    this.searchDni.set('');
+    this.searchTerm.set('');
     this.selectedDistrict.set('');
     this.selectedDisability.set('');
     this.updateQueryParams();
   }
 
   updateSearch(value: string): void {
-    this.searchDni.set(value);
+    this.searchTerm.set(value);
     this.updateQueryParams();
   }
 
@@ -177,7 +188,7 @@ export default class Map implements AfterViewInit, OnDestroy {
     void this.router.navigate(['/personas', person.id], {
       queryParams: {
         returnTo: 'mapa',
-        dni: this.searchDni() || null,
+        search: this.searchTerm() || null,
         district: this.selectedDistrict() || null,
         disability: this.selectedDisability() || null,
       },
@@ -283,7 +294,7 @@ export default class Map implements AfterViewInit, OnDestroy {
     void this.router.navigate([], {
       relativeTo: this.route,
       queryParams: {
-        dni: this.searchDni() || null,
+        search: this.searchTerm() || null,
         district: this.selectedDistrict() || null,
         disability: this.selectedDisability() || null,
       },
