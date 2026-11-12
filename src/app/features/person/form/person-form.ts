@@ -1,4 +1,14 @@
-import { Component, inject, input, output, signal, OnInit } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  inject,
+  input,
+  OnDestroy,
+  OnInit,
+  output,
+  signal,
+  ViewChild,
+} from '@angular/core';
 import {
   FormArray,
   FormBuilder,
@@ -10,6 +20,15 @@ import { Person } from '../../../shared/interfaces/person';
 import { TitleCasePipe } from '@angular/common';
 import { FormUtils } from '../../../shared/utils/form.utils';
 import { PersonUtils } from '../../../shared/utils/person.utils';
+import * as L from 'leaflet';
+
+const locationIcon = L.icon({
+  iconUrl: 'assets/leaflet/marker.svg',
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+});
+const LIBERTADOR_GENERAL_SAN_MARTIN_CENTER: L.LatLngExpression = [-23.8168127, -64.7952625];
 
 @Component({
   selector: 'person-form',
@@ -18,7 +37,8 @@ import { PersonUtils } from '../../../shared/utils/person.utils';
   templateUrl: './person-form.html',
   styleUrls: ['./person-form.css'],
 })
-export class PersonForm implements OnInit {
+export class PersonForm implements OnInit, OnDestroy {
+  @ViewChild('locationMap') private locationMap?: ElementRef<HTMLDivElement>;
 
   person = input<Person | null>(null);
 
@@ -32,6 +52,10 @@ export class PersonForm implements OnInit {
 
   isEditMode = false;
   isDeceased = signal(false);
+  isLocationModalOpen = signal(false);
+  locationError = signal('');
+  selectedLatitude = signal<number | null>(null);
+  selectedLongitude = signal<number | null>(null);
 
   personUtils = PersonUtils;
   formUtils = FormUtils;
@@ -59,7 +83,15 @@ export class PersonForm implements OnInit {
         street: [currentPerson?.address?.street || '', Validators.minLength(4)],
         district: [currentPerson?.address?.district || '', Validators.minLength(4)],
         locality: [currentPerson?.address?.locality || 'Libertador General San Martín', Validators.minLength(4)],
-        province: [currentPerson?.address?.province || 'Jujuy', Validators.minLength(4)]
+        province: [currentPerson?.address?.province || 'Jujuy', Validators.minLength(4)],
+        latitude: [
+          currentPerson?.address?.latitude ?? null,
+          [Validators.min(-90), Validators.max(90)],
+        ],
+        longitude: [
+          currentPerson?.address?.longitude ?? null,
+          [Validators.min(-180), Validators.max(180)],
+        ],
       }),
 
       // Health
@@ -133,6 +165,8 @@ export class PersonForm implements OnInit {
       return;
     }
     const formValue = { ...this.personForm.value };
+    formValue.address.latitude = this.normalizeCoordinate(formValue.address.latitude);
+    formValue.address.longitude = this.normalizeCoordinate(formValue.address.longitude);
     if (!this.isDeceased()) {
       formValue.dateDeath = '';
     }
@@ -152,8 +186,46 @@ export class PersonForm implements OnInit {
     }
   }
 
+  private normalizeCoordinate(value: number | string | null | undefined): number | null {
+    if (value === null || value === undefined || value === '') {
+      return null;
+    }
+
+    const coordinate = Number(value);
+    return Number.isFinite(coordinate) ? coordinate : null;
+  }
+
   onCancel() {
     this.cancel.emit();
+  }
+
+  openLocationModal(): void {
+    this.locationError.set('');
+    this.selectedLatitude.set(this.getCoordinateValue('address.latitude'));
+    this.selectedLongitude.set(this.getCoordinateValue('address.longitude'));
+    this.isLocationModalOpen.set(true);
+    setTimeout(() => this.initializeLocationMap(), 0);
+  }
+
+  closeLocationModal(): void {
+    this.isLocationModalOpen.set(false);
+    this.locationMapInstance?.remove();
+    this.locationMapInstance = undefined;
+    this.locationMarker = undefined;
+  }
+
+  useCurrentLocation(): void {
+    if (!navigator.geolocation) {
+      this.locationError.set('Tu navegador no permite obtener la ubicación actual.');
+      return;
+    }
+
+    this.locationError.set('');
+    navigator.geolocation.getCurrentPosition(
+      ({ coords }) => this.setLocation(coords.latitude, coords.longitude),
+      () => this.locationError.set('No se pudo obtener la ubicación actual. Revisá los permisos del navegador.'),
+      { enableHighAccuracy: true, timeout: 10000 },
+    );
   }
 
   toggleDeceased() {
@@ -212,6 +284,89 @@ export class PersonForm implements OnInit {
     const expDate = this.personForm.get('health.expirationDate')?.value;
     if (!active || !expDate) return false;
     return new Date(expDate) < new Date();
+  }
+
+  private locationMapInstance?: L.Map;
+  private locationMarker?: L.Marker;
+
+  private initializeLocationMap(): void {
+    const mapElement = this.locationMap?.nativeElement;
+    if (!mapElement || this.locationMapInstance) {
+      return;
+    }
+
+    const latitudeValue = this.personForm.get('address.latitude')?.value;
+    const longitudeValue = this.personForm.get('address.longitude')?.value;
+    const latitude = Number(latitudeValue);
+    const longitude = Number(longitudeValue);
+    const hasCoordinates =
+      latitudeValue !== null &&
+      latitudeValue !== undefined &&
+      latitudeValue !== '' &&
+      longitudeValue !== null &&
+      longitudeValue !== undefined &&
+      longitudeValue !== '' &&
+      Number.isFinite(latitude) &&
+      Number.isFinite(longitude) &&
+      latitude >= -90 &&
+      latitude <= 90 &&
+      longitude >= -180 &&
+      longitude <= 180;
+    const center: L.LatLngExpression = hasCoordinates
+      ? [latitude, longitude]
+      : LIBERTADOR_GENERAL_SAN_MARTIN_CENTER;
+
+    const openStreetMap = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors',
+    });
+
+    this.locationMapInstance = L.map(mapElement, {
+      center,
+      zoom: hasCoordinates ? 17 : 14,
+      layers: [openStreetMap],
+    });
+
+    this.locationMapInstance.on('click', (event: L.LeafletMouseEvent) => {
+      this.setLocation(event.latlng.lat, event.latlng.lng);
+    });
+
+    if (hasCoordinates) {
+      this.locationMarker = L.marker(center, { icon: locationIcon }).addTo(this.locationMapInstance);
+    }
+
+    setTimeout(() => this.locationMapInstance?.invalidateSize(), 0);
+  }
+
+  private setLocation(latitude: number, longitude: number): void {
+    const selectedLatitude = Number(latitude.toFixed(7));
+    const selectedLongitude = Number(longitude.toFixed(7));
+    this.selectedLatitude.set(selectedLatitude);
+    this.selectedLongitude.set(selectedLongitude);
+    this.personForm.get('address.latitude')?.setValue(selectedLatitude);
+    this.personForm.get('address.longitude')?.setValue(selectedLongitude);
+    this.personForm.get('address.latitude')?.markAsDirty();
+    this.personForm.get('address.longitude')?.markAsDirty();
+
+    if (this.locationMapInstance) {
+      const position: L.LatLngExpression = [latitude, longitude];
+      this.locationMapInstance.setView(position, 17);
+      this.locationMarker?.remove();
+      this.locationMarker = L.marker(position, { icon: locationIcon }).addTo(this.locationMapInstance);
+    }
+  }
+
+  private getCoordinateValue(controlName: string): number | null {
+    const value = this.personForm.get(controlName)?.value;
+    if (value === null || value === undefined || value === '') {
+      return null;
+    }
+
+    const coordinate = Number(value);
+    return Number.isFinite(coordinate) ? coordinate : null;
+  }
+
+  ngOnDestroy(): void {
+    this.locationMapInstance?.remove();
   }
 
 }

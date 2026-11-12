@@ -160,6 +160,47 @@
             </span>
           }
         </div>
+        <div class="lg:col-span-3">
+          <button
+            type="button"
+            class="location-picker-button"
+            (click)="openLocationModal()"
+          >
+            Seleccionar ubicación en el mapa
+          </button>
+        </div>
+        <div class="md:col-span-2 lg:col-span-3 grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label class="form-label">Latitud</label>
+            <input
+              formControlName="latitude"
+              type="number"
+              class="form-input coordinate-input"
+              placeholder="Seleccioná una ubicación en el mapa"
+              readonly
+            />
+            @if (formUtils.isValidField(personForm, 'address.latitude')) {
+              <span class="text-xs text-red-600">
+                La latitud debe estar entre -90 y 90.
+              </span>
+            }
+          </div>
+          <div>
+            <label class="form-label">Longitud</label>
+            <input
+              formControlName="longitude"
+              type="number"
+              class="form-input coordinate-input"
+              placeholder="Seleccioná una ubicación en el mapa"
+              readonly
+            />
+            @if (formUtils.isValidField(personForm, 'address.longitude')) {
+              <span class="text-xs text-red-600">
+                La longitud debe estar entre -180 y 180.
+              </span>
+            }
+          </div>
+        </div>
       </div>
     </fieldset>
 
@@ -448,4 +489,46 @@
       Guardar
     </button>
   </div>
+
+  @if (isLocationModalOpen()) {
+    <div class="location-modal-backdrop" role="presentation">
+      <section
+        class="location-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="location-modal-title"
+      >
+        <header class="location-modal-header">
+          <div>
+            <h2 id="location-modal-title">Seleccionar ubicación</h2>
+            <p>Hacé clic en el mapa o usá tu ubicación actual.</p>
+          </div>
+          <button type="button" class="location-close-button" aria-label="Cerrar" (click)="closeLocationModal()">
+            ×
+          </button>
+        </header>
+
+        <div #locationMap class="location-map"></div>
+
+        @if (locationError()) {
+          <p class="location-error">{{ locationError() }}</p>
+        }
+
+        <footer class="location-modal-footer">
+          <span>
+            Lat: {{ selectedLatitude() ?? '—' }} ·
+            Lon: {{ selectedLongitude() ?? '—' }}
+          </span>
+          <div class="location-actions">
+            <button type="button" class="current-location-button" (click)="useCurrentLocation()">
+              Usar ubicación actual
+            </button>
+            <button type="button" class="location-confirm-button" (click)="closeLocationModal()">
+              Confirmar ubicación
+            </button>
+          </div>
+        </footer>
+      </section>
+    </div>
+  }
 </form>

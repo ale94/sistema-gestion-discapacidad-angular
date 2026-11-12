@@ -109,6 +109,29 @@
 
     <a
       (click)="LinkClicked()"
+      routerLink="/mapa"
+      routerLinkActive="active-link"
+      class="flex items-center px-4 py-2.5 text-teal-100 hover:bg-teal-600 hover:text-white rounded-xl transition-all duration-200 group"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-5 w-5 opacity-80 group-hover:opacity-100"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M9 20.25l-5.25-3V6.75L9 3.75m0 16.5l6-3m-6 3V3.75m6 13.5l5.25 3V6.75L15 3.75m0 13.5V3.75"
+        />
+      </svg>
+      <span class="ml-4 font-medium">Mapa de domicilios</span>
+    </a>
+
+    <a
+      (click)="LinkClicked()"
       routerLink="/prestamos"
       routerLinkActive="active-link"
       class="flex items-center px-4 py-2.5 text-teal-100 hover:bg-teal-600 hover:text-white rounded-xl transition-all duration-200 group"

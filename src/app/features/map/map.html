@@ -1,0 +1,83 @@
+<section class="map-page">
+  <header class="page-header">
+    <div>
+      <p class="eyebrow">Georreferenciación</p>
+      <h2>Domicilios de las personas</h2>
+      <p class="subtitle">Consultá y ubicá a las personas registradas por barrio o discapacidad.</p>
+    </div>
+    <div class="result-counter">
+      <strong>{{ filteredPersons().length }}</strong>
+      <span>personas encontradas</span>
+    </div>
+  </header>
+
+  <div class="filters-card">
+    <label>
+      <span>Buscar por DNI, nombre o apellido</span>
+      <input
+        type="search"
+        placeholder="Ej. 30123456, Juan o Pérez"
+        [ngModel]="searchTerm()"
+        (ngModelChange)="updateSearch($event)"
+      />
+    </label>
+    <label>
+      <span>Barrio</span>
+      <select [ngModel]="selectedDistrict()" (ngModelChange)="updateDistrict($event)">
+        <option value="">Todos los barrios</option>
+        @for (district of districts(); track district) {
+          <option [value]="district">{{ district }}</option>
+        }
+      </select>
+    </label>
+    <label>
+      <span>Tipo de discapacidad</span>
+      <select [ngModel]="selectedDisability()" (ngModelChange)="updateDisability($event)">
+        <option value="">Todos los tipos</option>
+        @for (type of disabilityTypes(); track type) {
+          <option [value]="type">{{ type | titlecase }}</option>
+        }
+      </select>
+    </label>
+    <button class="clear-button" type="button" (click)="clearFilters()">Limpiar filtros</button>
+  </div>
+
+  <div class="map-layout">
+    <aside class="people-panel">
+      <div class="panel-heading">
+        <div>
+          <h3>Personas</h3>
+          <span>{{ peopleWithLocation() }} con ubicación en el mapa</span>
+        </div>
+      </div>
+
+      <div class="people-list">
+        @for (person of filteredPersons(); track $index) {
+          <button class="person-card" type="button" (click)="focusPerson(person)">
+            <span class="person-avatar">{{ getInitials(person) }}</span>
+            <span class="person-data">
+              <strong>{{ getFullName(person) }}</strong>
+              <span>DNI {{ person.dni }}</span>
+              <small>{{ person.address.district || 'Barrio sin especificar' }}</small>
+            </span>
+            <span class="arrow">→</span>
+          </button>
+        } @empty {
+          <div class="empty-state">
+            <strong>No hay resultados</strong>
+            <span>Probá modificando los filtros de búsqueda.</span>
+          </div>
+        }
+      </div>
+    </aside>
+
+    <div class="map-wrapper">
+      <div #mapContainer id="map"></div>
+      @if (filteredPersons().length > peopleWithLocation()) {
+        <p class="map-warning">
+          {{ filteredPersons().length - peopleWithLocation() }} domicilio(s) no tienen coordenadas cargadas.
+        </p>
+      }
+    </div>
+  </div>
+</section>

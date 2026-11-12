@@ -1,4 +1,5 @@
 @import 'tailwindcss';
+@import "leaflet/dist/leaflet.css";
 
 :root {
   --scrollbar-track: #e2e8f0; /* slate-200 */
