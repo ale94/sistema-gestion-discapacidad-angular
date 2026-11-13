@@ -185,4 +185,14 @@ export default class PersonList {
     }
     return age;
   }
+
+  hasLocation(person: Person): boolean {
+    const { latitude, longitude } = person.address ?? {};
+    return (
+      typeof latitude === 'number' &&
+      Number.isFinite(latitude) &&
+      typeof longitude === 'number' &&
+      Number.isFinite(longitude)
+    );
+  }
 }
