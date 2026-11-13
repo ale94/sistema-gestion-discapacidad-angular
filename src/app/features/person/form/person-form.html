@@ -508,6 +508,30 @@
           </button>
         </header>
 
+        <div class="address-search">
+          <div class="address-search-fields">
+            <label>
+              <span>Calle y altura</span>
+              <input
+                type="text"
+                placeholder="Ej: Belgrano 123"
+                [value]="addressSearch()"
+                (input)="addressSearch.set($any($event.target).value)"
+                (keydown.enter)="searchAddress()"
+              />
+            </label>
+            <button
+              type="button"
+              class="address-search-button"
+              [disabled]="isSearchingAddress()"
+              (click)="searchAddress()"
+            >
+              {{ isSearchingAddress() ? 'Buscando...' : 'Buscar dirección' }}
+            </button>
+          </div>
+          <small>La búsqueda está limitada a Libertador General San Martín, departamento Ledesma, Jujuy.</small>
+        </div>
+
         <div #locationMap class="location-map"></div>
 
         @if (locationError()) {
