@@ -50,25 +50,13 @@ export default class Map implements AfterViewInit, OnDestroy {
 
   private map!: L.Map;
 
-  districts = computed(() => {
-    const districts = this.persons()
-      .map((person) => person.address?.district?.trim())
-      .filter((district): district is string => Boolean(district));
+  districts = computed(() =>
+    [...PersonUtils.barriosLibertador()].sort((a, b) => a.localeCompare(b)),
+  );
 
-    return [...new Set([...PersonUtils.barriosLibertador(), ...districts])].sort((a, b) =>
-      a.localeCompare(b),
-    );
-  });
-
-  disabilityTypes = computed(() => {
-    const types = this.persons()
-      .map((person) => person.health?.disabilityType?.trim())
-      .filter((type): type is string => Boolean(type));
-
-    return [...new Set([...PersonUtils.disabilityTypes(), ...types])].sort((a, b) =>
-      a.localeCompare(b),
-    );
-  });
+  disabilityTypes = computed(() =>
+    [...PersonUtils.disabilityTypes()].sort((a, b) => a.localeCompare(b)),
+  );
 
   filteredPersons = computed(() => {
     const term = this.normalize(this.searchTerm());
@@ -92,7 +80,7 @@ export default class Map implements AfterViewInit, OnDestroy {
 
       return (
         matchesSearch &&
-        (!district || personDistrict === district || personDistrict.includes(district)) &&
+        (!district || personDistrict.includes(district)) &&
         (!disability || personDisability === disability)
       );
     });

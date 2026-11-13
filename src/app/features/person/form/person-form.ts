@@ -20,7 +20,9 @@ import { Person } from '../../../shared/interfaces/person';
 import { TitleCasePipe } from '@angular/common';
 import { FormUtils } from '../../../shared/utils/form.utils';
 import { PersonUtils } from '../../../shared/utils/person.utils';
+import { finalize } from 'rxjs';
 import * as L from 'leaflet';
+import { GeoRefService } from '../../../shared/services/georef.service';
 
 const locationIcon = L.icon({
   iconUrl: 'assets/leaflet/marker.svg',
@@ -46,6 +48,7 @@ export class PersonForm implements OnInit, OnDestroy {
   cancel = output<void>();
 
   private fb: FormBuilder = inject(FormBuilder);
+  private geoRefService = inject(GeoRefService);
 
   personForm!: FormGroup;
   formErrors: string[] = [];
@@ -56,6 +59,8 @@ export class PersonForm implements OnInit, OnDestroy {
   locationError = signal('');
   selectedLatitude = signal<number | null>(null);
   selectedLongitude = signal<number | null>(null);
+  addressSearch = signal('');
+  isSearchingAddress = signal(false);
 
   personUtils = PersonUtils;
   formUtils = FormUtils;
@@ -142,6 +147,38 @@ export class PersonForm implements OnInit, OnDestroy {
     });
   }
 
+  searchAddress(): void {
+    const address = this.addressSearch().trim();
+    if (!address) {
+      this.locationError.set('Ingresá una calle y una altura válida.');
+      return;
+    }
+
+    this.locationError.set('');
+    this.isSearchingAddress.set(true);
+    this.geoRefService.searchAddress(address).pipe(
+      finalize(() => this.isSearchingAddress.set(false)),
+    ).subscribe({
+      next: ({ direcciones }) => {
+        const [result] = direcciones;
+        if (!result) {
+          this.locationError.set('No se encontraron direcciones en Libertador General San Martín.');
+          return;
+        }
+
+        const { lat, lon } = result.ubicacion;
+        if (!Number.isFinite(lat) || !Number.isFinite(lon)) {
+          this.locationError.set('GeoRef devolvió una dirección sin coordenadas válidas.');
+          return;
+        }
+        this.setLocation(lat, lon);
+      },
+      error: () => {
+        this.locationError.set('No se pudo consultar GeoRef. Intentá nuevamente.');
+      },
+    });
+  }
+
   private getInvalidFields(): string[] {
     const invalid: string[] = [];
     Object.keys(this.personForm.controls).forEach(key => {
@@ -201,6 +238,7 @@ export class PersonForm implements OnInit, OnDestroy {
 
   openLocationModal(): void {
     this.locationError.set('');
+    this.addressSearch.set('');
     this.selectedLatitude.set(this.getCoordinateValue('address.latitude'));
     this.selectedLongitude.set(this.getCoordinateValue('address.longitude'));
     this.isLocationModalOpen.set(true);
