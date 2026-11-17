@@ -70,7 +70,10 @@
 
 .location-modal {
   width: min(900px, 100%);
-  overflow: hidden;
+  max-height: calc(100vh - 2rem);
+  max-height: calc(100dvh - 2rem);
+  overflow-x: hidden;
+  overflow-y: auto;
   border-radius: .75rem;
   background: white;
   box-shadow: 0 25px 50px -12px rgb(15 23 42 / 35%);
